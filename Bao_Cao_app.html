@@ -1147,7 +1147,14 @@
         <div class="summary-card">
           <h2>Tổng hợp giá trị hợp đồng</h2>
           <div class="sum-line"><span>Cộng (tất cả nhóm)</span><span id="sum-cong">0 đ</span></div>
-          <div class="sum-line"><span>Thuế VAT (8%)</span><span id="sum-vat">0 đ</span></div>
+          <div class="sum-line" style="display: flex; justify-content: space-between; align-items: center;">
+             <span style="display:flex; align-items:center; gap: 8px;">
+               Thuế VAT
+               <label style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input type="radio" name="vat_rate" value="0.08" onchange="recalc()" checked style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 8%</label>
+               <label style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input type="radio" name="vat_rate" value="0.1" onchange="recalc()" style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 10%</label>
+             </span>
+             <span id="sum-vat">0 đ</span>
+          </div>
           <div class="sum-line total"><span>Tổng cộng</span><span id="sum-tong">0 đ</span></div>
           <div class="sum-words" id="sum-words">Bằng chữ: —</div>
 
@@ -1451,7 +1458,15 @@
         allGroupData.push({ items, sum, kyHieu: g.el.querySelector('.ky-hieu')?.value || toRoman(idx + 1), tenNhom: g.el.querySelector('.ten-nhom')?.value || '' });
         cong += sum;
       });
-      const vat = cong * 0.08;
+      const vatRateNodes = document.getElementsByName('vat_rate');
+      let vatRate = 0.08;
+      for (let r of vatRateNodes) {
+          if (r.checked) {
+              vatRate = parseFloat(r.value);
+              break;
+          }
+      }
+      const vat = cong * vatRate;
       const tong = cong + vat;
       document.getElementById('sum-cong').textContent = fmtVND(cong) + " đ";
       document.getElementById('sum-vat').textContent = fmtVND(vat) + " đ";
@@ -1763,6 +1778,17 @@
         });
       });
 
+      let vatRateTxtOuter = "8%";
+      const vatRateNodesOuter = document.getElementsByName('vat_rate');
+      if(vatRateNodesOuter && vatRateNodesOuter.length > 0) {
+          for (let r of vatRateNodesOuter) {
+              if (r.checked) {
+                  vatRateTxtOuter = r.value === '0.08' ? '8%' : '10%';
+                  break;
+              }
+          }
+      }
+
       const wrapperStyle = isPdf
         ? `font-family:'Times New Roman',Times,serif;color:#000;font-size:15px;line-height:1.4;background:#fff; box-sizing:border-box;`
         : `font-family:'Times New Roman',Times,serif;color:#000;font-size:15px;line-height:1.4;max-width:210mm;margin:0 auto;background:#fff;padding:15mm;box-shadow:0 0 10px rgba(0,0,0,0.1);`;
@@ -1900,7 +1926,7 @@
         <td style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">${fmtVND(calc.cong)}</td>
       </tr>
       <tr>
-        <td colspan="5" style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">Thuế VAT (8%)</td>
+        <td colspan="5" style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">Thuế VAT (${vatRateTxtOuter})</td>
         <td style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">${fmtVND(calc.vat)}</td>
       </tr>
       <tr>
