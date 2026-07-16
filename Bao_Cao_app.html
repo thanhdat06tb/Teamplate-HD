@@ -1,0 +1,1987 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Hệ thống xuất Hợp đồng giao khoán - Nhập dữ liệu, xuất file Word/PDF chuyên nghiệp" />
+  <title>Hệ thống xuất Hợp đồng giao khoán</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #152238;
+      --ink-2: #243554;
+      --paper: #F7F5EF;
+      --paper-2: #FFFFFF;
+      --line: #DCD6C6;
+      --brass: #9C7A3C;
+      --brass-2: #B8934F;
+      --slate: #5B6472;
+      --ok: #2F6F4E;
+      --ok-bg: #EAF3EE;
+      --danger: #B5432D;
+      --radius: 10px;
+      font-family: 'Source Serif 4', 'Georgia', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Office background image overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        linear-gradient(135deg, rgba(247, 245, 239, 0.92) 0%, rgba(247, 245, 239, 0.88) 40%, rgba(237, 232, 220, 0.9) 100%),
+        url('office_background.png') center/cover no-repeat fixed;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(156, 122, 60, 0.08), transparent 60%),
+        radial-gradient(800px 400px at 90% 100%, rgba(21, 34, 56, 0.05), transparent 50%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Floating particles animation */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatParticle 15s infinite ease-in-out;
+    }
+
+    @keyframes floatParticle {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0);
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-10vh) scale(1);
+      }
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 120px;
+    }
+
+    /* Header */
+    .masthead {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 28px 30px;
+      background:
+        linear-gradient(135deg, rgba(21, 34, 56, 0.88) 0%, rgba(36, 53, 84, 0.85) 100%),
+        url('header_office.png') center/cover no-repeat;
+      border-radius: 16px;
+      color: #F4EFE3;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 8px 32px rgba(21, 34, 56, 0.25),
+        0 2px 8px rgba(21, 34, 56, 0.15),
+        inset 0 1px 0 rgba(184, 147, 79, 0.15);
+      animation: headerSlideIn 0.6s ease-out;
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(184, 147, 79, 0.35);
+      animation: pulseRing 4s ease-in-out infinite;
+    }
+
+    @keyframes pulseRing {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.35;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 0.6;
+      }
+    }
+
+    .masthead::before {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(184, 147, 79, 0.18);
+    }
+
+    .seal {
+      flex: 0 0 auto;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 2px solid var(--brass-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: var(--brass-2);
+      background: rgba(184, 147, 79, 0.12);
+      box-shadow: 0 0 20px rgba(184, 147, 79, 0.2);
+      animation: sealPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes sealPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(184, 147, 79, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 30px rgba(184, 147, 79, 0.4);
+      }
+    }
+
+    .masthead h1 {
+      font-family: 'Source Serif 4', serif;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .masthead p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: #C9C2AE;
+    }
+
+    /* Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width:920px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(220, 214, 198, 0.6);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 12px rgba(21, 34, 56, 0.04), 0 1px 3px rgba(21, 34, 56, 0.06);
+      transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+      animation: cardFadeIn 0.5s ease-out;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 20px rgba(21, 34, 56, 0.08), 0 2px 6px rgba(21, 34, 56, 0.1);
+      border-color: rgba(184, 147, 79, 0.3);
+    }
+
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 16px;
+      margin: 0 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+    }
+
+    .card h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #F4EFE3;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .card .hint {
+      font-size: 12.5px;
+      color: var(--slate);
+      margin: 0 0 16px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .row.three {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .row.wide {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width:600px) {
+
+      .row,
+      .row.three {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
+      margin-bottom: 5px;
+      letter-spacing: 0.2px;
+    }
+
+    input[type=text],
+    input[type=date],
+    input[type=number],
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      color: var(--ink);
+      background: rgba(253, 252, 249, 0.9);
+      backdrop-filter: blur(4px);
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--brass-2);
+      box-shadow: 0 0 0 3px rgba(184, 147, 79, 0.15);
+      background: #fff;
+    }
+
+    input:hover,
+    textarea:hover {
+      border-color: rgba(184, 147, 79, 0.4);
+    }
+
+    .field-note {
+      font-size: 11px;
+      color: var(--slate);
+      margin-top: 4px;
+    }
+
+    /* Work item group */
+    .group-title-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .items {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 26px 2.4fr 0.9fr 0.9fr 1.1fr 1.1fr;
+      gap: 8px;
+      align-items: end;
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #FDFCF9;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .item-row .stt {
+      align-self: center;
+      text-align: center;
+      font-weight: 700;
+      color: var(--slate);
+      font-size: 12.5px;
+    }
+
+    .item-row label {
+      font-size: 10.5px;
+      margin-bottom: 3px;
+    }
+
+    .item-row input {
+      padding: 7px 8px;
+      font-size: 12.5px;
+    }
+
+    .tt-display {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ok);
+      padding: 7px 8px;
+      background: var(--ok-bg);
+      border-radius: 6px;
+      text-align: right;
+      border: 1px solid #cfe4d8;
+    }
+
+    .items-head {
+      display: grid;
+      grid-template-columns: 26px 2.4fr 0.9fr 0.9fr 1.1fr 1.1fr;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--ink);
+      color: #F4EFE3;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    /* Summary panel */
+    .summary {
+      position: sticky;
+      top: 20px;
+    }
+
+    .summary-card {
+      background: linear-gradient(145deg, var(--ink) 0%, #1a2d48 60%, var(--ink-2) 100%);
+      color: #F4EFE3;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(21, 34, 56, 0.3), 0 2px 8px rgba(21, 34, 56, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(184, 147, 79, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .summary-card h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 16px;
+      margin: 0 0 14px;
+      color: #F4EFE3;
+    }
+
+    .sum-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(244, 239, 227, 0.18);
+    }
+
+    .sum-line span:first-child {
+      color: #C9C2AE;
+    }
+
+    .sum-line.total {
+      font-weight: 700;
+      font-size: 15.5px;
+      border-bottom: none;
+      padding-top: 12px;
+      color: var(--brass-2);
+    }
+
+    .sum-words {
+      font-size: 11.5px;
+      color: #C9C2AE;
+      margin-top: 10px;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 16px;
+      background: linear-gradient(135deg, var(--brass-2) 0%, #C9A661 100%);
+      color: #1B140A;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform .15s, background .2s, box-shadow .2s;
+      box-shadow: 0 2px 8px rgba(184, 147, 79, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #C9A661 0%, #D4B574 100%);
+      box-shadow: 0 4px 16px rgba(184, 147, 79, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.98) translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .btn.pdf-btn {
+      background: linear-gradient(135deg, #C0392B 0%, #E74C3C 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(192, 57, 43, 0.3);
+    }
+
+    .btn.pdf-btn:hover {
+      background: linear-gradient(135deg, #E74C3C 0%, #F15B4E 100%);
+      box-shadow: 0 4px 16px rgba(192, 57, 43, 0.4);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: #F4EFE3;
+      border: 1px solid rgba(244, 239, 227, 0.35);
+      margin-top: 8px;
+      font-weight: 600;
+      box-shadow: none;
+    }
+
+    .btn.secondary:hover {
+      background: rgba(244, 239, 227, 0.08);
+      border-color: rgba(244, 239, 227, 0.6);
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-group .btn {
+      margin-top: 0;
+      flex: 1;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-size: 12px;
+      text-align: center;
+      min-height: 16px;
+    }
+
+    .status.ok {
+      color: #8FD9AE;
+    }
+
+    .status.err {
+      color: #F1A08E;
+    }
+
+    .add-remove {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-btn {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--ink-2);
+    }
+
+    .mini-btn:hover {
+      border-color: var(--brass-2);
+      color: var(--brass);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 18px 0;
+    }
+
+    .back-btn {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 10px;
+      background: rgba(244, 239, 227, 0.08);
+      border: 1px solid rgba(244, 239, 227, 0.2);
+      color: #F4EFE3;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .back-btn:hover {
+      background: rgba(244, 239, 227, 0.15);
+      border-color: var(--brass-2);
+      color: var(--brass-2);
+      transform: translateX(-2px);
+    }
+
+    .back-btn .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .team-note {
+      font-size: 11.5px;
+      color: var(--slate);
+      text-align: center;
+      margin-top: 26px;
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--brass);
+      border: 1px solid var(--brass-2);
+      border-radius: 20px;
+      padding: 2px 9px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Group controls */
+    .group-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .group-controls label {
+      margin-bottom: 0;
+    }
+
+    .group-controls input[type=number] {
+      width: 70px;
+      text-align: center;
+    }
+
+    .group-controls .mini-btn {
+      margin: 0;
+    }
+
+    .group-card {
+      position: relative;
+    }
+
+    .group-card .remove-group-btn {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      cursor: pointer;
+      opacity: 0.85;
+      transition: opacity .15s;
+    }
+
+    .group-card .remove-group-btn:hover {
+      opacity: 1;
+    }
+
+    .add-group-btn {
+      width: 100%;
+      padding: 14px;
+      border: 2px dashed var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      color: var(--brass);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 18px;
+      transition: border-color .2s, color .2s, background .2s, transform .15s;
+    }
+
+    .add-group-btn:hover {
+      border-color: var(--brass-2);
+      color: var(--brass-2);
+      background: rgba(184, 147, 79, 0.05);
+      transform: translateY(-1px);
+    }
+
+    /* Decorative corner ornaments for cards */
+    .card.group-card::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 40px;
+      height: 40px;
+      border-right: 2px solid rgba(184, 147, 79, 0.12);
+      border-bottom: 2px solid rgba(184, 147, 79, 0.12);
+      border-radius: 0 0 8px 0;
+      pointer-events: none;
+    }
+
+    /* Tooltip-style hint enhancement */
+    .card h2 {
+      position: relative;
+    }
+
+    .card h2 .num {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover h2 .num {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(21, 34, 56, 0.2);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(247, 245, 239, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 122, 60, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 122, 60, 0.5);
+    }
+
+    /* Loading spinner for PDF */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Preview Modal */
+    .preview-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(21, 34, 56, 0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 30px 20px;
+      overflow-y: auto;
+      animation: overlayFadeIn .25s ease-out;
+    }
+
+    .preview-overlay.active {
+      display: flex;
+    }
+
+    @keyframes overlayFadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .preview-modal {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 860px;
+      box-shadow: 0 20px 60px rgba(21, 34, 56, .35), 0 4px 16px rgba(21, 34, 56, .2);
+      animation: modalSlideUp .35s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes modalSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(.97)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+      color: #F4EFE3;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .preview-toolbar h3 {
+      margin: 0;
+      font-family: 'Source Serif 4', serif;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-toolbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .preview-toolbar-actions .btn {
+      margin: 0;
+      padding: 8px 16px;
+      font-size: 12.5px;
+      border-radius: 8px;
+      width: auto;
+    }
+
+    .preview-close {
+      background: rgba(244, 239, 227, .1);
+      border: 1px solid rgba(244, 239, 227, .25);
+      color: #F4EFE3;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .preview-close:hover {
+      background: rgba(244, 239, 227, .2);
+    }
+
+    .preview-body {
+      padding: 24px 28px 32px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+    }
+
+    .preview-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .preview-body::-webkit-scrollbar-thumb {
+      background: rgba(156, 122, 60, .25);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="wrap" id="app-wrap">
+
+    <div class="masthead">
+      <div class="seal">HĐGK</div>
+      <div>
+        <h1>Hệ thống xuất Hợp đồng giao khoán</h1>
+      </div>
+      <a href="index.html" class="back-btn" title="Quay lại trang chủ">
+        <span class="back-arrow">←</span>
+        Quay lại
+      </a>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: FORM -->
+      <div>
+
+        <div class="card">
+          <h2><span class="num">1</span>Thông tin chung</h2>
+          <p class="hint">Số hợp đồng và tên công trình sẽ tự động điền vào cả phần đầu hợp đồng lẫn Phụ lục.</p>
+          <div class="row three">
+            <div>
+              <label>Số hợp đồng</label>
+              <input type="text" id="so_hd" placeholder="312/2024/HĐGK/ND-QMIT">
+            </div>
+            <div>
+              <label>Ngày ký hợp đồng</label>
+              <input type="date" id="ngay_ky_date">
+            </div>
+            <div>
+              <label>Ngày ký Phụ lục 01</label>
+              <input type="date" id="ngay_ky_pl_date">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Tên công trình</label>
+              <input type="text" id="ten_ct" placeholder="Lắp bộ ống sấy khí nhà máy...">
+            </div>
+            <div>
+              <label>Địa điểm thi công</label>
+              <input type="text" id="dia_diem" placeholder="KCN..., TP. Vũng Tàu">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><span class="num">2</span>Bên B — Bên giao khoán</h2>
+
+          <div class="row">
+            <div>
+              <label>Tên công ty</label>
+              <input type="text" id="ben_b_ten" placeholder="TNHH ...">
+            </div>
+            <div>
+              <label>Địa chỉ</label>
+              <input type="text" id="ben_b_dia_chi">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Mã số thuế</label>
+              <input type="text" id="ben_b_mst">
+            </div>
+
+            <div>
+              <label>Số tài khoản</label>
+              <input type="text" id="ben_b_stk">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Đại diện (Ông/Bà)</label>
+              <input type="text" id="ben_b_dai_dien" placeholder="Nguyễn Văn A">
+            </div>
+
+            <div>
+              <label>Chức vụ</label>
+              <input type="text" id="ben_b_chuc_vu" placeholder="Giám đốc">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Đại diện (Ông/Bà)</label>
+              <input type="text" id="ben_b_dai_dien_b" placeholder="Nguyễn Thị A">
+            </div>
+
+            <div>
+              <label>Chức vụ</label>
+              <input type="text" id="ben_b_chuc_vu_b" placeholder="Kế toán trưởng">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card">
+          <h2><span class="num">3</span>Bên A — Bên nhận giao khoán</h2>
+          <div class="row">
+            <div>
+              <label>Tên công ty</label>
+              <input type="text" id="ben_a_ten" placeholder="TNHH ...">
+            </div>
+            <div>
+              <label>Địa chỉ</label>
+              <input type="text" id="ben_a_dia_chi">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Mã số thuế</label>
+              <input type="text" id="ben_a_mst">
+            </div>
+
+            <div>
+              <label>Số tài khoản</label>
+              <input type="text" id="ben_a_stk">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Đại diện (Ông/Bà)</label>
+              <input type="text" id="ben_a_dai_dien" placeholder="Nguyễn Văn A">
+            </div>
+
+            <div>
+              <label>Chức vụ</label>
+              <input type="text" id="ben_a_chuc_vu" placeholder="Giám đốc">
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Đại diện (Ông/Bà)</label>
+              <input type="text" id="ben_a_dai_dien" placeholder="Nguyễn Thị A">
+            </div>
+
+            <div>
+              <label>Chức vụ</label>
+              <input type="text" id="ben_a_chuc_vu" placeholder="Kế toán trưởng">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><span class="num">4</span>Thanh toán &amp; Tiến độ</h2>
+          <div class="row three">
+            <div>
+              <label>Hình thức thanh toán</label>
+              <input type="text" id="hinh_thuc_tt" placeholder="Chuyển khoản">
+            </div>
+            <div>
+              <label>Đồng tiền thanh toán</label>
+              <input type="text" id="dong_tien_tt" placeholder="VNĐ">
+            </div>
+            <div>
+              <label>Số ngày thanh toán sau khi đủ hồ sơ</label>
+              <input type="text" id="so_ngay_tt" value="7">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Ngày bắt đầu thi công</label>
+              <input type="date" id="ngay_bat_dau_date">
+            </div>
+            <div>
+              <label>Ngày kết thúc thi công</label>
+              <input type="date" id="ngay_ket_thuc_date">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><span class="num">5</span>Phụ lục hợp đồng — Nhóm công việc</h2>
+          <p class="hint">Để trống một dòng nếu không sử dụng — dòng đó sẽ không được tính vào tổng. Nhấn "+ Thêm
+            nhóm"
+            để thêm nhóm công việc mới.</p>
+        </div>
+        <div id="groups-container"></div>
+        <button class="add-group-btn" id="btn-add-group" type="button">＋ Thêm nhóm công việc</button>
+
+      </div>
+
+      <!-- RIGHT: SUMMARY / ACTIONS -->
+      <div class="summary">
+        <div class="summary-card">
+          <h2>Tổng hợp giá trị hợp đồng</h2>
+          <div class="sum-line"><span>Cộng (tất cả nhóm)</span><span id="sum-cong">0 đ</span></div>
+          <div class="sum-line"><span>Thuế VAT (8%)</span><span id="sum-vat">0 đ</span></div>
+          <div class="sum-line total"><span>Tổng cộng</span><span id="sum-tong">0 đ</span></div>
+          <div class="sum-words" id="sum-words">Bằng chữ: —</div>
+
+          <button class="btn" id="btn-preview"
+            style="background:linear-gradient(135deg,#2980B9 0%,#3498DB 100%);color:#fff;box-shadow:0 2px 8px rgba(41,128,185,.3);margin-top:16px;">👁
+            Xem trước hợp đồng</button>
+          <div class="btn-group">
+            <button class="btn" id="btn-generate">📄 Xuất Word</button>
+            <button class="btn pdf-btn" id="btn-pdf">📕 Xuất PDF</button>
+          </div>
+          <button class="btn secondary" id="btn-fill-sample">Điền dữ liệu mẫu để xem thử</button>
+          <div class="status" id="status"></div>
+        </div>
+        <div class="team-note">
+          Định dạng gốc (font, khung bảng, tiêu đề, chữ ký) được giữ nguyên 100% từ file mẫu bạn tải lên —<br>
+          công cụ chỉ thay thế đúng các vị trí "…" bằng dữ liệu bạn nhập.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div class="preview-overlay" id="preview-overlay">
+    <div class="preview-modal">
+      <div class="preview-toolbar">
+        <h3>👁 Xem trước hợp đồng</h3>
+        <div class="preview-toolbar-actions">
+          <button class="btn" id="preview-export-word"
+            style="background:linear-gradient(135deg,var(--brass-2),#C9A661);color:#1B140A;">📄 Word</button>
+          <button class="btn pdf-btn" id="preview-export-pdf">📕 PDF</button>
+          <button class="preview-close" id="preview-close">✕ Đóng <small>(Esc)</small></button>
+        </div>
+      </div>
+      <div class="preview-body" id="preview-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+  <script>
+    /* =========================================================
+       Floating particles initialization
+    ========================================================= */
+    (function initParticles() {
+      const container = document.getElementById('particles');
+      const colors = ['rgba(184, 147, 79, 0.15)', 'rgba(21, 34, 56, 0.08)', 'rgba(156, 122, 60, 0.1)'];
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 6 + 3;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = Math.random() * 15 + 's';
+        p.style.animationDuration = (Math.random() * 10 + 12) + 's';
+        container.appendChild(p);
+      }
+    })();
+    /* =========================================================
+       TEMPLATE (base64 .docx, tagged with {placeholders})
+    ========================================================= */
+    const TEMPLATE_B64 = "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";
+
+    /* =========================================================
+       Work item rows
+    ========================================================= */
+    /* =========================================================
+       Roman numeral helper
+    ========================================================= */
+    const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'];
+    function toRoman(n) { return ROMAN[n - 1] || String(n); }
+
+    /* =========================================================
+       Dynamic work groups
+    ========================================================= */
+    const groupsContainer = document.getElementById('groups-container');
+    let groupCounter = 0; // incremental ID for uniqueness
+    let workGroups = [];   // [{id, el, containerEl}, ...]
+
+    function buildItemRow(container, groupIdx, itemIdx) {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+    <div class="stt">${itemIdx}</div>
+    <div><label>Diễn giải</label><input type="text" data-f="ten" placeholder="Nội dung công việc ${groupIdx}.${itemIdx}"></div>
+    <div><label>Đ.vt</label><input type="text" data-f="dvt" placeholder="Cái"></div>
+    <div><label>SL</label><input type="number" data-f="sl" min="0" step="any"></div>
+    <div><label>Đơn giá</label><input type="number" data-f="gia" min="0" step="any"></div>
+    <div><label>Thành tiền</label><div class="tt-display" data-f="tt">0</div></div>
+  `;
+      container.appendChild(row);
+      return row;
+    }
+
+    function addItemRow(groupObj) {
+      const currentCount = groupObj.containerEl.querySelectorAll('.item-row').length;
+      const groupVisualIdx = workGroups.indexOf(groupObj) + 1;
+      buildItemRow(groupObj.containerEl, groupVisualIdx, currentCount + 1);
+      recalc();
+    }
+
+    function removeLastItemRow(groupObj) {
+      const rows = groupObj.containerEl.querySelectorAll('.item-row');
+      if (rows.length > 0) {
+        rows[rows.length - 1].remove();
+        recalc();
+      }
+    }
+
+    function addGroup(kyHieu, tenNhom, itemCount) {
+      groupCounter++;
+      const gid = groupCounter;
+      const groupNum = workGroups.length + 1;
+      const defaultKyHieu = kyHieu || toRoman(groupNum);
+      const defaultTen = tenNhom || '';
+      const numItems = itemCount || 1;
+
+      const card = document.createElement('div');
+      card.className = 'card group-card';
+      card.dataset.gid = gid;
+      card.innerHTML = `
+    <h2><span class="num">${4 + groupNum}</span>Phụ lục hợp đồng — Nhóm công việc ${toRoman(groupNum)}</h2>
+    <p class="hint">Để trống một dòng nếu không sử dụng — dòng đó sẽ không được tính vào tổng.</p>
+    ${workGroups.length > 0 ? '<button class="remove-group-btn" type="button" title="Xóa nhóm này">✕ Xóa nhóm</button>' : ''}
+    <div class="group-title-row">
+      <div>
+        <label>Ký hiệu</label>
+        <input type="text" class="ky-hieu" value="${defaultKyHieu}">
+      </div>
+      <div>
+        <label>Tên nhóm công việc</label>
+        <input type="text" class="ten-nhom" placeholder="Vật tư lắp đặt ống sấy khí" value="${defaultTen}">
+      </div>
+    </div>
+    <div class="items-head">
+      <span>#</span><span>Diễn giải</span><span>Đ.vt</span><span>SL</span><span>Đơn giá</span><span>Thành tiền</span>
+    </div>
+    <div class="items" id="items-g${gid}"></div>
+    <div class="add-remove">
+      <button class="mini-btn btn-add-item" type="button">＋ Thêm dòng</button>
+      <button class="mini-btn btn-remove-item" type="button">－ Bớt dòng</button>
+    </div>
+  `;
+
+      groupsContainer.appendChild(card);
+
+      const containerEl = card.querySelector(`#items-g${gid}`);
+      const groupObj = { id: gid, el: card, containerEl };
+      workGroups.push(groupObj);
+
+      // Build initial item rows
+      for (let i = 1; i <= numItems; i++) {
+        buildItemRow(containerEl, groupNum, i);
+      }
+
+      // Add/remove item row buttons
+      card.querySelector('.btn-add-item').addEventListener('click', () => addItemRow(groupObj));
+      card.querySelector('.btn-remove-item').addEventListener('click', () => removeLastItemRow(groupObj));
+
+      // Remove group button
+      const removeBtn = card.querySelector('.remove-group-btn');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', () => removeGroup(groupObj));
+      }
+
+      recalc();
+      return groupObj;
+    }
+
+    function removeGroup(groupObj) {
+      if (workGroups.length <= 1) return; // must have at least 1 group
+      groupObj.el.remove();
+      workGroups = workGroups.filter(g => g.id !== groupObj.id);
+      renumberGroups();
+      recalc();
+    }
+
+    function renumberGroups() {
+      workGroups.forEach((g, idx) => {
+        const num = idx + 1;
+        const h2 = g.el.querySelector('h2');
+        h2.innerHTML = `<span class="num">${4 + num}</span>Phụ lục hợp đồng — Nhóm công việc ${toRoman(num)}`;
+        // Show remove button only if more than 1 group
+        let removeBtn = g.el.querySelector('.remove-group-btn');
+        if (workGroups.length > 1 && !removeBtn) {
+          removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-group-btn';
+          removeBtn.type = 'button';
+          removeBtn.title = 'Xóa nhóm này';
+          removeBtn.textContent = '✕ Xóa nhóm';
+          removeBtn.addEventListener('click', () => removeGroup(g));
+          g.el.insertBefore(removeBtn, g.el.querySelector('.group-title-row'));
+        } else if (workGroups.length <= 1 && removeBtn) {
+          removeBtn.remove();
+        }
+      });
+    }
+
+    // Button to add new group
+    document.getElementById('btn-add-group').addEventListener('click', () => {
+      addGroup();
+      renumberGroups();
+    });
+
+    // Initialize with 1 default group (user adds more as needed)
+    addGroup('I', '', 1);
+
+    /* =========================================================
+       Formatting helpers
+    ========================================================= */
+    function fmtVND(n) {
+      if (!isFinite(n)) n = 0;
+      return Math.round(n).toLocaleString('vi-VN');
+    }
+
+    function formatVNDateLong(dateStr) {
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-');
+      return `${d} tháng ${m} năm ${y}`;
+    }
+    function formatVNDateShort(dateStr) {
+      if (!dateStr) return '';
+      const [y, m, d] = dateStr.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    /* Vietnamese number-to-words */
+    function numberToVNWords(num) {
+      num = Math.round(num);
+      if (num === 0) return "Không đồng";
+      const chuSo = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+      function docBaChuSo(baso, dayDu) {
+        let tram = Math.floor(baso / 100);
+        let chuc = Math.floor((baso % 100) / 10);
+        let donvi = baso % 10;
+        let s = "";
+        if (dayDu || tram > 0) {
+          s += chuSo[tram] + " trăm ";
+          if (chuc === 0 && donvi > 0) s += "linh ";
+        }
+        if (chuc > 1) {
+          s += chuSo[chuc] + " mươi ";
+          if (donvi === 1) s += "mốt ";
+          else if (donvi === 5) s += "lăm ";
+          else if (donvi > 0) s += chuSo[donvi] + " ";
+        } else if (chuc === 1) {
+          s += "mười ";
+          if (donvi === 1) s += "một ";
+          else if (donvi === 5) s += "lăm ";
+          else if (donvi > 0) s += chuSo[donvi] + " ";
+        } else if (chuc === 0 && donvi > 0 && (tram > 0)) {
+          s += chuSo[donvi] + " ";
+        } else if (chuc === 0 && donvi > 0 && tram === 0) {
+          s += chuSo[donvi] + " ";
+        }
+        return s.trim();
+      }
+      const units = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
+      let str = Math.abs(num).toString();
+      let groups = [];
+      while (str.length > 0) {
+        groups.unshift(str.slice(-3));
+        str = str.slice(0, -3);
+      }
+      let parts = [];
+      for (let i = 0; i < groups.length; i++) {
+        let g = parseInt(groups[i], 10);
+        if (g === 0) continue;
+        let dayDu = i > 0;
+        let words = docBaChuSo(g, dayDu && g < 100 ? true : (g >= 100));
+        parts.push(words + (units[groups.length - 1 - i] ? " " + units[groups.length - 1 - i] : ""));
+      }
+      let result = parts.join(" ").replace(/\s+/g, ' ').trim();
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+      return (num < 0 ? "Âm " : "") + result + " đồng";
+    }
+
+    /* =========================================================
+       Recalculation (dynamic N groups)
+    ========================================================= */
+    function readItems(container) {
+      const rows = [...container.querySelectorAll('.item-row')];
+      return rows.map(row => {
+        const ten = row.querySelector('[data-f="ten"]').value.trim();
+        const dvt = row.querySelector('[data-f="dvt"]').value.trim();
+        const sl = parseFloat(row.querySelector('[data-f="sl"]').value) || 0;
+        const gia = parseFloat(row.querySelector('[data-f="gia"]').value) || 0;
+        const tt = sl * gia;
+        row.querySelector('[data-f="tt"]').textContent = tt ? fmtVND(tt) : '0';
+        return { ten, dvt, sl, gia, tt };
+      });
+    }
+
+    function recalc() {
+      let cong = 0;
+      const allGroupData = [];
+      workGroups.forEach((g, idx) => {
+        const items = readItems(g.containerEl);
+        const sum = items.reduce((a, it) => a + it.tt, 0);
+        allGroupData.push({ items, sum, kyHieu: g.el.querySelector('.ky-hieu')?.value || toRoman(idx + 1), tenNhom: g.el.querySelector('.ten-nhom')?.value || '' });
+        cong += sum;
+      });
+      const vat = cong * 0.08;
+      const tong = cong + vat;
+      document.getElementById('sum-cong').textContent = fmtVND(cong) + " đ";
+      document.getElementById('sum-vat').textContent = fmtVND(vat) + " đ";
+      document.getElementById('sum-tong').textContent = fmtVND(tong) + " đ";
+      document.getElementById('sum-words').textContent = "Bằng chữ: " + numberToVNWords(tong);
+      return { allGroupData, cong, vat, tong };
+    }
+
+    // listen to all inputs for live recalc
+    document.addEventListener('input', (e) => {
+      if (e.target.matches('input[data-f="sl"], input[data-f="gia"]')) recalc();
+    });
+    recalc();
+
+    /* =========================================================
+       Sample data
+    ========================================================= */
+    document.getElementById('btn-fill-sample').addEventListener('click', () => {
+      const v = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+      v('so_hd', '312/2024/HĐGK/ND-QMIT');
+      v('ngay_ky_date', '2024-12-03');
+      v('ngay_ky_pl_date', '2024-12-03');
+      v('ten_ct', 'Lắp đặt bộ ống sấy khí Nhà máy ND-QMIT');
+      v('dia_diem', 'KCN Đông Xuyên, TP. Vũng Tàu');
+      v('ben_b_ten', 'TNHH ND-QMIT VIỆT NAM');
+      v('ben_b_dia_chi', 'Số 10, KCN Đông Xuyên, TP. Vũng Tàu');
+      v('ben_b_mst', '3500123456');
+      v('ben_b_stk', '0071001234567 tại Vietcombank Vũng Tàu');
+      v('ben_b_dai_dien', 'Nguyễn Văn Hùng');
+      v('ben_b_chuc_vu', 'Giám đốc');
+      v('ben_a_ten', 'TNHH CƠ KHÍ LẮP ĐẶT AN PHÁT');
+      v('ben_a_dia_chi', '25 Nguyễn Thái Học, TP. Vũng Tàu');
+      v('ben_a_mst', '3500987654');
+      v('ben_a_stk', '0451000998877 tại BIDV Vũng Tàu');
+      v('ben_a_dai_dien', 'Trần Thị Ngọc Lan');
+      v('ben_a_chuc_vu', 'Trưởng phòng Thi công');
+      v('hinh_thuc_tt', 'Chuyển khoản');
+      v('dong_tien_tt', 'VNĐ');
+      v('so_ngay_tt', '7');
+      v('ngay_bat_dau_date', '2024-12-05');
+      v('ngay_ket_thuc_date', '2025-01-15');
+
+      // Ensure exactly 2 groups for sample
+      while (workGroups.length > 2) removeGroup(workGroups[workGroups.length - 1]);
+      while (workGroups.length < 2) addGroup();
+      renumberGroups();
+
+      // Set group titles
+      workGroups[0].el.querySelector('.ky-hieu').value = 'I';
+      workGroups[0].el.querySelector('.ten-nhom').value = 'Vật tư lắp đặt hệ thống ống sấy khí';
+      workGroups[1].el.querySelector('.ky-hieu').value = 'II';
+      workGroups[1].el.querySelector('.ten-nhom').value = 'Nhân công thi công, lắp đặt';
+
+      const sample1 = [
+        ['Ống thép sấy khí phi 114', 'Cái', 20, 850000],
+        ['Co nối ống 90 độ', 'Cái', 40, 220000],
+        ['Van điều tiết khí', 'Cái', 10, 1250000],
+        ['Bích liên kết mặt bích', 'Cái', 30, 180000],
+        ['Cụm giá đỡ ống', 'Cụm', 15, 650000],
+      ];
+      const sample2 = [
+        ['Nhân công lắp đặt tuyến ống chính', 'Cụm', 1, 35000000],
+        ['Nhân công hàn nối, gia cố', 'Cái', 60, 150000],
+        ['Nhân công kiểm tra rò rỉ khí', 'Cái', 20, 200000],
+        ['Nhân công sơn chống gỉ', 'Cái', 20, 90000],
+        ['Vệ sinh công nghiệp, bàn giao', 'Lot', 1, 5000000],
+      ];
+      function fillGroup(groupObj, data) {
+        // Ensure correct number of rows
+        const container = groupObj.containerEl;
+        const existingRows = container.querySelectorAll('.item-row');
+        while (existingRows.length > data.length && container.querySelectorAll('.item-row').length > data.length) {
+          container.querySelectorAll('.item-row')[container.querySelectorAll('.item-row').length - 1].remove();
+        }
+        const gIdx = workGroups.indexOf(groupObj) + 1;
+        while (container.querySelectorAll('.item-row').length < data.length) {
+          buildItemRow(container, gIdx, container.querySelectorAll('.item-row').length + 1);
+        }
+        const rows = [...container.querySelectorAll('.item-row')];
+        rows.forEach((row, i) => {
+          const d = data[i];
+          if (!d) return;
+          row.querySelector('[data-f="ten"]').value = d[0];
+          row.querySelector('[data-f="dvt"]').value = d[1];
+          row.querySelector('[data-f="sl"]').value = d[2];
+          row.querySelector('[data-f="gia"]').value = d[3];
+        });
+      }
+      fillGroup(workGroups[0], sample1);
+      fillGroup(workGroups[1], sample2);
+      recalc();
+    });
+
+    /* =========================================================
+       XML escaping
+    ========================================================= */
+    function escapeXml(str) {
+      if (str === undefined || str === null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
+    /* =========================================================
+       Generate .docx
+    ========================================================= */
+    function base64ToUint8Array(b64) {
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return bytes;
+    }
+
+    async function generateDocx() {
+      const btn = document.getElementById('btn-generate');
+      const status = document.getElementById('status');
+      btn.disabled = true;
+      status.className = 'status';
+      status.textContent = 'Đang tạo tài liệu...';
+
+      try {
+        const calc = recalc();
+        const gVal = (id) => escapeXml(document.getElementById(id).value.trim());
+
+        // --- Static field data ---
+        const data = {
+          so_hd: gVal('so_hd'),
+          ten_ct: gVal('ten_ct'),
+          dia_diem: gVal('dia_diem'),
+          ngay_ky: escapeXml(formatVNDateLong(document.getElementById('ngay_ky_date').value)),
+          ngay_ky_pl: escapeXml(formatVNDateLong(document.getElementById('ngay_ky_pl_date').value)),
+          ben_b_ten: gVal('ben_b_ten'),
+          ben_b_dia_chi: gVal('ben_b_dia_chi'),
+          ben_b_mst: gVal('ben_b_mst'),
+          ben_b_stk: gVal('ben_b_stk'),
+          ben_b_dai_dien: gVal('ben_b_dai_dien'),
+          ben_b_chuc_vu: gVal('ben_b_chuc_vu'),
+          ben_a_ten: gVal('ben_a_ten'),
+          ben_a_dia_chi: gVal('ben_a_dia_chi'),
+          ben_a_mst: gVal('ben_a_mst'),
+          ben_a_stk: gVal('ben_a_stk'),
+          ben_a_dai_dien: gVal('ben_a_dai_dien'),
+          ben_a_chuc_vu: gVal('ben_a_chuc_vu'),
+          hinh_thuc_tt: gVal('hinh_thuc_tt'),
+          dong_tien_tt: gVal('dong_tien_tt'),
+          so_ngay_tt: gVal('so_ngay_tt'),
+          ngay_bat_dau: escapeXml(formatVNDateShort(document.getElementById('ngay_bat_dau_date').value) + ' '),
+          ngay_ket_thuc: escapeXml(formatVNDateShort(document.getElementById('ngay_ket_thuc_date').value)),
+          cong: escapeXml(fmtVND(calc.cong)),
+          vat: escapeXml(fmtVND(calc.vat)),
+          tong_cong: escapeXml(fmtVND(calc.tong)),
+          bang_chu: escapeXml(numberToVNWords(calc.tong)),
+        };
+
+        // --- Load template ---
+        const bytes = base64ToUint8Array(TEMPLATE_B64);
+        const zip = await JSZip.loadAsync(bytes);
+        let xml = await zip.file('word/document.xml').async('string');
+
+        // --- Dynamic table row manipulation ---
+        // Extract all <w:tr>...</w:tr> rows with their positions
+        const trRegex = /<w:tr\b[^>]*>[\s\S]*?<\/w:tr>/g;
+        let trMatch;
+        const allTrRows = [];
+        while ((trMatch = trRegex.exec(xml)) !== null) {
+          allTrRows.push({ xml: trMatch[0], pos: trMatch.index, end: trMatch.index + trMatch[0].length });
+        }
+
+        // Identify template rows: group header (nhom1) and item row (i1_1)
+        const groupHeaderTemplate = allTrRows.find(r => r.xml.includes('{nhom1_ky_hieu}'));
+        const itemRowTemplate = allTrRows.find(r => r.xml.includes('{i1_1_ten}'));
+
+        if (!groupHeaderTemplate || !itemRowTemplate) {
+          throw new Error('Không tìm thấy cấu trúc bảng mẫu trong template');
+        }
+
+        // Find all rows that belong to group 1 and group 2 (the hardcoded ones)
+        const rowsToRemove = allTrRows.filter(r =>
+          r.xml.includes('{nhom1_') || r.xml.includes('{nhom2_') ||
+          /\{i1_\d+_/.test(r.xml) || /\{i2_\d+_/.test(r.xml)
+        );
+
+        // Find the position range to remove (from first group header to last item row)
+        const removeStart = Math.min(...rowsToRemove.map(r => r.pos));
+        const removeEnd = Math.max(...rowsToRemove.map(r => r.end));
+
+        // Helper: generate a random hex ID for w14:paraId/textId (8 hex chars)
+        function randHexId() {
+          return Math.random().toString(16).substring(2, 10).toUpperCase().padStart(8, '0');
+        }
+
+        // Helper: make unique IDs in a row XML to avoid Word corruption
+        function makeUniqueIds(rowXml) {
+          return rowXml
+            .replace(/w14:paraId="[^"]+"/g, () => `w14:paraId="${randHexId()}"`)
+            .replace(/w14:textId="[^"]+"/g, () => `w14:textId="${randHexId()}"`);
+        }
+
+        // Build new rows for all groups dynamically
+        let newRowsXml = '';
+        calc.allGroupData.forEach((gd, gi) => {
+          const gn = gi + 1;
+
+          // --- Group header row ---
+          let headerRow = groupHeaderTemplate.xml;
+          headerRow = headerRow.replace(/\{nhom1_ky_hieu\}/g, escapeXml(gd.kyHieu));
+          headerRow = headerRow.replace(/\{nhom1_ten\}/g, escapeXml(gd.tenNhom));
+          headerRow = headerRow.replace(/\{nhom1_thanh_tien\}/g, escapeXml(fmtVND(gd.sum)));
+          headerRow = makeUniqueIds(headerRow);
+          newRowsXml += headerRow;
+
+          // --- Item rows ---
+          gd.items.forEach((it, idx) => {
+            const n = idx + 1;
+            let itemRow = itemRowTemplate.xml;
+            // Replace the STT number
+            itemRow = itemRow.replace(/<w:t>1<\/w:t>/, `<w:t>${n}<\/w:t>`);
+            // Replace placeholders
+            itemRow = itemRow.replace(/\{i1_1_ten\}/g, escapeXml(it.ten));
+            itemRow = itemRow.replace(/\{i1_1_dvt\}/g, escapeXml(it.dvt));
+            itemRow = itemRow.replace(/\{i1_1_sl\}/g, it.sl ? escapeXml(it.sl.toLocaleString('vi-VN')) : '');
+            itemRow = itemRow.replace(/\{i1_1_gia\}/g, it.gia ? escapeXml(fmtVND(it.gia)) : '');
+            itemRow = itemRow.replace(/\{i1_1_tt\}/g, it.tt ? escapeXml(fmtVND(it.tt)) : '');
+            itemRow = makeUniqueIds(itemRow);
+            newRowsXml += itemRow;
+          });
+        });
+
+        // Replace the old rows block with the new dynamic rows
+        xml = xml.substring(0, removeStart) + newRowsXml + xml.substring(removeEnd);
+
+        // --- Replace remaining static placeholders ---
+        Object.keys(data).forEach(key => {
+          const token = '{' + key + '}';
+          xml = xml.split(token).join(data[key] ?? '');
+        });
+
+        // Clean up any leftover unreplaced placeholders
+        xml = xml.replace(/\{[a-z0-9_]+\}/g, '');
+
+        zip.file('word/document.xml', xml);
+
+        const blob = await zip.generateAsync({
+          type: 'blob',
+          mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          compression: 'DEFLATE'
+        });
+
+        const safeSoHd = (document.getElementById('so_hd').value.trim() || 'HopDong').replace(/[\\\\/:*?"<>|]/g, '-');
+        const filename = `HopDongGiaoKhoan_${safeSoHd}.docx`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        status.className = 'status ok';
+        status.textContent = '✓ Đã xuất: ' + filename;
+      } catch (err) {
+        console.error(err);
+        status.className = 'status err';
+        status.textContent = 'Lỗi khi tạo tài liệu: ' + err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('btn-generate').addEventListener('click', generateDocx);
+
+    /* =========================================================
+       Shared: build preview HTML content
+    ========================================================= */
+    function buildPreviewHtml(isPdf = false) {
+      const soHd = document.getElementById('so_hd').value.trim() || 'Chưa nhập';
+      const tenCt = document.getElementById('ten_ct').value.trim() || 'Chưa nhập';
+      const diaDiem = document.getElementById('dia_diem').value.trim() || '';
+      const ngayKy = formatVNDateLong(document.getElementById('ngay_ky_date').value) || '...';
+      const ngayKyPl = formatVNDateLong(document.getElementById('ngay_ky_pl_date').value) || '...';
+      const benBTen = document.getElementById('ben_b_ten').value.trim() || '';
+      const benBDiaChi = document.getElementById('ben_b_dia_chi').value.trim() || '';
+      const benBMst = document.getElementById('ben_b_mst').value.trim() || '';
+      const benBStk = document.getElementById('ben_b_stk').value.trim() || '';
+      const benBDaiDien = document.getElementById('ben_b_dai_dien').value.trim() || '';
+      const benBChucVu = document.getElementById('ben_b_chuc_vu').value.trim() || '';
+      const benBDaiDienB = document.getElementById('ben_b_dai_dien_b')?.value.trim() || '';
+      const benBChucVuB = document.getElementById('ben_b_chuc_vu_b')?.value.trim() || '';
+      const benATen = document.getElementById('ben_a_ten').value.trim() || '';
+      const benADiaChi = document.getElementById('ben_a_dia_chi').value.trim() || '';
+      const benAMst = document.getElementById('ben_a_mst').value.trim() || '';
+      const benAStk = document.getElementById('ben_a_stk').value.trim() || '';
+      const benADaiDien = document.getElementById('ben_a_dai_dien').value.trim() || '';
+      const benAChucVu = document.getElementById('ben_a_chuc_vu').value.trim() || '';
+      const hinhThucTt = document.getElementById('hinh_thuc_tt').value.trim() || '';
+      const dongTienTt = document.getElementById('dong_tien_tt').value.trim() || '';
+      const soNgayTt = document.getElementById('so_ngay_tt').value.trim() || '';
+      const ngayBatDau = formatVNDateShort(document.getElementById('ngay_bat_dau_date').value) || '...';
+      const ngayKetThuc = formatVNDateShort(document.getElementById('ngay_ket_thuc_date').value) || '...';
+      const calc = recalc();
+
+      let groupsHtml = '';
+      calc.allGroupData.forEach((gd) => {
+        groupsHtml += `<tr style="page-break-inside:avoid;"><td style="text-align:center;font-weight:bold;border:1px solid #000;padding:5px;">${gd.kyHieu}</td><td colspan="4" style="font-weight:bold;border:1px solid #000;padding:5px;">${gd.tenNhom}</td><td style="text-align:right;font-weight:bold;border:1px solid #000;padding:5px;">${fmtVND(gd.sum)}</td></tr>`;
+        gd.items.forEach((it, idx) => {
+          groupsHtml += `<tr style="page-break-inside:avoid;"><td style="text-align:center;border:1px solid #000;padding:5px;">${idx + 1}</td><td style="border:1px solid #000;padding:5px;">${it.ten || ''}</td><td style="text-align:center;border:1px solid #000;padding:5px;">${it.dvt || ''}</td><td style="text-align:right;border:1px solid #000;padding:5px;">${it.sl ? it.sl.toLocaleString('vi-VN') : ''}</td><td style="text-align:right;border:1px solid #000;padding:5px;">${it.gia ? fmtVND(it.gia) : ''}</td><td style="text-align:right;border:1px solid #000;padding:5px;">${it.tt ? fmtVND(it.tt) : ''}</td></tr>`;
+        });
+      });
+
+      const wrapperStyle = isPdf
+        ? `font-family:'Times New Roman',Times,serif;color:#000;font-size:15px;line-height:1.4;background:#fff; box-sizing:border-box;`
+        : `font-family:'Times New Roman',Times,serif;color:#000;font-size:15px;line-height:1.4;max-width:210mm;margin:0 auto;background:#fff;padding:15mm;box-shadow:0 0 10px rgba(0,0,0,0.1);`;
+
+      return `
+<div style="${wrapperStyle}">
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-weight:bold;font-size:15px;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+    <div style="font-weight:bold;font-size:15px;text-decoration:underline;">Độc lập - Tự do - Hạnh phúc</div>
+  </div>
+  <div style="text-align:center;margin-bottom:20px;margin-top:30px;">
+    <div style="font-size:20px;font-weight:bold;">HỢP ĐỒNG GIAO KHOÁN</div>
+    <div style="font-weight:bold;margin-top:5px;">Số: ${soHd}</div>
+  </div>
+  
+  <div style="margin-bottom:5px;"><b><u style="margin-right:5px;">Tên công trình:</u> <b>${tenCt}</b></b></div>
+  <div style="margin-bottom:15px;"><b><u style="margin-right:5px;">Địa điểm thi công:</u> <b>${diaDiem}</b></b></div>
+  
+  <div style="margin-bottom:10px;font-style:italic;">- Căn cứ vào Bộ luật Dân sự nước Cộng hòa XHCN Việt Nam;</div>
+  <div style="margin-bottom:10px;font-style:italic;">- Căn cứ vào nhu cầu và khả năng của hai bên.</div>
+  <div style="margin-bottom:20px;margin-top:15px;">Hôm nay, ${ngayKy}, tại công trình ${tenCt}, chúng tôi gồm:</div>
+  
+  <div style="font-weight:bold;margin-bottom:10px;text-transform:uppercase;">Đại diện bên giao khoán (Bên B):</div>
+  <table style="width:100%;margin-bottom:20px;border:none;page-break-inside:avoid;">
+    <tr><td style="width:160px;vertical-align:top;"><b>Tên công ty:</b></td><td><b>${benBTen}</b></td></tr>
+    <tr><td style="vertical-align:top;"><b>Địa chỉ:</b></td><td>${benBDiaChi}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Mã số thuế:</b></td><td>${benBMst}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Số tài khoản:</b></td><td>${benBStk}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Đại diện:</b></td><td><b>${benBDaiDien}</b> - Chức vụ: ${benBChucVu}</td></tr>
+    ${benBDaiDienB ? `<tr><td style="vertical-align:top;"><b>Đại diện (Bà):</b></td><td><b>${benBDaiDienB}</b> - Chức vụ: ${benBChucVuB}</td></tr>` : ''}
+  </table>
+
+  <div style="font-weight:bold;margin-bottom:10px;text-transform:uppercase;">Đại diện bên nhận giao khoán (Bên A):</div>
+  <table style="width:100%;margin-bottom:20px;border:none;page-break-inside:avoid;">
+    <tr><td style="width:160px;vertical-align:top;"><b>Tên công ty:</b></td><td><b>${benATen}</b></td></tr>
+    <tr><td style="vertical-align:top;"><b>Địa chỉ:</b></td><td>${benADiaChi}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Mã số thuế:</b></td><td>${benAMst}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Số tài khoản:</b></td><td>${benAStk}</td></tr>
+    <tr><td style="vertical-align:top;"><b>Đại diện:</b></td><td><b>${benADaiDien}</b> - Chức vụ: ${benAChucVu}</td></tr>
+  </table>
+
+  <div style="margin-top:20px;margin-bottom:10px;text-indent:30px;">Sau khi bàn bạc thoả thuận hai bên cùng thống nhất ký hợp đồng giao khoán công trình theo nội dung:</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 1: NỘI DUNG GIÁ TRỊ HỢP ĐỒNG</div>
+    <div style="margin-bottom:5px;text-align:justify;text-indent:30px;">Bên A đồng ý giao và bên B đồng ý nhận thực thiện các công việc giao khoán sau:</div>
+  </div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">- Tên công trình: ${tenCt}</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">- Khối lượng công việc và quy cách vật liệu, đơn giá theo Bản vẽ thiết kế kỹ thuật của bên A và Phụ lục hợp đồng số 01.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">- Địa điểm thi công giao khoán: ${diaDiem}</div>
+  <div style="margin-bottom:10px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Giá trị hợp đồng sẽ được xác nhận khối lượng công việc hoàn thành theo thời gian cụ thể.</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 2: HÌNH THỨC VÀ PHƯƠNG THỨC THANH TOÁN</div>
+    <div style="margin-bottom:5px;text-align:justify;"><b>2.1. Hình thức thanh toán:</b> ${hinhThucTt}</div>
+  </div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Đồng tiền thanh toán: ${dongTienTt}</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;"><b>2.2. Phương thức thanh toán:</b></div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">- Tạm ứng 50% giá trị sau 15 ngày từ khi ký hợp đồng.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">- Thanh toán cho bên B giá trị còn lại ngay sau khi bên A nhận được đầy đủ hồ sơ yêu cầu thanh toán của bên B trong vòng ${soNgayTt} ngày kể từ khi nhận đủ hồ sơ.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Hồ sơ thanh toán gồm:</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Hoá đơn giá trị gia tăng</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Đề nghị thanh toán</div>
+  <div style="margin-bottom:10px;text-align:justify;page-break-inside:avoid;">+ Biên bản xác nhận khối lượng công việc hoàn thành.</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 3: TIẾN ĐỘ THỰC HIỆN VÀ XÁC NHẬN KHỐI LƯỢNG CÔNG VIỆC HOÀN THÀNH</div>
+    <div style="margin-bottom:5px;text-align:justify;"><b>3.1. Thời gian thực hiện hợp đồng:</b> Từ ngày hai bên ký hợp đồng ${ngayBatDau} đến ${ngayKetThuc} (hoặc có thông báo thay đổi có xác nhận của hai bên).</div>
+  </div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Các tình huống bất khả kháng (Mưa, bão, mất điện, vào ngày lễ, theo quy định của pháp luật Việt Nam hoặc dịch bệnh, thiên tai, …) dẫn đến bên B không thực hiện được thì bên B được cộng thêm thời gian thi công.</div>
+  <div style="margin-bottom:10px;text-align:justify;page-break-inside:avoid;"><b>3.2. Xác nhận công việc hoàn thành:</b> Sau khi bên B thi công hoàn thành xong công việc và thông báo cho bên A, hai bên tiến hành xác nhận khối lượng công việc hoàn thành tại công trường.</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 4: QUYỀN VÀ NGHĨA VỤ CỦA CÁC BÊN</div>
+    <div style="margin-bottom:5px;text-align:justify;"><b>4.1 Trách nhiệm bên A:</b></div>
+  </div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Tạo điều kiện thuận lợi để bên B thi công đúng tiến độ hạng mục.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Thực hiện thanh toán cho bên B đủ và đúng hạn theo quy định tại ĐIỀU 2.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Cử người giám sát thi công lắp đặt đảm bảo đúng quy cách kỹ thuật.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Có trách nhiệm đăng ký công nhân thi công cho bên B khi có yêu cầu.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;"><b>4.2 Trách nhiệm bên B:</b></div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Tổ chức thực hiện lắp đặt giao hàng cho bên A đúng số lượng, đảm bảo chất lượng, mỹ thuật đúng kỹ thuật mà bên A duyệt.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Tổ chức thực hiện công việc thi công, lắp đặt đảm bảo an toàn lao động trong công trường cho cán bộ, công nhân viên của bên B, thực hiện nghiêm chỉnh và đầy đủ các quy định yêu cầu trong công trường đề ra.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Hoàn thành lắp đặt đúng tiến độ.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Thực hiện đầy đủ quy trình và các bước xác nhận khối lượng công việc hoàn thành của bên A yêu cầu.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Lập bản vẽ hoàn công nếu có yêu cầu.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Chịu trách nhiệm trước các bên về mọi phí tổn trong quá trình thi công nếu xảy ra hư hại trong phạm vi của mình.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Sau khi ký hợp đồng với bên A, bên B tiến hành sắp xếp nhân lực thi công lắp đặt theo đúng báo giá mà đã được 2 bên ký duyệt. Nếu trong thời gian này bên A có sự thay đổi về mẫu mã, chất liệu, số lượng hàng hóa đã ký với bên B thì bên A sẽ chịu toàn bộ chi phí (nếu có phát sinh) về sự thay đổi này.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;">+ Cung cấp cho bên A chứng từ hóa đơn hợp lệ sau khi ký biên bản xác nhận khối lượng công việc hoàn thành.</div>
+  <div style="margin-bottom:10px;text-align:justify;page-break-inside:avoid;">+ Chịu trách nhiệm bảo hành phạm vi công việc của mình, thời gian 12 tháng kể từ khi ký biên bản hoàn thành.</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 5: ĐIỀU KHOẢN VI PHẠM HỢP ĐỒNG</div>
+    <div style="margin-bottom:5px;text-align:justify;">- Nếu công việc thi công và bàn giao của Bên B bị chậm theo tiến độ quy định thì bên B phải phạt là 0,3%/ ngày (nếu thời gian chậm tiến độ nhỏ hơn mười ngày) và 0,5%/ngày (nếu thời gian chậm tiến độ lớn hơn 10 ngày) tính trên toàn bộ giá trị hợp đồng. Mức phạt tối đa không quá 12% giá trị hợp đồng.</div>
+  </div>
+  <div style="margin-bottom:10px;text-align:justify;page-break-inside:avoid;">- Nếu bên A chậm thanh toán theo điều IV của hợp đồng thì bên A cũng sẽ bị phạt 0,3%/ngày (nếu thời gian chậm tiến độ nhỏ hơn mười ngày) và 0,5%/ngày (nếu thời gian chậm tiến độ lớn hơn 10 ngày) tính trên toàn bộ giá trị hợp đồng. Mức phạt tối đa không quá 12% giá trị hợp đồng.</div>
+
+  <div style="page-break-inside:avoid;">
+    <div style="font-weight:bold;margin-bottom:5px;">ĐIỀU 6: ĐIỀU KHOẢN CHUNG</div>
+    <div style="margin-bottom:5px;text-align:justify;text-indent:30px;">Trong thời hạn thực hiện hợp đồng, không bên nào được tuỳ ý thay đổi hoặc chấm dứt hợp đồng khi chưa có sự thoả thuận đồng ý với bên kia. Bên nào tự ý thay đổi hoặc chấm dứt hợp đồng phải chịu bồi thường vi phạm hợp đồng bằng 12% tổng giá trị hợp đồng.</div>
+  </div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Hai bên cam kết thực hiện đầy đủ các điều khoản trong Hợp đồng, trong quá trình thực hiện hợp đồng nếu có vướng mắc gì hai bên gặp nhau đàm phán thống nhất giải quyết trên tinh thần hợp tác và theo pháp luật hiện hành. Nếu thương lượng không thành sẽ được đưa ra Toà án Thành Phố Vũng Tàu giải quyết. Quyết định của Toà án là quyết định cuối cùng buộc hai bên phải thực hiện. Mọi chi phí liên quan đến việc giải quyết tranh chấp bên thua sẽ phải chịu.</div>
+  <div style="margin-bottom:5px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Sau khi hai bên đã thực hiện xong quyền và nghĩa vụ với nhau, sau 5 ngày hợp đồng được thanh lý theo quy định.</div>
+  <div style="margin-bottom:30px;text-align:justify;page-break-inside:avoid;text-indent:30px;">Hợp đồng có hiệu lực từ ngày ký, được lập bằng tiếng Việt gồm 02 bản có giá trị pháp lý như nhau mỗi bên giữ 01 bản để cùng nhau thực hiện.</div>
+
+  <div style="display:flex;justify-content:space-between;text-align:center;margin-top:20px;">
+    <div style="width:45%;font-weight:bold;">ĐẠI DIỆN BÊN A</div>
+    <div style="width:45%;font-weight:bold;">ĐẠI DIỆN BÊN B</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;text-align:center;margin-top:90px;">
+    <div style="width:45%;"><b>${benADaiDien}</b></div>
+    <div style="width:45%;"><b>${benBDaiDien}</b></div>
+  </div>
+  
+  ${isPdf ? '' : `</div><div style="${wrapperStyle.replace('margin:0 auto;', 'margin:20px auto 0;')}">`}
+
+  <div style="page-break-before:always; font-weight:bold;margin-bottom:5px;text-align:center;font-size:18px;margin-top:20px;">PHỤ LỤC HỢP ĐỒNG</div>
+  <div style="text-align:center;margin-bottom:20px;font-style:italic;">(Kèm theo hợp đồng số: ${soHd})</div>
+
+  <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+    <thead>
+      <tr style="background:#f0f0f0;">
+        <th style="border:1px solid #000;padding:6px;width:6%;text-align:center;">STT</th>
+        <th style="border:1px solid #000;padding:6px;width:34%;text-align:center;">Nội dung công việc</th>
+        <th style="border:1px solid #000;padding:6px;width:8%;text-align:center;">ĐVT</th>
+        <th style="border:1px solid #000;padding:6px;width:12%;text-align:center;">Khối lượng</th>
+        <th style="border:1px solid #000;padding:6px;width:20%;text-align:center;">Đơn giá</th>
+        <th style="border:1px solid #000;padding:6px;width:20%;text-align:center;">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${groupsHtml}
+      <tr>
+        <td colspan="5" style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">Cộng</td>
+        <td style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">${fmtVND(calc.cong)}</td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">Thuế VAT (8%)</td>
+        <td style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">${fmtVND(calc.vat)}</td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">Tổng cộng</td>
+        <td style="border:1px solid #000;padding:6px;text-align:center;page-break-inside:avoid;">${fmtVND(calc.tong)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-bottom:30px;margin-top:15px;font-style:italic;">Bằng chữ : ${numberToVNWords(calc.tong)}</div>
+
+</div>`;
+    }
+
+    /* =========================================================
+       Preview Modal
+    ========================================================= */
+    const previewOverlay = document.getElementById('preview-overlay');
+    const previewBody = document.getElementById('preview-body');
+
+    function openPreview() {
+      recalc();
+      previewBody.innerHTML = buildPreviewHtml();
+      previewOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePreview() {
+      previewOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('btn-preview').addEventListener('click', openPreview);
+    document.getElementById('preview-close').addEventListener('click', closePreview);
+    previewOverlay.addEventListener('click', (e) => { if (e.target === previewOverlay) closePreview(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && previewOverlay.classList.contains('active')) closePreview(); });
+
+    // Export from preview modal
+    document.getElementById('preview-export-word').addEventListener('click', () => { closePreview(); generateDocx(); });
+    document.getElementById('preview-export-pdf').addEventListener('click', () => { closePreview(); generatePdf(); });
+
+    /* =========================================================
+       PDF Export (uses shared buildPreviewHtml)
+    ========================================================= */
+    async function generatePdf() {
+      const btnPdf = document.getElementById('btn-pdf');
+      const status = document.getElementById('status');
+      btnPdf.disabled = true;
+      btnPdf.innerHTML = '<span class="spinner"></span> Đang tạo PDF...';
+      status.className = 'status';
+      status.textContent = 'Đang chuẩn bị file PDF...';
+
+      try {
+        recalc();
+
+        const soHd = document.getElementById('so_hd').value.trim() || 'HopDong';
+        const safeSoHd = soHd.replace(/[\\/:*?"<>|]/g, '-');
+        const filename = `HopDongGiaoKhoan_${safeSoHd}.pdf`;
+
+        const opt = {
+          margin: 15,
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] }
+        };
+
+        await html2pdf().set(opt).from(buildPreviewHtml(true)).save();
+
+        status.className = 'status ok';
+        status.textContent = '✓ Đã xuất PDF: ' + filename;
+      } catch (err) {
+        console.error(err);
+        status.className = 'status err';
+        status.textContent = 'Lỗi khi tạo PDF: ' + err.message;
+      } finally {
+        btnPdf.disabled = false;
+        btnPdf.innerHTML = '📕 Xuất PDF';
+      }
+    }
+
+    document.getElementById('btn-pdf').addEventListener('click', generatePdf);
+  </script>
+</body>

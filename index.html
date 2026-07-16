@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Hệ thống xuất Hợp đồng chuyên nghiệp - Giao khoán & Điều lệ" />
+    <title>Hệ thống xuất Hợp đồng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0B1120;
+            --ink-2: #1A2744;
+            --paper: #F7F5EF;
+            --gold: #C9A661;
+            --gold-2: #E8C97A;
+            --gold-dark: #8B6914;
+            --emerald: #10B981;
+            --emerald-dark: #047857;
+            --blue: #3B82F6;
+            --blue-dark: #1D4ED8;
+            --purple: #8B5CF6;
+            --rose: #F43F5E;
+            --slate: #64748B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--ink);
+            color: #F1F5F9;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ======================== VIDEO BACKGROUND ======================== */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: rgba(11, 17, 32, 0.65);
+            /* var(--ink) with opacity to darken video */
+            pointer-events: none;
+        }
+
+        /* ======================== MAIN LAYOUT ======================== */
+        .main {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        /* ======================== HEADER ======================== */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: headerAppear 0.8s ease-out;
+        }
+
+        @keyframes headerAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(201, 166, 97, 0.1);
+            border: 1px solid rgba(201, 166, 97, 0.25);
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--emerald);
+            border-radius: 50%;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+        }
+
+        .header h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #F1F5F9 0%, var(--gold-2) 50%, #F1F5F9 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerText 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerText {
+            0% {
+                background-position: 0% center;
+            }
+
+            50% {
+                background-position: 100% center;
+            }
+
+            100% {
+                background-position: 0% center;
+            }
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #94A3B8;
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ======================== CONTRACT CARDS ======================== */
+        .cards-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            perspective: 1200px;
+            animation: cardsAppear 0.8s 0.2s ease-out both;
+        }
+
+        @keyframes cardsAppear {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .cards-wrapper {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+
+        .contract-card {
+            position: relative;
+            width: 340px;
+            min-height: 420px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @media (max-width: 800px) {
+            .contract-card {
+                width: 100%;
+                max-width: 380px;
+            }
+        }
+
+        .contract-card:hover {
+            transform: translateY(-12px) rotateX(2deg);
+        }
+
+        .card-inner {
+            position: relative;
+            height: 100%;
+            border-radius: 20px;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* Card 1 - Giao khoán */
+        .card-gk .card-inner {
+            background: linear-gradient(165deg,
+                    rgba(26, 39, 68, 0.95) 0%,
+                    rgba(17, 24, 45, 0.98) 100%);
+            border: 1px solid rgba(201, 166, 97, 0.15);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(201, 166, 97, 0.05),
+                inset 0 1px 0 rgba(201, 166, 97, 0.08);
+        }
+
+        .card-gk:hover .card-inner {
+            border-color: rgba(201, 166, 97, 0.4);
+            box-shadow:
+                0 20px 60px rgba(201, 166, 97, 0.15),
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(201, 166, 97, 0.2),
+                inset 0 1px 0 rgba(201, 166, 97, 0.15);
+        }
+
+        /* Card 2 - Điều lệ */
+        .card-dl .card-inner {
+            background: linear-gradient(165deg,
+                    rgba(20, 30, 55, 0.95) 0%,
+                    rgba(13, 20, 40, 0.98) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(59, 130, 246, 0.05),
+                inset 0 1px 0 rgba(59, 130, 246, 0.08);
+        }
+
+        .card-dl:hover .card-inner {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow:
+                0 20px 60px rgba(59, 130, 246, 0.12),
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(59, 130, 246, 0.15);
+        }
+
+        /* Card glow effect on hover */
+        .card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card-gk .card-glow {
+            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(201, 166, 97, 0.08), transparent);
+        }
+
+        .card-dl .card-glow {
+            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(59, 130, 246, 0.08), transparent);
+        }
+
+        .contract-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        /* Card icon area */
+        .card-icon-wrap {
+            position: relative;
+            z-index: 1;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contract-card:hover .card-icon-wrap {
+            transform: scale(1.08);
+        }
+
+        .card-gk .card-icon-wrap {
+            background: linear-gradient(135deg, rgba(201, 166, 97, 0.15), rgba(201, 166, 97, 0.05));
+            border: 1px solid rgba(201, 166, 97, 0.2);
+            box-shadow: 0 4px 16px rgba(201, 166, 97, 0.1);
+        }
+
+        .card-gk:hover .card-icon-wrap {
+            box-shadow: 0 8px 32px rgba(201, 166, 97, 0.2);
+        }
+
+        .card-dl .card-icon-wrap {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+        }
+
+        .card-dl:hover .card-icon-wrap {
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+        }
+
+        .card-icon {
+            font-size: 36px;
+            line-height: 1;
+        }
+
+        /* Card animated line decoration */
+        .card-deco-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .card-deco-line::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: left 0.6s ease;
+        }
+
+        .card-gk .card-deco-line::after {
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .card-dl .card-deco-line::after {
+            background: linear-gradient(90deg, transparent, var(--blue), transparent);
+        }
+
+        .contract-card:hover .card-deco-line::after {
+            left: 100%;
+        }
+
+        /* Card content */
+        .card-label {
+            position: relative;
+            z-index: 1;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .card-gk .card-label {
+            color: var(--gold);
+        }
+
+        .card-dl .card-label {
+            color: var(--blue);
+        }
+
+        .card-title {
+            position: relative;
+            z-index: 1;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #F1F5F9;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .card-desc {
+            position: relative;
+            z-index: 1;
+            font-size: 14px;
+            color: #94A3B8;
+            line-height: 1.65;
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        /* Card features list */
+        .card-features {
+            position: relative;
+            z-index: 1;
+            list-style: none;
+            margin-bottom: 28px;
+        }
+
+        .card-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #CBD5E1;
+            padding: 5px 0;
+        }
+
+        .card-features li .feat-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .card-gk .feat-icon {
+            background: rgba(201, 166, 97, 0.15);
+            color: var(--gold);
+        }
+
+        .card-dl .feat-icon {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--blue);
+        }
+
+        /* Card CTA button */
+        .card-cta {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            overflow: hidden;
+        }
+
+        .card-cta::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card-cta:hover::before {
+            left: 100%;
+        }
+
+        .card-gk .card-cta {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-2) 100%);
+            color: #1A0E00;
+            box-shadow: 0 4px 16px rgba(201, 166, 97, 0.3);
+        }
+
+        .card-gk .card-cta:hover {
+            box-shadow: 0 8px 32px rgba(201, 166, 97, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .card-dl .card-cta {
+            background: linear-gradient(135deg, var(--blue) 0%, #60A5FA 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .card-dl .card-cta:hover {
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .card-cta .arrow {
+            transition: transform 0.3s ease;
+            font-size: 16px;
+        }
+
+        .contract-card:hover .card-cta .arrow {
+            transform: translateX(4px);
+        }
+
+        /* Card corner decoration */
+        .card-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card-corner-tr {
+            top: -1px;
+            right: -1px;
+            border-top: 2px solid;
+            border-right: 2px solid;
+            border-radius: 0 20px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-corner-bl {
+            bottom: -1px;
+            left: -1px;
+            border-bottom: 2px solid;
+            border-left: 2px solid;
+            border-radius: 0 0 0 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-gk .card-corner {
+            border-color: rgba(201, 166, 97, 0.3);
+        }
+
+        .card-dl .card-corner {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .contract-card:hover .card-corner {
+            opacity: 1;
+        }
+
+        /* Status indicator */
+        .card-status {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+
+        .card-gk .card-status {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--emerald);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .card-dl .card-status {
+            background: rgba(251, 191, 36, 0.1);
+            color: #FBBF24;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .card-status .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .card-gk .status-dot {
+            background: var(--emerald);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+        }
+
+        .card-dl .status-dot {
+            background: #FBBF24;
+            box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+        }
+
+
+        /* Card 3 - Kinh Tế */
+        .card-kt .card-inner {
+            background: linear-gradient(165deg, rgba(20, 30, 55, 0.95) 0%, rgba(13, 20, 40, 0.98) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(16, 185, 129, 0.05), inset 0 1px 0 rgba(16, 185, 129, 0.08);
+        }
+
+        .card-kt:hover .card-inner {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.15);
+        }
+
+        .card-kt .card-glow {
+            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(16, 185, 129, 0.08), transparent);
+        }
+
+        .card-kt .card-icon-wrap {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+        }
+
+        .card-kt:hover .card-icon-wrap {
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+        }
+
+        .card-kt .card-deco-line::after {
+            background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+        }
+
+        .card-kt .card-label {
+            color: var(--emerald);
+        }
+
+        .card-kt .feat-icon {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--emerald);
+        }
+
+        .card-kt .card-cta {
+            background: linear-gradient(135deg, var(--emerald) 0%, #34D399 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .card-kt .card-cta:hover {
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .card-kt .card-corner {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .card-kt .card-status {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--emerald);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .card-kt .status-dot {
+            background: var(--emerald);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+        }
+
+        /* ======================== FOOTER ======================== */
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            animation: cardsAppear 0.8s 0.4s ease-out both;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .footer-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Source Serif 4', serif;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold), var(--gold-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ======================== RESPONSIVE ======================== */
+        @media (max-width: 800px) {
+            .main {
+                padding: 30px 16px;
+            }
+
+            .header {
+                margin-bottom: 40px;
+            }
+
+            .footer-stats {
+                gap: 24px;
+            }
+        }
+
+        /* ======================== MOUSE TRAIL EFFECT ======================== */
+        .trail-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="3194277-hd_1920_1080_30fps.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <div class="main">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-badge">
+                <span class="dot"></span>
+                Hệ thống quản lý hợp đồng
+            </div>
+            <h1>Xuất Hợp Đồng<br>Chuyên Nghiệp</h1>
+            <p>Chọn loại hợp đồng cần xuất, nhập dữ liệu và tải về file Word hoặc PDF — nhanh chóng, chính xác, đẹp mắt.
+            </p>
+        </div>
+
+        <!-- Contract Type Cards -->
+        <div class="cards-wrapper">
+            <!-- Card 1: HĐ Giao Khoán -->
+            <div class="contract-card card-gk" id="card-gk" onclick="window.location.href='Bao_Cao_app.html'">
+                <div class="card-inner">
+                    <div class="card-deco-line"></div>
+                    <div class="card-glow"></div>
+                    <div class="card-corner card-corner-tr"></div>
+                    <div class="card-corner card-corner-bl"></div>
+                    <div class="card-status">
+                        <span class="status-dot"></span>
+                        Sẵn sàng
+                    </div>
+
+                    <div class="card-icon-wrap">
+                        <span class="card-icon">📋</span>
+                    </div>
+
+                    <div class="card-label">Loại 01</div>
+                    <div class="card-title">Hợp Đồng<br>Giao Khoán</div>
+                    <div class="card-desc">
+                        Xuất hợp đồng giao khoán công trình với đầy đủ phụ lục, bảng khối lượng công việc và điều khoản
+                        thanh toán.
+                    </div>
+
+                    <ul class="card-features">
+                        <li><span class="feat-icon">✓</span> Nhập liệu trực quan, tính toán tự động</li>
+                        <li><span class="feat-icon">✓</span> Xuất Word & PDF chuyên nghiệp</li>
+                        <li><span class="feat-icon">✓</span> Phụ lục hợp đồng với N nhóm công việc</li>
+                    </ul>
+
+                    <button class="card-cta">
+                        Bắt đầu xuất hợp đồng
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 2: HĐ Vận Chuyển -->
+            <div class="contract-card card-dl" id="card-vc-btn" onclick="window.location.href='VanChuyen_app.html'">
+                <div class="card-inner">
+                    <div class="card-deco-line"></div>
+                    <div class="card-glow"></div>
+                    <div class="card-corner card-corner-tr"></div>
+                    <div class="card-corner card-corner-bl"></div>
+                    <div class="card-status" style="background: rgba(16, 185, 129, 0.1); color: var(--emerald); border-color: rgba(16, 185, 129, 0.2);">
+                        <span class="status-dot" style="background: var(--emerald); box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);"></span>
+                        Sẵn sàng
+                    </div>
+
+                    <div class="card-icon-wrap">
+                        <span class="card-icon">🚛</span>
+                    </div>
+
+                    <div class="card-label">Loại 02</div>
+                    <div class="card-title">Hợp Đồng<br>Vận Chuyển</div>
+                    <div class="card-desc">
+                        Xuất hợp đồng dịch vụ vận chuyển hàng hóa, theo dõi tuyến đường và cước phí chi tiết.
+                    </div>
+
+                    <ul class="card-features">
+                        <li><span class="feat-icon">✓</span> Bảng tính cước thông minh</li>
+                        <li><span class="feat-icon">✓</span> Phụ lục nhóm hành trình</li>
+                        <li><span class="feat-icon">✓</span> Xuất PDF/Word tức thì</li>
+                    </ul>
+
+                    <button class="card-cta">
+                        Bắt đầu xuất hợp đồng
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: HĐ Kinh Tế -->
+            <div class="contract-card card-kt" id="card-kinhte" onclick="window.location.href='Kinh_Te_app.html'">
+                <div class="card-inner">
+                    <div class="card-deco-line"></div>
+                    <div class="card-glow"></div>
+                    <div class="card-corner card-corner-tr"></div>
+                    <div class="card-corner card-corner-bl"></div>
+                    <div class="card-status">
+                        <span class="status-dot"></span>
+                        Sẵn sàng
+                    </div>
+
+                    <div class="card-icon-wrap">
+                        <span class="card-icon">💼</span>
+                    </div>
+
+                    <div class="card-label">Loại 03</div>
+                    <div class="card-title">Hợp Đồng<br>Kinh Tế</div>
+                    <div class="card-desc">
+                        Xuất hợp đồng kinh tế theo mẫu Thiên Nam, áp dụng cho các giao dịch thiết yếu.
+                    </div>
+
+                    <ul class="card-features">
+                        <li><span class="feat-icon">✓</span> Điều khoản chuẩn khung</li>
+                        <li><span class="feat-icon">✓</span> Smart data insertion</li>
+                        <li><span class="feat-icon">✓</span> Xuất PDF/Word tức thì</li>
+                    </ul>
+
+                    <button class="card-cta">
+                        Bắt đầu xuất hợp đồng
+                        <span class="arrow">→</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-stats">
+                <div class="stat">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Loại hợp đồng</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Word</div>
+                    <div class="stat-label">& PDF Export</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Giữ nguyên mẫu</div>
+                </div>
+            </div>
+            <p>
+                Định dạng gốc (font, khung bảng, tiêu đề) được giữ nguyên 100% từ file mẫu —<br>
+                công cụ chỉ thay thế đúng các vị trí cần điền bằng dữ liệu bạn nhập.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        /* ======================== CARD GLOW FOLLOW MOUSE ======================== */
+        document.querySelectorAll('.contract-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width * 100);
+                const y = ((e.clientY - rect.top) / rect.height * 100);
+                card.querySelector('.card-glow').style.setProperty('--mx', x + '%');
+                card.querySelector('.card-glow').style.setProperty('--my', y + '%');
+
+                // Subtle 3D tilt
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (e.clientY - rect.top - centerY) / centerY * 3;
+                const tiltY = -(e.clientX - rect.left - centerX) / centerX * 3;
+                card.style.transform = `translateY(-12px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    </script>
+</body>
+
+</html>
