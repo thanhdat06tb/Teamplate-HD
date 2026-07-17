@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 
 <head>
@@ -1093,12 +1093,12 @@
           <div class="row">
             <div>
               <label>Đại diện (Ông/Bà)</label>
-              <input type="text" id="ben_a_dai_dien" placeholder="Nguyễn Thị A">
+              <input type="text" id="ben_a_dai_dien_b" placeholder="Nguyễn Thị A">
             </div>
 
             <div>
               <label>Chức vụ</label>
-              <input type="text" id="ben_a_chuc_vu" placeholder="Kế toán trưởng">
+              <input type="text" id="ben_a_chuc_vu_b" placeholder="Kế toán trưởng">
             </div>
           </div>
         </div>
@@ -1148,12 +1148,18 @@
           <h2>Tổng hợp giá trị hợp đồng</h2>
           <div class="sum-line"><span>Cộng (tất cả nhóm)</span><span id="sum-cong">0 đ</span></div>
           <div class="sum-line" style="display: flex; justify-content: space-between; align-items: center;">
-             <span style="display:flex; align-items:center; gap: 8px;">
-               Thuế VAT
-               <label style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input type="radio" name="vat_rate" value="0.08" onchange="recalc()" checked style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 8%</label>
-               <label style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input type="radio" name="vat_rate" value="0.1" onchange="recalc()" style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 10%</label>
-             </span>
-             <span id="sum-vat">0 đ</span>
+            <span style="display:flex; align-items:center; gap: 8px;">
+              Thuế VAT
+              <label
+                style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input
+                  type="radio" name="vat_rate" value="0.08" onchange="recalc()" checked
+                  style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 8%</label>
+              <label
+                style="margin:0; font-size:12.5px; font-weight:600; color:#fff; display:flex; align-items:center; cursor:pointer; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.3);"><input
+                  type="radio" name="vat_rate" value="0.1" onchange="recalc()"
+                  style="margin:0 5px 0 0; accent-color: #C9A661; transform: scale(1.1);"> 10%</label>
+            </span>
+            <span id="sum-vat">0 đ</span>
           </div>
           <div class="sum-line total"><span>Tổng cộng</span><span id="sum-tong">0 đ</span></div>
           <div class="sum-words" id="sum-words">Bằng chữ: —</div>
@@ -1461,10 +1467,10 @@
       const vatRateNodes = document.getElementsByName('vat_rate');
       let vatRate = 0.08;
       for (let r of vatRateNodes) {
-          if (r.checked) {
-              vatRate = parseFloat(r.value);
-              break;
-          }
+        if (r.checked) {
+          vatRate = parseFloat(r.value);
+          break;
+        }
       }
       const vat = cong * vatRate;
       const tong = cong + vat;
@@ -1718,7 +1724,7 @@
           compression: 'DEFLATE'
         });
 
-        const safeSoHd = (document.getElementById('so_hd').value.trim() || 'HopDong').replace(/[\\\\/:*?"<>|]/g, '-');
+        const safeSoHd = (document.getElementById('so_hd').value.trim() || 'HopDong').replace(/[/:*?"<>|]/g, '-');
         const filename = `HopDongGiaoKhoan_${safeSoHd}.docx`;
 
         const url = URL.createObjectURL(blob);
@@ -1763,6 +1769,8 @@
       const benAStk = document.getElementById('ben_a_stk').value.trim() || '';
       const benADaiDien = document.getElementById('ben_a_dai_dien').value.trim() || '';
       const benAChucVu = document.getElementById('ben_a_chuc_vu').value.trim() || '';
+      const benADaiDienB = document.getElementById('ben_a_dai_dien_b')?.value.trim() || '';
+      const benAChucVuB = document.getElementById('ben_a_chuc_vu_b')?.value.trim() || '';
       const hinhThucTt = document.getElementById('hinh_thuc_tt').value.trim() || '';
       const dongTienTt = document.getElementById('dong_tien_tt').value.trim() || '';
       const soNgayTt = document.getElementById('so_ngay_tt').value.trim() || '';
@@ -1780,13 +1788,13 @@
 
       let vatRateTxtOuter = "8%";
       const vatRateNodesOuter = document.getElementsByName('vat_rate');
-      if(vatRateNodesOuter && vatRateNodesOuter.length > 0) {
-          for (let r of vatRateNodesOuter) {
-              if (r.checked) {
-                  vatRateTxtOuter = r.value === '0.08' ? '8%' : '10%';
-                  break;
-              }
+      if (vatRateNodesOuter && vatRateNodesOuter.length > 0) {
+        for (let r of vatRateNodesOuter) {
+          if (r.checked) {
+            vatRateTxtOuter = r.value === '0.08' ? '8%' : '10%';
+            break;
           }
+        }
       }
 
       const wrapperStyle = isPdf
@@ -1828,6 +1836,7 @@
     <tr><td style="vertical-align:top;"><b>Mã số thuế:</b></td><td>${benAMst}</td></tr>
     <tr><td style="vertical-align:top;"><b>Số tài khoản:</b></td><td>${benAStk}</td></tr>
     <tr><td style="vertical-align:top;"><b>Đại diện:</b></td><td><b>${benADaiDien}</b> - Chức vụ: ${benAChucVu}</td></tr>
+    ${benADaiDienB ? `<tr><td style="vertical-align:top;"><b>Đại diện (Bà/Ông):</b></td><td><b>${benADaiDienB}</b> - Chức vụ: ${benAChucVuB}</td></tr>` : ''}
   </table>
 
   <div style="margin-top:20px;margin-bottom:10px;text-indent:30px;">Sau khi bàn bạc thoả thuận hai bên cùng thống nhất ký hợp đồng giao khoán công trình theo nội dung:</div>
@@ -1982,7 +1991,7 @@
         recalc();
 
         const soHd = document.getElementById('so_hd').value.trim() || 'HopDong';
-        const safeSoHd = soHd.replace(/[\\/:*?"<>|]/g, '-');
+        const safeSoHd = soHd.replace(/[/:*?"<>|]/g, '-');
         const filename = `HopDongGiaoKhoan_${safeSoHd}.pdf`;
 
         const opt = {
