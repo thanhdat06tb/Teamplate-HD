@@ -1,0 +1,165 @@
+﻿<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>
+        <div style="font-family:'Times New Roman',Times,serif;color:#000;font-size:15px;line-height:1.4;background:#fff; box-sizing:border-box; width: 780px; max-width: 100%; margin: 0 auto; padding-right: 15px;">
+        <div style="text-align:center; font-weight:bold;">
+          CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br>
+          Độc lập – Tự do – Hạnh phúc<br>
+          --------oOo-------<br><br>
+          HỢP ĐỒNG KINH TẾ<br>
+          <span style="font-weight:normal;">(Số: 011/2026/HĐKT)</span>
+        </div>
+        
+        <div style="margin-top:20px; break-inside: avoid;">
+          <div style="margin-bottom: 10px;">Căn cứ và bộ luật dân sự có hiệu lực từ ngày 01/01/2017.</div>
+          <div style="margin-bottom: 10px;">Căn cứ vào bộ luật thương mại nước Cộng hoà xã hội chủ nghĩa Việt Nam số 36/2005/QH có hiệu lực từ ngày 01/01/2006.</div>
+          <div style="margin-bottom: 10px;">Căn cứ nhu cầu và khả năng của hai bên:</div>
+        </div>
+        
+        <div style="margin-top:20px; break-inside: avoid;">Hôm nay, ngày 13 tháng 07 năm 2026 chúng tôi gồm:</div>
+        
+        <div style="margin-top:10px; break-inside: avoid;">
+          <b><u>BÊN A (BÊN MUA):</u> CÔNG TY TNHH ABC VINA</b><br>
+          <table style="width:100%; border:none;">
+            <tr><td style="width:150px; vertical-align: top;">- Địa chỉ</td><td style="vertical-align: top; word-wrap: break-word;">: Tòa nhà X, Hà Nội</td></tr>
+            <tr><td style="vertical-align: top;">- Điện thoại</td><td style="vertical-align: top;">: 0987654321</td></tr>
+            <tr><td style="vertical-align: top;">- Mã số thuế</td><td style="vertical-align: top;">: 0101234567</td></tr>
+            <tr><td style="vertical-align: top;">- Người đại diện</td><td style="vertical-align: top;">: Nguyễn Văn A <span style="display:inline-block; margin-left:30px;">Chức vụ: Tổng Giám đốc</span></td></tr>
+            <tr><td style="vertical-align: top;">- Gmail</td><td style="vertical-align: top;">: abcvina@gmail.com</td></tr>
+          </table>
+        </div>
+        
+        <div style="margin-top:10px; break-inside: avoid;">
+          <b><u>BÊN B (BÊN BÁN):</u> CỔ PHẦN THIÊN NAM</b><br>
+          <table style="width:100%; border:none;">
+            <tr><td style="width:150px;">- Địa chỉ</td><td>: KCN Phú Mỹ 1, Vũng Tàu</td></tr>
+            <tr><td>- Điện thoại</td><td>: 0123456789</td></tr>
+            <tr><td>- Mã số thuế</td><td>: 3500111222</td></tr>
+            <tr><td>- Người đại diện</td><td>: Trần Thị C <span style="display:inline-block; margin-left:30px;">Chức vụ: Giám đốc Kinh doanh</span></td></tr>
+            <tr><td>- Tài khoản số</td><td>: 1023456789 <span style="display:inline-block; margin-left:15px;">Tại ngân hàng: Vietcombank CN Vũng Tàu</span></td></tr>
+          </table>
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;">Hai bên thỏa thuận đồng ý ký kết hợp đồng mua bán với các điều khoản sau:</div>
+        <div style="break-inside: avoid;"><b><u>ĐIỀU 1:</u> PHẠM VI CUNG CẤP, GIÁ TRỊ HỢP ĐỒNG</b></div>
+        <div style="break-inside: avoid;"><b>1.1 Phạm vi cung cấp:</b> Bên B đồng ý bán, Bên A đồng ý mua sản phẩm do bên B cung cấp như sau:</div>
+        
+        <table style="width:100%; border-collapse:collapse; text-align:center; margin-top:10px; break-inside: avoid;">
+          <tr>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">STT</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">TÊN SẢN PHẨM</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">ĐVT</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">SL</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">ĐƠN GIÁ<br>(VNĐ)</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">THÀNH TIỀN<br>(VNĐ)</th>
+            <th style="border:1px solid #000; padding:6px; font-weight:bold;">GHI CHÚ</th>
+          </tr>
+          <tr style="page-break-inside:avoid; break-inside:avoid;">
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">1</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">Ống sấy khí phi 60</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">Cái</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">10</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">1.500.000</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">15.000.000</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;"></td>
+                </tr><tr style="page-break-inside:avoid; break-inside:avoid;">
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">2</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">Van bảo áp</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">Bộ</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">5</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">2.000.000</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;">10.000.000</td>
+                <td style="border:1px solid #000; padding:6px; font-size:14px;"></td>
+                </tr>
+          <tr><td colspan="5" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Tổng cộng trước VAT:</td><td colspan="2" style="border:1px solid #000; padding:6px;">25.000.000</td></tr>
+          <tr><td colspan="5" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Thuế VAT 10%:</td><td colspan="2" style="border:1px solid #000; padding:6px;">2.500.000</td></tr>
+          <tr><td colspan="5" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Tổng cộng sau VAT:</td><td colspan="2" style="border:1px solid #000; padding:6px;">27.500.000</td></tr>
+        </table>
+        
+        <div style="margin-top:10px; break-inside: avoid;"><b>1.2 Tổng giá trị hợp đồng (Gồm VAT):</b> 27.500.000 đồng</div>
+        <div style="font-style:italic; break-inside: avoid;">Bằng chữ: Hai mươi bảy triệu năm trăm nghìn đồng</div>
+        <div style="break-inside: avoid;">Giá trị trên bao gồm thuế VAT 10%, gồm chi phí vận chuyển đến chân công trình, không bao gồm chi phí bốc xếp hạ hàng.</div>
+        
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 2:</u> Điều kiện giao nhận hàng và bảo hành sản phẩm</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Địa điểm giao hàng: Kho Cảng Thị Vải<br>
+          - Người nhận hàng: Theo chi tiết trong đơn đặt hàng của Bên mua.<br>
+          - Thời gian giao hàng: trong vòng 15 ngày làm việc kể từ ngày Bên Bán nhận được tạm ứng Bên mua (không bao gồm chủ nhật, các ngày nghỉ lễ và các nguyên nhân bất khả kháng như bão lụt...).<br>
+          - Bốc xếp: Mỗi bên chịu 1 đầu.<br>
+          - Bên B có nghĩa vụ bảo hành chất lượng sản phẩm trong vòng 12 tháng kể từ ngày giao hàng tại công trường.
+        </div>
+        
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 3:</u> Phương thức thanh toán</b></div>
+        <div style="break-inside: avoid;">3.1 Phương thức thanh toán: 100% bằng Chuyển khoản</div>
+        <div style="break-inside: avoid;">3.2 Hình thức thanh toán: Chuyển khoản theo tiến độ</div>
+        <div style="break-inside: avoid;">3.3 Tạm ứng, thanh toán: Chia làm 2 đợt</div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          <u>Đợt 1</u>: Bên A tạm ứng cho Bên B số tiền: <b>20.000.000</b> (Bằng chữ: <i>Hai mươi triệu đồng</i>./) sau khi hai Bên ký hợp đồng, Bên A gửi đơn đặt hàng cho Bên B và Bên A nhận được thư đề nghị tạm ứng.<br>
+          <u>Đợt 2</u>: Bên A sẽ thanh toán cho Bên B 100% còn lại của giá trị hợp đồng tương ứng số tiền: <b>30.000.000 đồng</b> (Bằng chữ: <i>Ba mươi triệu đồng</i> /.) sau khi nhận được hồ sơ thanh toán và trước khi hàng xuất xưởng.
+        </div>
+        <div style="break-inside: avoid;">Hồ sơ thanh toán gồm có:</div>
+        <div style="margin-left:20px; break-inside: avoid;">
+          &#10003; Giấy đề nghị thanh toán<br>
+          &#10003; Hóa đơn VAT<br>
+          &#10003; Giấy chứng nhận xuất xưởng của nhà máy (C/O)<br>
+          &#10003; Giấy chứng nhận mạ kẽm hàng hóa
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 4:</u> Chất lượng hàng hóa:</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Bên B cam kết sản phẩm sản xuất đúng tiêu chuẩn chất lượng và theo yêu cầu đặt hàng của Bên A và là hàng mới 100% chưa qua sử dụng.<br>
+          - Bên B có nghĩa vụ bảo hành chất lượng sản phẩm trong vòng 12 tháng kể từ ngày giao hàng tại công trường. Bên Bán không bảo hành các hư hỏng do lỗi nhà thầu thi công sai không đúng hướng dẫn lắp đặt của bên bán.
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 5:</u> Quyền và Nghĩa vụ của các Bên</b></div>
+        <div style="break-inside: avoid;"><b>5.1 Quyền và nghĩa vụ của Bên A</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Tạo điều kiện cho Bên B ra vào công trình để việc giao hàng thuận tiện, nhanh chóng;<br>
+          - Bố trí nhân sự kiểm tra hàng hóa tại công trình và xác nhận hàng hóa giao nhận và mặt bằng, kho bãi nhận hàng;<br>
+          - Bên A có quyền từ chối nhận lô hàng không đạt yêu cầu về chất lượng, quy cách và tiêu chuẩn (theo tiêu chuẩn của nhà sản xuất) đã thỏa thuận và/hoặc Bên B không đảm bảo chứng từ chứng minh nguồn gốc, xuất xứ của hàng hóa, thiếu các giấy tờ đi kèm, chậm giao theo thỏa thuận.<br>
+          - Bên A có quyền đơn phương chấm dứt Hợp đồng, yêu cầu bồi thường thiệt hại trong trường hợp Bên B vi phạm bất kỳ quy định nào của Hợp đồng hoặc sau khi ký kết Hợp đồng nhưng Bên B không thực hiện Hợp đồng này gây ảnh hưởng nghiêm trọng đến tiến độ công việc và gây thiệt hại cho Bên A.<br>
+          - Các quyền và nghĩa vụ khác được quy định trong Hợp đồng này và Pháp luật Việt Nam hiện hành.
+        </div>
+        <div style="break-inside: avoid;"><b>5.2 Quyền và nghĩa vụ của Bên B.</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Giao hàng đúng địa điểm, tiến độ, đúng chất lượng, yêu cầu kỹ thuật, quy cách kèm theo chứng từ liên quan đến việc Bên A đặt hàng từ nhà sản xuất theo quy định của Hợp đồng. Trường hợp Bên B giao hàng không đúng theo quy định trong Hợp đồng thì Bên A có quyền từ chối nhận hàng.<br>
+          - Đảm bảo hàng hóa mới 100%, chưa qua sử dụng, chính hãng; chất lượng hàng hóa cung cấp cho Bên A là phù hợp với thỏa thuận tại Hợp đồng này;<br>
+          - Bên B tự chịu trách nhiệm và phải đảm bảo hàng hóa cung cấp là hợp pháp, đúng nguồn gốc xuất xứ, chất lượng và đảm bảo quyền sở hữu của Bên B đối với hàng hoá đã bán không bị tranh chấp bởi Bên thứ ba.<br>
+          - Quyền và nghĩa vụ trong Hợp đồng này không bên nào được chuyển giao cho bất kỳ bên thứ ba nào nếu không có sự đồng ý của Bên còn lại.<br>
+          - Các quyền và nghĩa vụ khác được quy định tại Hợp đồng này và quy định của pháp luật.
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 6:</u> Điều khoản vi phạm và chấm dứt Hợp đồng.</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Nếu Bên B thực hiện chậm so với tiến độ thì Bên B sẽ chịu phạt 0,1% giá trị hợp đồng/ngày chậm trễ. Tổng giá trị khoản phạt do vi phạm hợp đồng không quá 10% giá trị hợp đồng.<br>
+          - Nếu quá thời hạn thanh toán mà Bên A vẫn chưa thanh toán cho Bên B thì Bên A chịu phạt là 0.1%/ngày cho số tiền chậm thanh toán. Tổng số tiền phạt do vi phạm không quá 10% giá trị Hợp đồng.<br>
+          - Nếu Bên B đơn phương chấm dứt hợp đồng không phải lỗi do Bên A thì Bên B phải có trách nhiệm bồi thường cho Bên A 10% giá trị hợp đồng và các khoản chi phí phát sinh do việc Bên B đơn phương chấm dứt hợp đồng nhưng không quá 100% giá trị hợp đồng.<br>
+          - Trường hợp nếu hợp đồng tạm ngưng quá 30 ngày mà hai bên vẫn không thể đi đến thỏa thuận thống nhất để tiếp tục thực hiện hợp đồng thì hai bên sẽ tiến hành chấm dứt, thanh lý hợp đồng. Các chi phí thiệt hại phát sinh do việc chấm dứt hợp đồng do lỗi của bên nào thì bên đó sẽ phải chịu trách nhiệm bồi thường nhưng không quá 100% giá trị hợp đồng.<br>
+          - Trong trường hợp có những tranh chấp mà hai bên không thể giải quyết được bằng hoà giải thì việc giải quyết đựơc thực hiện tại Tòa án. Quyết định của Tòa án là cuối cùng và bắt buộc thực hiện đối với hai bên. Bên thua kiện sẽ chịu mọi án phí và phải thực hiện mọi quyết định của Toà án.
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 7:</u> Hiệu lực của Hợp đồng</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Hợp đồng này có hiệu lực kể từ ngày ký. Khi bên mua đã nhận đủ hàng và bên bán đã nhận đủ tiền theo đúng các điều khoản trên, trong vòng 20 ngày nếu hai bên không có ý kiến gì thì hợp đồng này tự thanh lý.
+        </div>
+
+        <div style="margin-top:15px; break-inside: avoid;"><b><u>Điều 8:</u> Các cam kết chung</b></div>
+        <div style="margin-left:5px; break-inside: avoid;">
+          - Hai bên cam kết thực hiện đầy đủ các nghĩa vụ của mình theo quy định trong Hợp đồng này. Trong quá trình thực hiện nếu có khó khăn, trở ngại, các bên phải có thông báo cho nhau để cùng giải quyết.<br>
+          - Hợp đồng này được lập thành 04 bản, bên A giữ 02 bản, bên B giữ 02 bản làm cơ sở thực hiện.
+        </div>
+        
+        <table style="width:100%; border:none; text-align:center; margin-top:40px; break-inside: avoid;">
+          <tr>
+            <td style="width:50%; font-weight:bold;">ĐẠI DIỆN BÊN A</td>
+            <td style="width:50%; font-weight:bold;">ĐẠI DIỆN BÊN B</td>
+          </tr>
+          <tr>
+            <td style="height: 100px;"></td>
+            <td style="height: 100px;"></td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Nguyễn Văn A</td>
+            <td style="font-weight:bold;">Trần Thị C</td>
+          </tr>
+        </table>
+      </div>
+    </body></html>
