@@ -3,7 +3,7 @@ const State = {
   currentStep: 1,
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '' },
   company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
-  contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15' },
+  contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
   products: [],
   tableMode: 'simple',
   vatRate: 0.08
@@ -20,6 +20,7 @@ const els = {
   productTbody: document.getElementById('product-table-body'),
   appProductTable: document.getElementById('app-product-table'),
   vatSelect: document.getElementById('vat-rate'),
+  vatSelectKt: document.getElementById('vat-rate-kt'),
   
   // Inputs
   kh_ten: document.getElementById('kh_ten'),
@@ -45,6 +46,11 @@ const els = {
   diadiem_ct: document.getElementById('diadiem_ct'),
   tam_ung: document.getElementById('tam_ung'),
   so_ngay_tt: document.getElementById('so_ngay_tt'),
+  thoi_gian_giao: document.getElementById('thoi_gian_giao'),
+  pt_thanh_toan: document.getElementById('pt_thanh_toan'),
+  so_hd_kt: document.getElementById('so_hd_kt'),
+  ngay_ky_kt: document.getElementById('ngay_ky_kt'),
+  tam_ung_kt: document.getElementById('tam_ung_kt'),
 };
 
 function fmtVND(n) {
@@ -62,7 +68,7 @@ function updateNav() {
   });
   
   els.btnPrev.style.display = State.currentStep === 1 ? 'none' : 'block';
-  if (State.currentStep === 5) {
+  if (State.currentStep === 6) {
     els.btnNext.style.display = 'none';
     prepareFinalPreviews();
   } else {
@@ -74,7 +80,7 @@ function updateNav() {
 }
 
 els.btnNext.addEventListener('click', () => {
-  if (State.currentStep < 5) {
+  if (State.currentStep < 6) {
     saveFormState();
     State.currentStep++;
     updateNav();
@@ -110,14 +116,36 @@ function saveFormState() {
   State.company.sdt = els.dn_sdt.value || '...';
   State.company.email = els.dn_email.value || '...';
   
-  State.contract.sohd = els.so_hd.value || '...';
-  State.contract.ngay = els.ngay_ky.value || '...';
+  // Prefer Step 3 inputs if we are on Step 3, otherwise Step 2 inputs
+  if (State.currentStep === 3) {
+    State.contract.sohd = els.so_hd_kt ? (els.so_hd_kt.value || '...') : '...';
+    State.contract.ngay = els.ngay_ky_kt ? (els.ngay_ky_kt.value || '...') : '...';
+    State.contract.tamung = els.tam_ung_kt ? (els.tam_ung_kt.value || '50') : '50';
+    if(els.so_hd) els.so_hd.value = els.so_hd_kt.value;
+    if(els.ngay_ky) els.ngay_ky.value = els.ngay_ky_kt.value;
+    if(els.tam_ung) els.tam_ung.value = els.tam_ung_kt.value;
+  } else {
+    State.contract.sohd = els.so_hd.value || '...';
+    State.contract.ngay = els.ngay_ky.value || '...';
+    State.contract.tamung = els.tam_ung.value || '50';
+    if(els.so_hd_kt) els.so_hd_kt.value = els.so_hd.value;
+    if(els.ngay_ky_kt) els.ngay_ky_kt.value = els.ngay_ky.value;
+    if(els.tam_ung_kt) els.tam_ung_kt.value = els.tam_ung.value;
+  }
+  
   State.contract.tenct = els.ten_ct.value || '...';
   State.contract.diadiemct = els.diadiem_ct.value || '...';
-  State.contract.tamung = els.tam_ung.value || '50';
   State.contract.songaytt = els.so_ngay_tt.value || '15';
+  State.contract.thoiGianGiao = els.thoi_gian_giao ? els.thoi_gian_giao.value || '...' : '...';
+  State.contract.ptThanhToan = els.pt_thanh_toan ? els.pt_thanh_toan.value || '...' : '...';
   
-  State.vatRate = parseFloat(els.vatSelect.value);
+  if (State.currentStep === 3) {
+      if(els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
+      if(els.vatSelect && els.vatSelectKt) els.vatSelect.value = els.vatSelectKt.value;
+  } else {
+      if(els.vatSelect) State.vatRate = parseFloat(els.vatSelect.value);
+      if(els.vatSelectKt && els.vatSelect) els.vatSelectKt.value = els.vatSelect.value;
+  }
 }
 
 // Global Re-bind
@@ -155,6 +183,8 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-diadiem-ct').forEach(e => e.textContent = State.contract.diadiemct);
   document.querySelectorAll('.bind-tam-ung').forEach(e => e.textContent = State.contract.tamung);
   document.querySelectorAll('.bind-so-ngay-tt').forEach(e => e.textContent = State.contract.songaytt);
+  document.querySelectorAll('.bind-thoi-gian-giao').forEach(e => e.textContent = State.contract.thoiGianGiao);
+  document.querySelectorAll('.bind-pt-thanh-toan').forEach(e => e.textContent = State.contract.ptThanhToan);
   
   // Date parsing
   const dateStr = State.contract.ngay;
@@ -194,13 +224,14 @@ window.updateRow = function(index, field, value) {
 
 // Product Rendering
 function renderProducts() {
-  let h1 = '', h3 = '', hBg = '';
+  let h1 = '', h3 = '', hBg = '', hKt = '';
   let sum = 0;
   
   if (State.products.length === 0) {
     h1 = `<tr><td colspan="6" style="text-align:center; color:#888;">Chưa có dữ liệu</td></tr>`;
     h3 = `<tr><td colspan="5" style="text-align:center;">Vui lòng nhập dữ liệu ở Bước 1</td></tr>`;
     hBg = `<tr><td colspan="6" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
+    hKt = `<tr><td colspan="10" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
   } else {
     // Pass 1: Compute category totals
     let categoryTotals = [];
@@ -283,20 +314,38 @@ function renderProducts() {
         <td style="border:1px solid #000; padding:8px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
       </tr>`;
+      
+      // Step 2 Kinh Te Rows
+      hKt += `<tr style="${styleBold} page-break-inside:avoid; break-inside:avoid;">
+        <td style="border:1px solid #000; padding:6px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
+        <td style="border:1px solid #000; padding:6px;">${p.ten || ''}</td>
+        <td style="border:1px solid #000; padding:6px; text-align:center;">${p.dvt || ''}</td>
+        <td style="border:1px solid #000; padding:6px; text-align:center;">${dispSl}</td>
+        <td class="col-simple" style="border:1px solid #000; padding:6px; text-align:right;">${(gSimple || isCat) ? fmtVND(gSimple) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${(gVatTu || isCat) && !isCat ? fmtVND(gVatTu) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${(gNhanCong || isCat) && !isCat ? fmtVND(gNhanCong) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gVatTu) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gNhanCong) : ''}</td>
+        <td class="col-simple" style="border:1px solid #000; padding:6px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px; font-weight:bold; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
+        <td class="col-complex" style="border:1px solid #000; padding:6px;">${p.ghiChu || ''}</td>
+      </tr>`;
     });
   }
   
   els.productTbody.innerHTML = h1;
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
+  if(document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
   
   // Set table modes
   const tblMode = State.tableMode === 'complex' ? 'complex-mode' : 'simple-mode';
   const noMode = State.tableMode === 'complex' ? 'simple-mode' : 'complex-mode';
   [
-    document.querySelector('#product-table-body').closest('table'),
-    document.querySelector('#bg-product-table').closest('table'),
-    document.querySelector('#app-product-table').closest('table')
+    document.querySelector('#product-table-body')?.closest('table'),
+    document.querySelector('#bg-product-table')?.closest('table'),
+    document.querySelector('#app-product-table')?.closest('table'),
+    document.querySelector('#bind-products-kt')?.closest('table')
   ].forEach(tb => {
     if(tb) {
       tb.classList.add(tblMode);
@@ -307,26 +356,43 @@ function renderProducts() {
   // Update totals
   const vat = sum * State.vatRate;
   const total = sum + vat;
-  document.getElementById('app-subtotal').textContent = fmtVND(sum) + ' VNĐ';
-  document.getElementById('app-vat').textContent = fmtVND(vat) + ' VNĐ';
-  document.getElementById('app-total').textContent = fmtVND(total) + ' VNĐ';
-  document.getElementById('app-vat-rate').textContent = (State.vatRate * 100);
-  document.getElementById('bbnt-total').textContent = fmtVND(total);
+  const setText = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
+
+  setText('app-subtotal', fmtVND(sum) + ' VNĐ');
+  setText('app-vat', fmtVND(vat) + ' VNĐ');
+  setText('app-total', fmtVND(total) + ' VNĐ');
+  setText('app-vat-rate', (State.vatRate * 100));
+  setText('bbnt-total', fmtVND(total));
   
   // Bg logic with VAT
   const bgSubtotal = Math.round(sum);
   const bgVatAmount = Math.round(vat);
   const bgTotal = Math.round(total);
   
-  if(document.getElementById('bg-subtotal')) document.getElementById('bg-subtotal').textContent = fmtVND(bgSubtotal);
-  if(document.getElementById('bg-subtotal-complex')) document.getElementById('bg-subtotal-complex').textContent = fmtVND(bgSubtotal);
-  if(document.getElementById('bg-vat-amount')) document.getElementById('bg-vat-amount').textContent = fmtVND(bgVatAmount);
-  if(document.getElementById('bg-vat-amount-complex')) document.getElementById('bg-vat-amount-complex').textContent = fmtVND(bgVatAmount);
-  if(document.getElementById('bg-total-rounded')) document.getElementById('bg-total-rounded').textContent = fmtVND(bgTotal);
-  if(document.getElementById('bg-total-rounded-complex')) document.getElementById('bg-total-rounded-complex').textContent = fmtVND(bgTotal);
+  setText('bg-subtotal', fmtVND(bgSubtotal));
+  setText('bg-subtotal-complex', fmtVND(bgSubtotal));
+  setText('bg-vat-amount', fmtVND(bgVatAmount));
+  setText('bg-vat-amount-complex', fmtVND(bgVatAmount));
+  setText('bg-total-rounded', fmtVND(bgTotal));
+  setText('bg-total-rounded-complex', fmtVND(bgTotal));
+  setText('bg-total-words', docTien(bgTotal));
 
-  document.getElementById('bg-total-words').textContent = docTien(bgTotal);
   document.querySelectorAll('.bind-vat-rate').forEach(e => e.textContent = (State.vatRate * 100));
+  
+  // Update KT contract totals
+  const tamUngPerc = parseFloat(State.contract.tamung) || 0;
+  const tamUngVal = Math.round(bgTotal * tamUngPerc / 100);
+  const conLaiVal = bgTotal - tamUngVal;
+  
+  document.querySelectorAll('.bind-tong-truoc-vat').forEach(e => e.textContent = fmtVND(bgSubtotal));
+  document.querySelectorAll('.bind-tien-vat').forEach(e => e.textContent = fmtVND(bgVatAmount));
+  document.querySelectorAll('.bind-tong-sau-vat').forEach(e => e.textContent = fmtVND(bgTotal));
+  document.querySelectorAll('.bind-tong-bang-chu').forEach(e => e.textContent = docTien(bgTotal));
+  
+  document.querySelectorAll('.bind-tien-tam-ung').forEach(e => e.textContent = fmtVND(tamUngVal));
+  document.querySelectorAll('.bind-chu-tam-ung').forEach(e => e.textContent = docTien(tamUngVal).replace(' đồng', ''));
+  document.querySelectorAll('.bind-tien-con-lai').forEach(e => e.textContent = fmtVND(conLaiVal));
+  document.querySelectorAll('.bind-chu-con-lai').forEach(e => e.textContent = docTien(conLaiVal).replace(' đồng', ''));
 }
 
 // Convert Number to Words (Vietnamese)
@@ -407,6 +473,12 @@ els.vatSelect.addEventListener('change', () => {
     saveFormState();
     bindDataToPreviews();
 });
+if(els.vatSelectKt) {
+    els.vatSelectKt.addEventListener('change', () => {
+        saveFormState();
+        bindDataToPreviews();
+    });
+}
 
 // Setup realtime updates for all inputs
 document.querySelectorAll('input').forEach(input => {
@@ -499,24 +571,28 @@ function parseExcelToState(rows) {
   bindDataToPreviews();
 }
 
-// Step 5: Previews
+// Step 6: Previews
 function prepareFinalPreviews() {
   document.getElementById('mini-preview-1').innerHTML = document.getElementById('preview-baogia').innerHTML;
-  document.getElementById('mini-preview-2').innerHTML = document.getElementById('preview-contract').innerHTML;
-  document.getElementById('mini-preview-3').innerHTML = document.getElementById('preview-appendix').innerHTML;
-  document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-bbnt').innerHTML;
+  document.getElementById('mini-preview-2').innerHTML = document.getElementById('preview-contract-gk').innerHTML;
+  document.getElementById('mini-preview-3').innerHTML = document.getElementById('preview-contract-kt').innerHTML;
+  document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-appendix').innerHTML;
+  document.getElementById('mini-preview-5').innerHTML = document.getElementById('preview-bbnt').innerHTML;
 }
 
 // File Export
 document.getElementById('btn-export-pdf').addEventListener('click', () => {
   const chk1 = document.getElementById('chk-quote').checked;
-  const chk2 = document.getElementById('chk-contract').checked;
+  const chk2_gk = document.getElementById('chk-contract-gk').checked;
+  const chk2_kt = document.getElementById('chk-contract-kt').checked;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
   
   const docs = [];
+
   if (chk1) docs.push(document.getElementById('preview-baogia').outerHTML);
-  if (chk2) docs.push(document.getElementById('preview-contract').outerHTML);
+  if (chk2_gk) docs.push(document.getElementById('preview-contract-gk').outerHTML);
+  if (chk2_kt) docs.push(document.getElementById('preview-contract-kt').outerHTML);
   if (chk3) docs.push(document.getElementById('preview-appendix').outerHTML);
   if (chk4) docs.push(document.getElementById('preview-bbnt').outerHTML);
   
@@ -549,17 +625,24 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
 });
 
 document.getElementById('btn-export-all').addEventListener('click', () => {
+  const zip = new JSZip();
+  const folder = zip.folder("HopDong_XuatKhang");
+  
   const chk1 = document.getElementById('chk-quote').checked;
-  const chk2 = document.getElementById('chk-contract').checked;
+  const chk2_gk = document.getElementById('chk-contract-gk').checked;
+  const chk2_kt = document.getElementById('chk-contract-kt').checked;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
   
-  const clientName = (State.client.ten || 'KhachHang').replace(/[^a-zA-Z0-9 -]/g, "").trim().replace(/\s+/g,"_");
+  if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(document.getElementById('preview-baogia').outerHTML));
+  if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(document.getElementById('preview-contract-gk').outerHTML));
+  if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(document.getElementById('preview-contract-kt').outerHTML));
+  if (chk3) folder.file("03_PhuLuc.doc", generateWordBlob(document.getElementById('preview-appendix').outerHTML));
+  if (chk4) folder.file("04_BBNT.doc", generateWordBlob(document.getElementById('preview-bbnt').outerHTML));
   
-  if(chk1) exportHTMLToWord(document.getElementById('preview-baogia').innerHTML, `BaoGia_${clientName}`);
-  if(chk2) exportHTMLToWord(document.getElementById('preview-contract').innerHTML, `HopDongGK_${clientName}`);
-  if(chk3) exportHTMLToWord(document.getElementById('preview-appendix').innerHTML, `PhuLuc_${clientName}`);
-  if(chk4) exportHTMLToWord(document.getElementById('preview-bbnt').innerHTML, `BBNT_${clientName}`);
+  zip.generateAsync({type:"blob"}).then(function(content) {
+      saveAs(content, "TaiLieu.zip");
+  });
 });
 
 document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
@@ -612,3 +695,5 @@ function exportHTMLToWord(htmlContent, filename){
 
 // Initial binding
 bindDataToPreviews();
+
+

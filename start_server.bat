@@ -7,3 +7,4 @@ echo Link cua ban se la: https://shown-underuse-disliking.ngrok-free.dev/index.h
 echo.
 start http://localhost:8090/index.html
 ngrok http --domain=shown-underuse-disliking.ngrok-free.dev 8090
+.\start_server.bat
