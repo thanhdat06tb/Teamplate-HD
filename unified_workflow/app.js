@@ -1,6 +1,7 @@
 // State Management
 const State = {
   currentStep: 1,
+  contractType: 'gk',
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '' },
   company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
@@ -22,6 +23,14 @@ const els = {
   vatSelect: document.getElementById('vat-rate'),
   vatSelectKt: document.getElementById('vat-rate-kt'),
   
+  radioGk: document.getElementById('radio-gk'),
+  radioKt: document.getElementById('radio-kt'),
+  wrapperGk: document.getElementById('wrapper-gk'),
+  wrapperKt: document.getElementById('wrapper-kt'),
+  wrapperBbnt: document.getElementById('wrapper-bbnt'),
+  wrapperBbgh: document.getElementById('wrapper-bbgh'),
+  bbghProductTable: document.getElementById('bbgh-product-table'),
+
   // Inputs
   kh_ten: document.getElementById('kh_ten'),
   kh_mst: document.getElementById('kh_mst'),
@@ -70,7 +79,7 @@ function updateNav() {
   });
   
   els.btnPrev.style.display = State.currentStep === 1 ? 'none' : 'block';
-  if (State.currentStep === 6) {
+  if (State.currentStep === 5) {
     els.btnNext.style.display = 'none';
     prepareFinalPreviews();
   } else {
@@ -78,11 +87,31 @@ function updateNav() {
     els.btnNext.textContent = `Tiếp Theo Bước ${State.currentStep + 1} →`;
   }
   
+  if (State.currentStep === 2) {
+    if (State.contractType === 'gk') {
+        els.wrapperGk.style.display = 'block';
+        els.wrapperKt.style.display = 'none';
+    } else {
+        els.wrapperGk.style.display = 'none';
+        els.wrapperKt.style.display = 'block';
+    }
+  }
+  
+  if (State.currentStep === 4) {
+    if (State.contractType === 'gk') {
+        els.wrapperBbnt.style.display = 'block';
+        if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'none';
+    } else {
+        els.wrapperBbnt.style.display = 'none';
+        if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'block';
+    }
+  }
+  
   bindDataToPreviews();
 }
 
 els.btnNext.addEventListener('click', () => {
-  if (State.currentStep < 6) {
+  if (State.currentStep < 5) {
     saveFormState();
     State.currentStep++;
     updateNav();
@@ -96,6 +125,20 @@ els.btnPrev.addEventListener('click', () => {
     updateNav();
   }
 });
+
+
+if(els.radioGk) {
+  els.radioGk.addEventListener('change', () => {
+    if(els.radioGk.checked) State.contractType = 'gk';
+    updateNav();
+  });
+}
+if(els.radioKt) {
+  els.radioKt.addEventListener('change', () => {
+    if(els.radioKt.checked) State.contractType = 'kt';
+    updateNav();
+  });
+}
 
 // Update State from Inputs
 function saveFormState() {
@@ -118,21 +161,15 @@ function saveFormState() {
   State.company.sdt = els.dn_sdt.value || '...';
   State.company.email = els.dn_email.value || '...';
   
-  // Prefer Step 3 inputs if we are on Step 3, otherwise Step 2 inputs
-  if (State.currentStep === 3) {
+  // Remove cross-syncs
+  if (State.contractType === 'kt') {
     State.contract.sohd = els.so_hd_kt ? (els.so_hd_kt.value || '...') : '...';
     State.contract.ngay = els.ngay_ky_kt ? (els.ngay_ky_kt.value || '...') : '...';
     State.contract.tamung = els.tam_ung_kt ? (els.tam_ung_kt.value || '50') : '50';
-    if(els.so_hd) els.so_hd.value = els.so_hd_kt.value;
-    if(els.ngay_ky) els.ngay_ky.value = els.ngay_ky_kt.value;
-    if(els.tam_ung) els.tam_ung.value = els.tam_ung_kt.value;
   } else {
     State.contract.sohd = els.so_hd.value || '...';
     State.contract.ngay = els.ngay_ky.value || '...';
     State.contract.tamung = els.tam_ung.value || '50';
-    if(els.so_hd_kt) els.so_hd_kt.value = els.so_hd.value;
-    if(els.ngay_ky_kt) els.ngay_ky_kt.value = els.ngay_ky.value;
-    if(els.tam_ung_kt) els.tam_ung_kt.value = els.tam_ung.value;
   }
   
   State.contract.tenct = els.ten_ct.value || '...';
@@ -144,7 +181,7 @@ function saveFormState() {
   State.contract.sopl = els.so_pl ? els.so_pl.value || '...' : '...';
   State.contract.ngaypl = els.ngay_pl ? els.ngay_pl.value || '...' : '...';
   
-  if (State.currentStep === 3) {
+  if (State.contractType === 'kt') {
       if(els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
       if(els.vatSelect && els.vatSelectKt) els.vatSelect.value = els.vatSelectKt.value;
   } else {
@@ -247,14 +284,15 @@ window.updateRow = function(index, field, value) {
 
 // Product Rendering
 function renderProducts() {
-  let h1 = '', h3 = '', hBg = '', hKt = '';
+  let h1 = '', h3 = '', hBg = '', hKt = '', hBb = '';
   let sum = 0;
   
   if (State.products.length === 0) {
     h1 = `<tr><td colspan="6" style="text-align:center; color:#888;">Chưa có dữ liệu</td></tr>`;
     h3 = `<tr><td colspan="5" style="text-align:center;">Vui lòng nhập dữ liệu ở Bước 1</td></tr>`;
     hBg = `<tr><td colspan="6" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
-    hKt = `<tr><td colspan="10" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
+        hKt = `<tr><td colspan="10" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
+    hBb = `<tr><td colspan="6" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
   } else {
     // Pass 1: Compute category totals
     let categoryTotals = [];
@@ -326,6 +364,16 @@ function renderProducts() {
         <td class="col-complex" style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
       </tr>`;
         
+      
+      // BB Giao Hang Rows
+      hBb += `<tr style="${styleBold}">
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
+        <td style="border:1px solid #000; padding:8px;">${p.ten || ''}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:center;"></td>
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${dispSl}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.dvt || ''}</td>
+        <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
+      </tr>`;
       // Step 2 Bao Gia Rows
       hBg += `<tr style="${styleBold}">
         <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || ''}</td>
@@ -360,6 +408,7 @@ function renderProducts() {
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
   if(document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
+  if(document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
   
   // Set table modes
   const tblMode = State.tableMode === 'complex' ? 'complex-mode' : 'simple-mode';
@@ -412,10 +461,51 @@ function renderProducts() {
   document.querySelectorAll('.bind-tong-sau-vat').forEach(e => e.textContent = fmtVND(bgTotal));
   document.querySelectorAll('.bind-tong-bang-chu').forEach(e => e.textContent = docTien(bgTotal));
   
+
   document.querySelectorAll('.bind-tien-tam-ung').forEach(e => e.textContent = fmtVND(tamUngVal));
   document.querySelectorAll('.bind-chu-tam-ung').forEach(e => e.textContent = docTien(tamUngVal).replace(' đồng', ''));
   document.querySelectorAll('.bind-tien-con-lai').forEach(e => e.textContent = fmtVND(conLaiVal));
   document.querySelectorAll('.bind-chu-con-lai').forEach(e => e.textContent = docTien(conLaiVal).replace(' đồng', ''));
+  
+  // Update live Appendix based on contractType
+  const liveAppTable = document.getElementById('app-product-table');
+  const liveAppTotals = document.getElementById('app-subtotal');
+  
+  if (State.contractType === 'kt') {
+      const liveAppTableParent = liveAppTable ? liveAppTable.closest('table') : null;
+      const ktTableTbody = document.getElementById('bind-products-kt');
+      const ktTable = ktTableTbody ? ktTableTbody.closest('table') : null;
+      
+      if (liveAppTableParent && ktTable) {
+         // Create a placeholder if not exists
+         const ktClone = ktTable.cloneNode(true);
+         ktClone.id = 'temp-kt-table-app';
+         // Replace entire table layout to match KT
+         if(document.getElementById('temp-kt-table-app')) {
+            document.getElementById('temp-kt-table-app').replaceWith(ktClone);
+         } else {
+            liveAppTableParent.style.display = 'none'; // hide original
+            liveAppTableParent.parentNode.insertBefore(ktClone, liveAppTableParent.nextSibling);
+         }
+      }
+      
+      if (liveAppTotals) {
+         const pTotals = liveAppTotals.closest('div');
+         if(pTotals) pTotals.style.display = 'none';
+      }
+  } else {
+      if (liveAppTable) {
+         const t = liveAppTable.closest('table');
+         if(t) t.style.display = '';
+      }
+      if(document.getElementById('temp-kt-table-app')) {
+         document.getElementById('temp-kt-table-app').style.display = 'none';
+      }
+      if (liveAppTotals) {
+         const pTotals = liveAppTotals.closest('div');
+         if(pTotals) pTotals.style.display = '';
+      }
+  }
 }
 
 // Convert Number to Words (Vietnamese)
@@ -597,17 +687,53 @@ function parseExcelToState(rows) {
 // Step 6: Previews
 function prepareFinalPreviews() {
   document.getElementById('mini-preview-1').innerHTML = document.getElementById('preview-baogia').innerHTML;
-  document.getElementById('mini-preview-2').innerHTML = document.getElementById('preview-contract-gk').innerHTML;
-  document.getElementById('mini-preview-3').innerHTML = document.getElementById('preview-contract-kt').innerHTML;
-  document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-appendix').innerHTML;
-  document.getElementById('mini-preview-5').innerHTML = document.getElementById('preview-bbnt').innerHTML;
+  
+  if (State.contractType === 'gk') {
+      document.getElementById('mini-preview-2').innerHTML = document.getElementById('preview-contract-gk').innerHTML;
+      document.getElementById('chk-contract-gk').checked = true;
+      document.getElementById('chk-contract-kt').checked = false;
+      document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
+      
+      document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-bbnt').innerHTML;
+      document.getElementById('chk-bbnt').checked = true;
+      if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
+  } else {
+      document.getElementById('mini-preview-kt').innerHTML = document.getElementById('preview-contract-kt').innerHTML;
+      document.getElementById('chk-contract-kt').checked = true;
+      document.getElementById('chk-contract-gk').checked = false;
+      document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
+      
+      if(document.getElementById('preview-bbgh')) {
+          document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-bbgh').innerHTML;
+          // rename the label 
+          document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
+      }
+      document.getElementById('chk-bbnt').checked = true;
+      if(document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
+  }
+  
+  const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+  
+  if (State.contractType === 'kt') {
+      const appTable = appPreview.querySelector('table:nth-of-type(1)');
+      const ktTableTbody = document.getElementById('bind-products-kt');
+      const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+      if (appTable && ktTable) {
+        appTable.parentNode.replaceChild(ktTable, appTable);
+      }
+      const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
+      if (appTotals) {
+        appTotals.style.display = 'none';
+      }
+  }
+  document.getElementById('mini-preview-3').innerHTML = appPreview.innerHTML;
 }
 
 // File Export
 document.getElementById('btn-export-pdf').addEventListener('click', () => {
   const chk1 = document.getElementById('chk-quote').checked;
-  const chk2_gk = document.getElementById('chk-contract-gk').checked;
-  const chk2_kt = document.getElementById('chk-contract-kt').checked;
+  const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
+  const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
   
@@ -616,9 +742,31 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   if (chk1) docs.push(document.getElementById('preview-baogia').outerHTML);
   if (chk2_gk) docs.push(document.getElementById('preview-contract-gk').outerHTML);
   if (chk2_kt) docs.push(document.getElementById('preview-contract-kt').outerHTML);
-  if (chk3) docs.push(document.getElementById('preview-appendix').outerHTML);
-  if (chk4) docs.push(document.getElementById('preview-bbnt').outerHTML);
   
+  if (chk3) {
+      if (State.contractType === 'kt') {
+          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+          const appTable = appPreview.querySelector('table:nth-of-type(1)');
+          const ktTableTbody = document.getElementById('bind-products-kt');
+      const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+          const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
+          if (appTotals) appTotals.style.display = 'none';
+          docs.push(appPreview.outerHTML);
+      } else {
+          docs.push(document.getElementById('preview-appendix').outerHTML);
+      }
+  }
+  
+  if (chk4) {
+      if (State.contractType === 'gk') docs.push(document.getElementById('preview-bbnt').outerHTML);
+      else docs.push(document.getElementById('preview-bbgh').outerHTML);
+  }
+  
+  if (docs.length === 0) {
+    alert("Vui lòng chọn ít nhất 1 văn bản để lưu PDF.");
+    return;
+  }
   if (docs.length === 0) {
     alert("Vui lòng chọn ít nhất 1 văn bản để lưu PDF.");
     return;
@@ -652,16 +800,38 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
   const folder = zip.folder("HopDong_XuatKhang");
   
   const chk1 = document.getElementById('chk-quote').checked;
-  const chk2_gk = document.getElementById('chk-contract-gk').checked;
-  const chk2_kt = document.getElementById('chk-contract-kt').checked;
+  const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
+  const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
   
   if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(document.getElementById('preview-contract-kt').outerHTML));
-  if (chk3) folder.file("03_PhuLuc.doc", generateWordBlob(document.getElementById('preview-appendix').outerHTML));
-  if (chk4) folder.file("04_BBNT.doc", generateWordBlob(document.getElementById('preview-bbnt').outerHTML));
+  
+  if (chk3) {
+      if (State.contractType === 'kt') {
+          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+          const appTable = appPreview.querySelector('table:nth-of-type(1)');
+          const ktTableTbody = document.getElementById('bind-products-kt');
+      const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+          const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
+          if (appTotals) appTotals.style.display = 'none';
+          folder.file("03_PhuLuc.doc", generateWordBlob(appPreview.outerHTML));
+      } else {
+          folder.file("03_PhuLuc.doc", generateWordBlob(document.getElementById('preview-appendix').outerHTML));
+      }
+  }
+  
+  if (chk4) {
+      if (State.contractType === 'gk') {
+          folder.file("04_BBNT.doc", generateWordBlob(document.getElementById('preview-bbnt').outerHTML));
+      } else {
+          folder.file("04_BBGH.doc", generateWordBlob(document.getElementById('preview-bbgh').outerHTML));
+      }
+  }
+
   
   zip.generateAsync({type:"blob"}).then(function(content) {
       saveAs(content, "TaiLieu.zip");
