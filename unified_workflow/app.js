@@ -51,6 +51,8 @@ const els = {
   so_hd_kt: document.getElementById('so_hd_kt'),
   ngay_ky_kt: document.getElementById('ngay_ky_kt'),
   tam_ung_kt: document.getElementById('tam_ung_kt'),
+  so_pl: document.getElementById('so_pl'),
+  ngay_pl: document.getElementById('ngay_pl'),
 };
 
 function fmtVND(n) {
@@ -139,6 +141,9 @@ function saveFormState() {
   State.contract.thoiGianGiao = els.thoi_gian_giao ? els.thoi_gian_giao.value || '...' : '...';
   State.contract.ptThanhToan = els.pt_thanh_toan ? els.pt_thanh_toan.value || '...' : '...';
   
+  State.contract.sopl = els.so_pl ? els.so_pl.value || '...' : '...';
+  State.contract.ngaypl = els.ngay_pl ? els.ngay_pl.value || '...' : '...';
+  
   if (State.currentStep === 3) {
       if(els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
       if(els.vatSelect && els.vatSelectKt) els.vatSelect.value = els.vatSelectKt.value;
@@ -194,11 +199,29 @@ function bindDataToPreviews() {
           document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = parts[2]);
           document.querySelectorAll('.bind-thang').forEach(e => e.textContent = parts[1]);
           document.querySelectorAll('.bind-nam').forEach(e => e.textContent = parts[0]);
+          document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`);
       }
   } else {
       document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = '...');
       document.querySelectorAll('.bind-thang').forEach(e => e.textContent = '...');
       document.querySelectorAll('.bind-nam').forEach(e => e.textContent = '...');
+      document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = '...');
+  }
+
+  // Appendix Parsing
+  document.querySelectorAll('.bind-sopl').forEach(e => e.textContent = State.contract.sopl);
+  const datePl = State.contract.ngaypl;
+  if(datePl) {
+      const parts = datePl.split('-');
+      if(parts.length === 3) {
+          document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = parts[2]);
+          document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = parts[1]);
+          document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = parts[0]);
+      }
+  } else {
+      document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = '...');
+      document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = '...');
+      document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = '...');
   }
   
   // Render Product Tables for Step 1 and Step 3

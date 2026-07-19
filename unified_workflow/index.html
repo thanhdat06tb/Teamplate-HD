@@ -982,27 +982,43 @@
 
     <!-- STEP 4: APPENDIX -->
     <div class="step-content" id="step-4">
+      <div class="card">
+        <h2>Cài đặt Phụ Lục</h2>
+        <div class="row">
+          <div class="col"><label>Số phụ lục</label><input type="text" id="so_pl" value="01/2026/PLHĐ"></div>
+          <div class="col"><label>Ngày lập phụ lục</label><input type="date" id="ngay_pl"></div>
+        </div>
+      </div>
       <div class="doc-preview" id="preview-appendix">
-        <div class="doc-title">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><span
-            style="font-size:14px; font-weight:normal;"><u>Độc lập - Tự do - Hạnh phúc</u></span></div>
-        <div class="doc-title" style="margin-top:40px; font-size:16px; margin-bottom: 5px;">PHỤ LỤC HỢP ĐỒNG</div>
-        <p style="text-align:center; margin-top: 0; margin-bottom: 20px; font-weight: bold;">Kèm theo Hợp đồng số: <span class="bind-sohd">...</span>
-        </p>
+        <div class="doc-title" style="margin-bottom:0;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><span
+            style="font-size:14px; font-weight:normal;"><u>Độc lập - Tự do - Hạnh phúc</u></span><br><span style="font-size:14px; font-weight:normal;">---o0o---</span></div>
+        <p style="text-align:right; font-style:italic;">Hải Phòng, ngày <span class="bind-pl-ngay">...</span> tháng <span class="bind-pl-thang">...</span> năm <span class="bind-pl-nam">...</span></p>
 
-        <table style="width:100%; border:none; margin-bottom: 20px; font-size: 16px; line-height: 1.5;">
-          <tr>
-            <td style="border:none; padding: 4px 10px 4px 0; vertical-align: top; white-space: nowrap;"><strong>Bên A:</strong></td>
-            <td style="border:none; padding: 4px 15px 4px 0; vertical-align: top; width: 360px;"><strong class="bind-dn-ten">...</strong></td>
-            <td style="border:none; padding: 4px 0; vertical-align: top;">(Đại diện: <strong class="bind-dn-daidien">...</strong>)</td>
-          </tr>
-          <tr>
-            <td style="border:none; padding: 4px 10px 4px 0; vertical-align: top; white-space: nowrap;"><strong>Bên B:</strong></td>
-            <td style="border:none; padding: 4px 15px 4px 0; vertical-align: top;"><strong class="bind-kh-ten">...</strong></td>
-            <td style="border:none; padding: 4px 0; vertical-align: top;">(Đại diện: <strong class="bind-kh-daidien">...</strong>)</td>
-          </tr>
-        </table>
+        <div class="doc-title" style="margin-top:20px; font-size:16px; margin-bottom: 5px;">PHỤ LỤC HỢP ĐỒNG</div>
+        <p style="text-align:center; font-weight: bold; margin: 0;">Số: <span class="bind-sopl">...</span></p>
+        <p style="text-align:center; font-style: italic; margin-top: 5px;">(Kèm theo Hợp đồng số <span class="bind-sohd">...</span> ký ngày <span class="bind-ngay-ky">...</span>)</p>
 
-        <h3 style="text-align:center; margin-top:30px;">BẢNG CHI TIẾT KHỐI LƯỢNG</h3>
+        <p style="margin-top:15px; font-style:italic;">- Căn cứ Hợp đồng số <strong class="bind-sohd">...</strong> ký ngày <strong class="bind-ngay-ky">...</strong> giữa hai bên;</p>
+        <p style="font-style:italic;">- Căn cứ nhu cầu thực tế phát sinh trong quá trình thực hiện hợp đồng,</p>
+        <p>Hôm nay, ngày <strong class="bind-pl-ngay">...</strong> tháng <strong class="bind-pl-thang">...</strong> năm <strong class="bind-pl-nam">...</strong>, tại Hải Phòng, hai bên chúng tôi gồm:</p>
+
+        <p style="margin-top:15px;"><strong><u>BÊN A:</u> <span class="bind-dn-ten" style="text-transform: uppercase;">...</span></strong></p>
+        <div style="margin-left: 0;">
+          <p>Địa chỉ: <span class="bind-dn-diachi">...</span></p>
+          <p>Mã số thuế: <span class="bind-dn-mst">...</span></p>
+          <p>Đại diện: <span class="bind-dn-daidien">...</span><span style="display:inline-block; margin-left: 40px;">Chức vụ: </span><span class="bind-dn-chucvu">...</span></p>
+        </div>
+
+        <p style="margin-top:15px;"><strong><u>BÊN B:</u> <span class="bind-kh-ten" style="text-transform: uppercase;">...</span></strong></p>
+        <div style="margin-left: 0;">
+          <p>Địa chỉ: <span class="bind-kh-diachi">...</span></p>
+          <p>Mã số thuế: <span class="bind-kh-mst">...</span></p>
+          <p>Đại diện: <span class="bind-kh-daidien">...</span><span style="display:inline-block; margin-left: 40px;">Chức vụ: </span><span class="bind-kh-chucvu">...</span></p>
+        </div>
+
+        <p style="margin-top:15px;">Hai bên thống nhất ký kết Phụ lục hợp đồng với nội dung chi tiết khối lượng như sau:</p>
+
+        <h3 style="text-align:center; margin-top:15px; margin-bottom: 15px; text-transform:uppercase;">BẢNG CHI TIẾT KHỐI LƯỢNG</h3>
         <table style="width:calc(100% - 2px); box-sizing:border-box; border:1px solid #000; border-collapse:collapse;">
           <thead>
             <tr>
@@ -1037,19 +1053,28 @@
           </thead>
           <tbody id="app-product-table"></tbody>
         </table>
-        <p style="text-align:right; margin-top:20px;">Tổng tiền chưa thuế: <strong id="app-subtotal">0</strong></p>
-        <p style="text-align:right;">Thuế VAT (<span id="app-vat-rate">8</span>%): <strong id="app-vat">0</strong></p>
-        <p style="text-align:right; font-size:18px;">Tổng cộng: <strong id="app-total">0</strong></p>
+        
+        <div style="margin-top:20px; text-align:right; font-size:15px; margin-right: 10px;">
+          <p style="margin:4px 0;">Tổng tiền chưa thuế: <strong id="app-subtotal">0</strong></p>
+          <p style="margin:4px 0;">Thuế VAT (<span id="app-vat-rate">8</span>%): <strong id="app-vat">0</strong></p>
+          <p style="margin:4px 0;">Tổng cộng: <strong id="app-total">0</strong></p>
+        </div>
 
-        <div
-          style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; break-inside: avoid; page-break-inside: avoid;">
-          <div style="width: 50%; font-weight: bold;">
-            <p style="margin: 0;">ĐẠI DIỆN BÊN A</p>
-            <img src="./Picture2.png"
-              style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
-          </div>
-          <div style="width: 50%; font-weight: bold;">
-            <p style="margin: 0;">ĐẠI DIỆN BÊN B</p>
+        <p style="margin-top:20px; font-weight:bold;">Điều khoản hiệu lực:</p>
+        <p>Phụ lục này là bộ phận không thể tách rời của Hợp đồng số <strong class="bind-sohd">...</strong>, có hiệu lực kể từ ngày ký. Các điều khoản khác của Hợp đồng gốc không thay đổi.</p>
+        <div style="page-break-inside: avoid; break-inside: avoid;">
+          <p>Phụ lục được lập thành 02 (hai) bản có giá trị pháp lý như nhau, mỗi bên giữ 01 (một) bản.</p>
+
+          <div
+            style="display: flex; justify-content: space-between; margin-top: 15px; text-align: center;">
+            <div style="width: 50%; font-weight: bold;">
+              <p style="margin: 0;">ĐẠI DIỆN BÊN A</p>
+              <img src="./Picture2.png"
+                style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
+            </div>
+            <div style="width: 50%; font-weight: bold;">
+              <p style="margin: 0;">ĐẠI DIỆN BÊN B</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1162,7 +1187,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
 </body>
 
 </html>
