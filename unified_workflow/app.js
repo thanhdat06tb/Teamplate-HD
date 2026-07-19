@@ -5,7 +5,7 @@ const State = {
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '' },
   company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
-  products: [],
+  products: [{stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: ''}],
   tableMode: 'simple',
   vatRate: 0.08
 };
@@ -15,6 +15,7 @@ const els = {
   steps: document.querySelectorAll('.step'),
   contents: document.querySelectorAll('.step-content'),
   btnPrev: document.getElementById('btn-prev'),
+  soBbgh: document.getElementById('so_bbgh'),
   btnNext: document.getElementById('btn-next'),
   fileDrop: document.getElementById('file-drop'),
   fileInput: document.getElementById('excel-file'),
@@ -101,9 +102,11 @@ function updateNav() {
     if (State.contractType === 'gk') {
         els.wrapperBbnt.style.display = 'block';
         if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'none';
+        if(document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'none';
     } else {
         els.wrapperBbnt.style.display = 'none';
         if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'block';
+        if(document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'block';
     }
   }
   
@@ -180,6 +183,7 @@ function saveFormState() {
   
   State.contract.sopl = els.so_pl ? els.so_pl.value || '...' : '...';
   State.contract.ngaypl = els.ngay_pl ? els.ngay_pl.value || '...' : '...';
+  State.contract.soBbgh = els.soBbgh ? els.soBbgh.value || '.....................................' : '.....................................';
   
   if (State.contractType === 'kt') {
       if(els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
@@ -247,6 +251,7 @@ function bindDataToPreviews() {
 
   // Appendix Parsing
   document.querySelectorAll('.bind-sopl').forEach(e => e.textContent = State.contract.sopl);
+  document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
   const datePl = State.contract.ngaypl;
   if(datePl) {
       const parts = datePl.split('-');
@@ -272,6 +277,12 @@ function isRoman(str) {
   return /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/.test(s);
 }
 
+
+window.updateSoBbgh = function(val) {
+    State.contract.soBbgh = (val || '').trim();
+    document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
+};
+
 window.updateRow = function(index, field, value) {
   if (!State.products[index]) return;
   if (['sl', 'gia', 'giaVatTu', 'giaNhanCong'].includes(field)) {
@@ -282,8 +293,68 @@ window.updateRow = function(index, field, value) {
   renderProducts();
 };
 
+window.addProductRow = function() {
+  State.products.push({
+    stt: '',
+    ten: '',
+    dvt: '',
+    sl: 1,
+    gia: 0,
+    giaVatTu: 0,
+    giaNhanCong: 0,
+    ghichu: ''
+  });
+  renderProducts();
+};
+
+window.removeProductRow = function(index) {
+  State.products.splice(index, 1);
+  renderProducts();
+};
+
+window.updateDvt = function(index, value) {
+  if (value === '_other_') {
+    let custom = prompt("Nhập Đơn vị tính mới:");
+    if (custom) {
+      State.products[index].dvt = custom;
+    }
+  } else {
+    State.products[index].dvt = value;
+  }
+  renderProducts();
+};
+
+
+window.checkTab = function(e, index) {
+  if (e.key === 'Enter') {
+    if (index === State.products.length - 1) {
+      e.preventDefault();
+      window.addProductRow();
+      // focus the next row's ten input after rendering
+      setTimeout(() => {
+        let inputs = document.querySelectorAll('#bg-product-table tr:last-child input');
+        if(inputs.length > 1) inputs[1].focus();
+      }, 50);
+    }
+  }
+};
+
+window.uploadProductImage = function(index, input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      State.products[index].imgData = e.target.result;
+      renderProducts();
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+
 // Product Rendering
 function renderProducts() {
+  if (State.products.length === 0) {
+    State.products = [{stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: ''}];
+  }
   let h1 = '', h3 = '', hBg = '', hKt = '', hBb = '';
   let sum = 0;
   
@@ -332,11 +403,27 @@ function renderProducts() {
       const styleBold = isCat ? 'font-weight:bold;' : '';
       const bText = isCat ? 'font-weight:bold;' : 'font-weight:inherit;';
       
+      
+      const defaultDvts = ["", "Sét", "Cái", "Chiếc", "Bộ", "m2", "m", "Kg", "Lít", "Gói", "Hộp", "Cuộn"];
+      let dvtOptions = "";
+      let foundDvt = false;
+      for (let d of defaultDvts) {
+          let sel = (p.dvt === d) ? "selected" : "";
+          if (p.dvt === d) foundDvt = true;
+          dvtOptions += `<option value="${d}" ${sel}>${d || '--'}</option>`;
+      }
+      if (!foundDvt && p.dvt) {
+          dvtOptions += `<option value="${p.dvt}" selected>${p.dvt}</option>`;
+      }
+      dvtOptions += `<option value="_other_">Tự nhập...</option>`;
+      
+      const dvtSelect = `<select onchange="updateDvt(${i}, this.value)" style="width:70px; background:transparent; border:1px solid #ccc; border-radius:4px; padding:2px; font-size:13px;">${dvtOptions}</select>`;
+
       // Step 1 Editor rows
       h1 += `<tr style="${styleBold}">
         <td><input type="text" value="${p.stt || ''}" onchange="updateRow(${i}, 'stt', this.value)" style="width:40px; ${bText} background:transparent; border:none;"></td>
         <td><input type="text" value="${p.ten || ''}" onchange="updateRow(${i}, 'ten', this.value)" style="width:100%; min-width:200px; ${bText} background:transparent;"></td>
-        <td><input type="text" value="${p.dvt || ''}" onchange="updateRow(${i}, 'dvt', this.value)" style="width:50px; ${bText} background:transparent;"></td>
+        <td>${dvtSelect}</td>
         <td><input type="number" value="${p.sl || 0}" onchange="updateRow(${i}, 'sl', this.value)" style="width:50px; ${bText} background:transparent;"></td>
         <td class="col-simple"><input type="number" value="${gSimple}" onchange="updateRow(${i}, 'gia', this.value)" style="width:80px; ${bText} background:transparent;"></td>
         <td class="col-complex"><input type="number" value="${gVatTu}" onchange="updateRow(${i}, 'giaVatTu', this.value)" style="width:70px; ${bText} background:transparent;"></td>
@@ -345,62 +432,52 @@ function renderProducts() {
         <td class="col-complex" style="${bText}">${p.sl ? fmtVND((p.sl||0)*gNhanCong) : ''}</td>
         <td class="col-simple" style="${bText}">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td class="col-complex" style="font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td class="col-complex"><input type="text" value="${p.ghiChu || ''}" onchange="updateRow(${i}, 'ghiChu', this.value)" style="width:100px; ${bText} background:transparent;"></td>
+        <td class="col-complex"><input type="text" value="${p.ghiChu || ''}" onchange="updateRow(${i}, 'ghiChu', this.value)" onkeydown="checkTab(event, ${i})" style="width:100px; ${bText} background:transparent;"></td>
       </tr>`;
       
-      // Step 3 Static rows (Appendix)
-      h3 += `<tr style="${styleBold}">
+      // Step 3 Static rows (Appendix) & BBGH
+      let staticImgHtml = p.imgData ? `<img src="${p.imgData}" style="max-width:50px; max-height:50px;">` : '';
+      let staticRow = `<tr style="${styleBold}">
         <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
         <td style="border:1px solid #000; padding:8px;">${p.ten || ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.dvt || ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:right;">${dispSl}</td>
-        <td class="col-simple" style="border:1px solid #000; padding:8px; text-align:right;">${(gSimple || isCat) ? fmtVND(gSimple) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px; text-align:right;">${(gVatTu || isCat) && !isCat ? fmtVND(gVatTu) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px; text-align:right;">${(gNhanCong || isCat) && !isCat ? fmtVND(gNhanCong) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gVatTu) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gNhanCong) : ''}</td>
-        <td class="col-simple" style="border:1px solid #000; padding:8px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
-      </tr>`;
-        
-      
-      // BB Giao Hang Rows
-      hBb += `<tr style="${styleBold}">
-        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
-        <td style="border:1px solid #000; padding:8px;">${p.ten || ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:center;"></td>
         <td style="border:1px solid #000; padding:8px; text-align:center;">${dispSl}</td>
         <td style="border:1px solid #000; padding:8px; text-align:center;">${p.dvt || ''}</td>
+        <td style="border:1px solid #000; padding:4px; text-align:center; vertical-align:middle;">${staticImgHtml}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:right;">${(tGia || isCat) ? fmtVND(tGia) : ''}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
       </tr>`;
-      // Step 2 Bao Gia Rows
+      
+      h3 += staticRow;
+      hBb += staticRow;
+
+      // Step 2 Bao Gia Rows (WYSIWYG)
+      let imgHtml = p.imgData ? `<img src="${p.imgData}" style="max-width:50px; max-height:50px; cursor:pointer;" onclick="document.getElementById('img-upload-${i}').click()">` : `<span onclick="document.getElementById('img-upload-${i}').click()" style="color:#aaa; cursor:pointer; font-size:12px;">+ Ảnh</span>`;
+      let uploadInput = `<input type="file" id="img-upload-${i}" style="display:none" accept="image/*" onchange="uploadProductImage(${i}, this)">`;
+      let bGText = isCat ? 'font-weight:bold;' : 'font-weight:inherit;';
+
       hBg += `<tr style="${styleBold}">
-        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || ''}</td>
-        <td style="border:1px solid #000; padding:8px;">${p.ten || ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:center;">${dispSl}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.dvt || ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:center;"></td>
-        <td style="border:1px solid #000; padding:8px; text-align:right;">${(tGia || isCat) && !isCat ? fmtVND(tGia) : ''}</td>
-        <td style="border:1px solid #000; padding:8px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
+        <td style="border:1px solid #000; padding:0; text-align:center;"><input type="text" value="${p.stt || ''}" onchange="updateRow(${i}, 'stt', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
+        <td style="border:1px solid #000; padding:0;"><input type="text" value="${p.ten || ''}" onchange="updateRow(${i}, 'ten', this.value)" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
+        <td style="border:1px solid #000; padding:0; text-align:center;"><input type="number" value="${p.sl || 0}" onchange="updateRow(${i}, 'sl', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
+        <td style="border:1px solid #000; padding:0; text-align:center;">
+           <select onchange="updateDvt(${i}, this.value)" class="dvt-select-wysiwyg" style="width:100%; box-sizing:border-box; background:transparent; border:none; padding:8px; font-size:inherit; font-family:inherit; text-align:center; outline:none; -webkit-appearance:none; appearance:none; cursor:pointer;">${dvtOptions}</select>
+        </td>
+        <td style="border:1px solid #000; padding:4px; text-align:center; vertical-align:middle;">
+          ${imgHtml}${uploadInput}
+        </td>
+        <td style="border:1px solid #000; padding:0; text-align:right;"><input type="number" value="${(State.tableMode === 'complex' && !isCat && !p.gia) ? (gVatTu + gNhanCong) : gSimple}" onchange="updateRow(${i}, 'gia', this.value); if(State.tableMode === 'complex') { State.products[${i}].giaVatTu = 0; State.products[${i}].giaNhanCong = 0; State.tableMode = 'simple'; renderProducts(); }" style="width:100%; text-align:right; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
+        <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
+        <td style="border:1px solid #000; padding:0;">
+           <div style="display:flex; width:100%;">
+             <input type="text" value="${p.ghiChu || ''}" onchange="updateRow(${i}, 'ghiChu', this.value)" onkeydown="checkTab(event, ${i})" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;">
+             <button class="no-print" onclick="window.removeProductRow(${i})" style="color:red; background:none; border:none; cursor:pointer; padding:8px;" title="Xoá dòng">✖</button>
+           </div>
+        </td>
       </tr>`;
       
       // Step 2 Kinh Te Rows
-      hKt += `<tr style="${styleBold} page-break-inside:avoid; break-inside:avoid;">
-        <td style="border:1px solid #000; padding:6px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
-        <td style="border:1px solid #000; padding:6px;">${p.ten || ''}</td>
-        <td style="border:1px solid #000; padding:6px; text-align:center;">${p.dvt || ''}</td>
-        <td style="border:1px solid #000; padding:6px; text-align:center;">${dispSl}</td>
-        <td class="col-simple" style="border:1px solid #000; padding:6px; text-align:right;">${(gSimple || isCat) ? fmtVND(gSimple) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${(gVatTu || isCat) && !isCat ? fmtVND(gVatTu) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${(gNhanCong || isCat) && !isCat ? fmtVND(gNhanCong) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gVatTu) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px; text-align:right;">${!isCat && p.sl ? fmtVND((p.sl||0)*gNhanCong) : ''}</td>
-        <td class="col-simple" style="border:1px solid #000; padding:6px; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px; font-weight:bold; text-align:right;">${displayTt ? fmtVND(displayTt) : ''}</td>
-        <td class="col-complex" style="border:1px solid #000; padding:6px;">${p.ghiChu || ''}</td>
-      </tr>`;
+      hKt += staticRow;
     });
   }
   
@@ -448,6 +525,9 @@ function renderProducts() {
   setText('bg-total-rounded', fmtVND(bgTotal));
   setText('bg-total-rounded-complex', fmtVND(bgTotal));
   setText('bg-total-words', docTien(bgTotal));
+  setText('kt-subtotal', fmtVND(bgSubtotal));
+  setText('kt-vat-amount', fmtVND(bgVatAmount));
+  setText('kt-total-rounded', fmtVND(bgTotal));
 
   document.querySelectorAll('.bind-vat-rate').forEach(e => e.textContent = (State.vatRate * 100));
   
@@ -467,46 +547,7 @@ function renderProducts() {
   document.querySelectorAll('.bind-tien-con-lai').forEach(e => e.textContent = fmtVND(conLaiVal));
   document.querySelectorAll('.bind-chu-con-lai').forEach(e => e.textContent = docTien(conLaiVal).replace(' đồng', ''));
   
-  // Update live Appendix based on contractType
-  const liveAppTable = document.getElementById('app-product-table');
-  const liveAppTotals = document.getElementById('app-subtotal');
-  
-  if (State.contractType === 'kt') {
-      const liveAppTableParent = liveAppTable ? liveAppTable.closest('table') : null;
-      const ktTableTbody = document.getElementById('bind-products-kt');
-      const ktTable = ktTableTbody ? ktTableTbody.closest('table') : null;
-      
-      if (liveAppTableParent && ktTable) {
-         // Create a placeholder if not exists
-         const ktClone = ktTable.cloneNode(true);
-         ktClone.id = 'temp-kt-table-app';
-         // Replace entire table layout to match KT
-         if(document.getElementById('temp-kt-table-app')) {
-            document.getElementById('temp-kt-table-app').replaceWith(ktClone);
-         } else {
-            liveAppTableParent.style.display = 'none'; // hide original
-            liveAppTableParent.parentNode.insertBefore(ktClone, liveAppTableParent.nextSibling);
-         }
-      }
-      
-      if (liveAppTotals) {
-         const pTotals = liveAppTotals.closest('div');
-         if(pTotals) pTotals.style.display = 'none';
-      }
-  } else {
-      if (liveAppTable) {
-         const t = liveAppTable.closest('table');
-         if(t) t.style.display = '';
-      }
-      if(document.getElementById('temp-kt-table-app')) {
-         document.getElementById('temp-kt-table-app').style.display = 'none';
-      }
-      if (liveAppTotals) {
-         const pTotals = liveAppTotals.closest('div');
-         if(pTotals) pTotals.style.display = '';
-      }
   }
-}
 
 // Convert Number to Words (Vietnamese)
 const mangso = ['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
@@ -576,6 +617,12 @@ function docTien(so){
 }
 
 // Global window function for inline handlers
+
+window.updateSoBbgh = function(val) {
+    State.contract.soBbgh = (val || '').trim();
+    document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
+};
+
 window.updateRow = function(idx, field, value) {
   if(field === 'sl' || field === 'gia') value = parseFloat(value) || 0;
   State.products[idx][field] = value;
@@ -684,27 +731,33 @@ function parseExcelToState(rows) {
   bindDataToPreviews();
 }
 
+
+function cleanHtml(htmlStr) {
+    return htmlStr.replace(/<button[^>]*class="no-print"[^>]*>.*?<\/button>/g, '');
+}
+
 // Step 6: Previews
 function prepareFinalPreviews() {
-  document.getElementById('mini-preview-1').innerHTML = document.getElementById('preview-baogia').innerHTML;
+
+  document.getElementById('mini-preview-1').innerHTML = cleanHtml(document.getElementById('preview-baogia').innerHTML);
   
   if (State.contractType === 'gk') {
-      document.getElementById('mini-preview-2').innerHTML = document.getElementById('preview-contract-gk').innerHTML;
+      document.getElementById('mini-preview-2').innerHTML = cleanHtml(document.getElementById('preview-contract-gk').innerHTML);
       document.getElementById('chk-contract-gk').checked = true;
       document.getElementById('chk-contract-kt').checked = false;
       document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
       
-      document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-bbnt').innerHTML;
+      document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbnt').innerHTML);
       document.getElementById('chk-bbnt').checked = true;
       if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
   } else {
-      document.getElementById('mini-preview-kt').innerHTML = document.getElementById('preview-contract-kt').innerHTML;
+      document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
       document.getElementById('chk-contract-kt').checked = true;
       document.getElementById('chk-contract-gk').checked = false;
       document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
       
       if(document.getElementById('preview-bbgh')) {
-          document.getElementById('mini-preview-4').innerHTML = document.getElementById('preview-bbgh').innerHTML;
+          document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
           // rename the label 
           document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
       }
@@ -721,12 +774,10 @@ function prepareFinalPreviews() {
       if (appTable && ktTable) {
         appTable.parentNode.replaceChild(ktTable, appTable);
       }
-      const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
-      if (appTotals) {
-        appTotals.style.display = 'none';
-      }
+      const appSub = appPreview.querySelector('#app-subtotal');
+          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
   }
-  document.getElementById('mini-preview-3').innerHTML = appPreview.innerHTML;
+  document.getElementById('mini-preview-3').innerHTML = cleanHtml(appPreview.innerHTML);
 }
 
 // File Export
@@ -739,9 +790,9 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   
   const docs = [];
 
-  if (chk1) docs.push(document.getElementById('preview-baogia').outerHTML);
-  if (chk2_gk) docs.push(document.getElementById('preview-contract-gk').outerHTML);
-  if (chk2_kt) docs.push(document.getElementById('preview-contract-kt').outerHTML);
+  if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
+  if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
+  if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
   
   if (chk3) {
       if (State.contractType === 'kt') {
@@ -750,17 +801,16 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
           const ktTableTbody = document.getElementById('bind-products-kt');
       const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
           if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
-          const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
-          if (appTotals) appTotals.style.display = 'none';
-          docs.push(appPreview.outerHTML);
+          const appSub = appPreview.querySelector('#app-subtotal');
+          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';docs.push(cleanHtml(appPreview.outerHTML));
       } else {
-          docs.push(document.getElementById('preview-appendix').outerHTML);
+          docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
       }
   }
   
   if (chk4) {
-      if (State.contractType === 'gk') docs.push(document.getElementById('preview-bbnt').outerHTML);
-      else docs.push(document.getElementById('preview-bbgh').outerHTML);
+      if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
+      else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
   }
   
   if (docs.length === 0) {
@@ -805,9 +855,9 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
   
-  if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(document.getElementById('preview-baogia').outerHTML));
-  if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(document.getElementById('preview-contract-gk').outerHTML));
-  if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(document.getElementById('preview-contract-kt').outerHTML));
+  if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(cleanHtml(document.getElementById('preview-baogia').outerHTML)));
+  if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-gk').outerHTML)));
+  if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-kt').outerHTML)));
   
   if (chk3) {
       if (State.contractType === 'kt') {
@@ -816,19 +866,18 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
           const ktTableTbody = document.getElementById('bind-products-kt');
       const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
           if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
-          const appTotals = appPreview.querySelector('#app-subtotal').parentNode;
-          if (appTotals) appTotals.style.display = 'none';
-          folder.file("03_PhuLuc.doc", generateWordBlob(appPreview.outerHTML));
+          const appSub = appPreview.querySelector('#app-subtotal');
+          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(appPreview.outerHTML)));
       } else {
-          folder.file("03_PhuLuc.doc", generateWordBlob(document.getElementById('preview-appendix').outerHTML));
+          folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(document.getElementById('preview-appendix').outerHTML)));
       }
   }
   
   if (chk4) {
       if (State.contractType === 'gk') {
-          folder.file("04_BBNT.doc", generateWordBlob(document.getElementById('preview-bbnt').outerHTML));
+          folder.file("04_BBNT.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbnt').outerHTML)));
       } else {
-          folder.file("04_BBGH.doc", generateWordBlob(document.getElementById('preview-bbgh').outerHTML));
+          folder.file("04_BBGH.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbgh').outerHTML)));
       }
   }
 
@@ -852,13 +901,13 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   document.getElementById('ten_ct').value = "Hệ thống làm mát nhà máy Demo Tech";
   document.getElementById('diadiem_ct').value = "KCN ABC, TP HCM";
   
-  State.tableMode = 'complex';
+  State.tableMode = 'simple';
   State.products = [
-    { stt: "I", ten: "Xây mới nhà vệ sinh nữ", dvt: "", sl: 0, giaVatTu: 0, giaNhanCong: 0 },
-    { stt: "1", ten: "Xây tường bao dày 110m (xây 3 mặt)", dvt: "m2", sl: 19.8, giaVatTu: 245000, giaNhanCong: 185000, ghiChu: "" },
-    { stt: "2", ten: "Trát 2 mặt tường bao", dvt: "m2", sl: 39.6, giaVatTu: 95000, giaNhanCong: 75000, ghiChu: "" },
-    { stt: "3", ten: "Sơn tường ngoài", dvt: "m2", sl: 19.8, giaVatTu: 65000, giaNhanCong: 35000, ghiChu: "" },
-    { stt: "4", ten: "Nhân công lắp đặt cửa nhôm kính", dvt: "Bộ", sl: 1, giaVatTu: 0, giaNhanCong: 650000, ghiChu: "Lắp đặt lại" }
+    { stt: "I", ten: "Xây mới nhà vệ sinh nữ", dvt: "", sl: 0, gia: 0, giaVatTu: 0, giaNhanCong: 0 },
+    { stt: "1", ten: "Xây tường bao dày 110m (xây 3 mặt)", dvt: "m2", sl: 19.8, gia: 430000, giaVatTu: 245000, giaNhanCong: 185000, ghiChu: "" },
+    { stt: "2", ten: "Trát 2 mặt tường bao", dvt: "m2", sl: 39.6, gia: 170000, giaVatTu: 95000, giaNhanCong: 75000, ghiChu: "" },
+    { stt: "3", ten: "Sơn tường ngoài", dvt: "m2", sl: 19.8, gia: 100000, giaVatTu: 65000, giaNhanCong: 35000, ghiChu: "" },
+    { stt: "4", ten: "Nhân công lắp đặt cửa nhôm kính", dvt: "Bộ", sl: 1, gia: 650000, giaVatTu: 0, giaNhanCong: 650000, ghiChu: "Lắp đặt lại" }
   ];
   
   alert("Đã điền dữ liệu mẫu thành công!");

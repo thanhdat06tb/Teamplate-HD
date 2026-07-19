@@ -363,7 +363,7 @@
         <button id="btn-fill-dummy" class="btn btn-secondary"
           style="position:absolute; top: 10px; right: 10px; font-size: 12px; padding: 6px 12px;">🧪 Dữ liệu Mẫu</button>
         <h3>Kéo thả file Excel Báo Giá vào đây</h3>
-        <p>Hoặc click để chọn file. File cần có các cột: STT, Tên Hàng Hoá, ĐVT, Số Lượng, Đơn Giá.</p>
+        <p>Hoặc click để chọn file. File cần có các cột: Mã SP, Tên Hàng Hoá, ĐVT, Số Lượng, Đơn Giá.</p>
         <input type="file" id="excel-file" accept=".xlsx, .xls" style="display:none;">
       </div>
 
@@ -436,7 +436,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" style="display: none;">
         <h2>Danh sách Sản Phẩm / Dịch vụ</h2>
         <table>
           <thead>
@@ -553,7 +553,7 @@
             <tr>
               <th
                 style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">
-                STT</th>
+                Mã SP<br>编号</th>
               <th
                 style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">
                 Tên sản phẩm<br>品名 & 规格</th>
@@ -620,8 +620,8 @@
             <p style="margin: 3px 0 0 0; line-height: 1.1; font-weight:bold; font-size:15px; font-family: 'SimSun', 'Times New Roman', serif; white-space: nowrap;">越南华森国际商贸有限公司</p>
             
             <div style="height: 150px; margin-top: 10px;">
+               <p style="margin: 0; margin-bottom: 5px; font-size:14px; font-style:italic; transform: translateY(0); position: relative; z-index: 2;">(Ký tên & đóng dấu / 签字盖章)</p>
                <img src="./Picture2.png" style="width:200px; display: block; margin: 0 auto; transform: translateY(0); position: relative; z-index: 1;">
-               <p style="margin: 0; font-size:14px; font-style:italic; transform: translateY(0); position: relative; z-index: 2;">(Ký tên & đóng dấu / 签字盖章)</p>
             </div>
           </div>
         </div>
@@ -910,32 +910,39 @@
         <p><strong>1.1 Phạm vi cung cấp:</strong> Bên A đồng ý bán, Bên B đồng ý mua sản phẩm do bên A cung cấp như sau:</p>
 
         <table style="width:100%; border-collapse:collapse; text-align:center; font-size:12px; margin-top:10px; margin-bottom:10px; box-sizing: border-box; width: calc(100% - 2px);">
-          <thead>
-            <tr>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">STT</th>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">TÊN SẢN PHẨM</th>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">ĐVT</th>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">SL</th>
-              <th colspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">ĐƠN GIÁ (VNĐ)</th>
-              <th colspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">THÀNH TIỀN (VNĐ)</th>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">TỔNG TIỀN</th>
-              <th rowspan="2" style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">GHI CHÚ</th>
-            </tr>
-            <tr>
-              <th style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">Vật tư</th>
-              <th style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">Nhân công</th>
-              <th style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">Vật tư</th>
-              <th style="border:1px solid #000; padding:6px; background:none; color:#000; font-weight:bold;">Nhân công</th>
-            </tr>
-          </thead>
+                      <thead>
+              <tr>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Mã SP<br>编号</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Tên sản phẩm<br>品名 & 规格</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Số lượng<br>数量</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn vị<br>单位</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Hình ảnh<br>产品照片</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn giá (VNĐ)<br>单价(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Thành Tiền (VNĐ)<br>金额(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Ghi chú<br>备注</th>
+              </tr>
+            </thead>
           <tbody id="bind-products-kt">
              <!-- Dữ liệu tự động -->
           </tbody>
-          <tfoot>
-             <tr><td colspan="8" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Tổng cộng trước VAT:</td><td colspan="2" style="border:1px solid #000; padding:6px; font-weight:bold; text-align: right;" class="bind-tong-truoc-vat">0</td></tr>
-             <tr><td colspan="8" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Thuế VAT <span class="bind-vat-rate">10</span>%:</td><td colspan="2" style="border:1px solid #000; padding:6px; font-weight:bold; text-align: right;" class="bind-tien-vat">0</td></tr>
-             <tr><td colspan="8" style="border:1px solid #000; padding:6px; text-align:center; font-weight:bold;">Tổng cộng sau VAT:</td><td colspan="2" style="border:1px solid #000; padding:6px; font-weight:bold; text-align: right;" class="bind-tong-sau-vat">0</td></tr>
-          </tfoot>
+            <tbody>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tổng tiền chưa bao gồm thuế 总金额不含税</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px;" id="kt-subtotal">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tiền thuế <span class="bind-vat-rate">8</span>% 税<span class="bind-vat-rate">8</span>%</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px;" id="kt-vat-amount">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tổng thanh toán 总金额</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px; background:rgba(156,122,60,0.1);" id="kt-total-rounded">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+            </tbody>
+          
         </table>
 
         <p style="margin-top:10px;"><strong>1.1 Tổng giá trị hợp đồng (Gồm VAT):</strong> <strong class="bind-tong-sau-vat">...</strong> đồng</p>
@@ -1027,45 +1034,39 @@
 
         <h3 style="text-align:center; margin-top:15px; margin-bottom: 15px; text-transform:uppercase;">BẢNG CHI TIẾT KHỐI LƯỢNG</h3>
         <table style="width:calc(100% - 2px); box-sizing:border-box; border:1px solid #000; border-collapse:collapse;">
-          <thead>
-            <tr>
-              <th rowspan="2" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">STT</th>
-              <th rowspan="2" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Sản phẩm
-              </th>
-              <th rowspan="2" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">ĐVT</th>
-              <th rowspan="2" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">SL</th>
-              <th rowspan="2" class="col-simple"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Đơn giá</th>
-              <th colspan="2" class="col-complex"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Đơn giá</th>
-              <th colspan="2" class="col-complex"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Thành tiền</th>
-              <th rowspan="2" class="col-simple"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Thành tiền</th>
-              <th rowspan="2" class="col-complex"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Tổng tiền</th>
-              <th rowspan="2" class="col-complex"
-                style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">Ghi chú</th>
-            </tr>
-            <tr class="col-complex">
-              <th class="col-complex" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">
-                Vật tư</th>
-              <th class="col-complex" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">
-                Nhân công</th>
-              <th class="col-complex" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">
-                Vật tư</th>
-              <th class="col-complex" style="border:1px solid #000; background:#f0f0f0; color:#000; text-align:center;">
-                Nhân công</th>
-            </tr>
-          </thead>
+                      <thead>
+              <tr>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Mã SP<br>编号</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Tên sản phẩm<br>品名 & 规格</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Số lượng<br>数量</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn vị<br>单位</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Hình ảnh<br>产品照片</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn giá (VNĐ)<br>单价(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Thành Tiền (VNĐ)<br>金额(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Ghi chú<br>备注</th>
+              </tr>
+            </thead>
           <tbody id="app-product-table"></tbody>
+            <tbody>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tổng tiền chưa bao gồm thuế 总金额不含税</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px;" id="app-subtotal">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tiền thuế <span class="bind-vat-rate">8</span>% 税<span class="bind-vat-rate">8</span>%</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px;" id="app-vat">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+              <tr>
+                <td colspan="6" style="border:1px solid #000; text-align:center; font-weight:bold; padding:8px;">Tổng thanh toán 总金额</td>
+                <td style="border:1px solid #000; text-align:right; font-weight:bold; padding:8px; background:rgba(156,122,60,0.1);" id="app-total">0</td>
+                <td style="border:1px solid #000;"></td>
+              </tr>
+            </tbody>
         </table>
         
-        <div style="margin-top:20px; text-align:right; font-size:15px; margin-right: 10px;">
-          <p style="margin:4px 0;">Tổng tiền chưa thuế: <strong id="app-subtotal">0</strong></p>
-          <p style="margin:4px 0;">Thuế VAT (<span id="app-vat-rate">8</span>%): <strong id="app-vat">0</strong></p>
-          <p style="margin:4px 0;">Tổng cộng: <strong id="app-total">0</strong></p>
-        </div>
+        
 
         <p style="margin-top:20px; font-weight:bold;">Điều khoản hiệu lực:</p>
         <p>Phụ lục này là bộ phận không thể tách rời của Hợp đồng số <strong class="bind-sohd">...</strong>, có hiệu lực kể từ ngày ký. Các điều khoản khác của Hợp đồng gốc không thay đổi.</p>
@@ -1089,7 +1090,17 @@
 
         <!-- STEP 4: BIÊN BẢN -->
     <div class="step-content" id="step-4">
-      <div id="wrapper-bbnt">
+      
+      <div class="card" id="bb-settings" style="margin-bottom: 20px;">
+        <h2>Cài đặt Biên Bản</h2>
+        <div class="row">
+          <div class="col" id="col-so-bbgh" style="display:none;">
+             <label>Số biên bản (Giao hàng)</label>
+             <input type="text" id="so_bbgh" value="" oninput="window.updateSoBbgh(this.value)">
+          </div>
+        </div>
+      </div>
+<div id="wrapper-bbnt">
 <!-- STEP 5: BBNT -->
     
       <div class="doc-preview" id="preview-bbnt">
@@ -1180,10 +1191,10 @@
           <table style="width:100%; border:none; margin-bottom: 15px; font-size:15px; line-height: 1.5;">
             <tr>
               <td style="border:none; padding:4px 0; width:50%;">
-                <strong>HĐ Số/合同号:</strong> <span class="bind-sohd">...</span>
+                <strong>Số/单号:</strong> <span class="bind-sobbgh">.....................................</span>
               </td>
-              <td style="border:none; padding:4px 0; width:50%;">
-                <strong>Số/单号:</strong> .....................................
+              <td style="border:none; padding:4px 0; width:50%; text-align:right;">
+                <strong>Ngày/日期:</strong> <span class="bind-ngay">...</span> 年 <span class="bind-thang">...</span> 月 <span class="bind-nam">...</span> 日
               </td>
             </tr>
             <tr>
@@ -1197,32 +1208,31 @@
               </td>
             </tr>
             <tr>
-              <td style="border:none; padding:4px 0;">
+              <td style="border:none; padding:4px 0;" colspan="2">
                 <strong>Mã số thuế/税号:</strong> <span class="bind-kh-mst">...</span>
-              </td>
-              <td style="border:none; padding:4px 0;">
-                <strong>Ngày/日期:</strong> <span class="bind-ngay">...</span> 年 <span class="bind-thang">...</span> 月 <span class="bind-nam">...</span> 日
               </td>
             </tr>
             <tr>
-              <td style="border:none; padding:4px 0;">
+              <td style="border:none; padding:4px 0; width:50%;">
                 <strong>Người liên hệ/联系人:</strong> <span class="bind-kh-daidien">...</span>
               </td>
-              <td style="border:none; padding:4px 0;">
+              <td style="border:none; padding:4px 0; width:50%;">
                 <strong>Điện thoại/电话:</strong> <span class="bind-kh-sdt">...</span>
               </td>
             </tr>
           </table>
 
           <table style="width:calc(100% - 2px); box-sizing:border-box; border:1px solid #000; border-collapse:collapse; text-align:center; font-size:14px; margin-bottom: 30px;">
-            <thead>
+                        <thead>
               <tr>
-                <th style="border:1px solid #000; padding:8px; width:50px; background:#e6f2eb; color:#000;">STT<br><span style="font-size:12px; font-family:'SimSun';">序号</span></th>
-                <th style="border:1px solid #000; padding:8px; background:#e6f2eb; color:#000;">Tên Hàng<br><span style="font-size:12px; font-family:'SimSun';">品名</span></th>
-                <th style="border:1px solid #000; padding:8px; background:#e6f2eb; color:#000;">Mã Hàng<br><span style="font-size:12px; font-family:'SimSun';">规格</span></th>
-                <th style="border:1px solid #000; padding:8px; background:#e6f2eb; color:#000;">Số lượng<br><span style="font-size:12px; font-family:'SimSun';">数量</span></th>
-                <th style="border:1px solid #000; padding:8px; background:#e6f2eb; color:#000;">Đơn vị<br><span style="font-size:12px; font-family:'SimSun';">单位</span></th>
-                <th style="border:1px solid #000; padding:8px; background:#e6f2eb; color:#000;">Ghi Chú<br><span style="font-size:12px; font-family:'SimSun';">备注</span></th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Mã SP<br>编号</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Tên sản phẩm<br>品名 & 规格</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Số lượng<br>数量</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn vị<br>单位</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Hình ảnh<br>产品照片</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Đơn giá (VNĐ)<br>单价(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Thành Tiền (VNĐ)<br>金额(VNĐ)</th>
+                <th style="border:1px solid #000; color:#000; background:rgba(0,0,0,0.05); text-align:center; padding:8px;">Ghi chú<br>备注</th>
               </tr>
             </thead>
             <tbody id="bbgh-product-table">

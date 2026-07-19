@@ -1,4 +1,4 @@
-sao l$word = New-Object -ComObject Word.Application
+$word = New-Object -ComObject Word.Application
 $word.Visible = $false
 $files = Get-ChildItem 'd:\Template_HopDong\' -Filter '*.doc'
 Write-Host "Doc files found:"
