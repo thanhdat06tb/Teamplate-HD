@@ -10,6 +10,45 @@ const State = {
   vatRate: 0.08
 };
 
+// --- Duplicate Document Number Validation Module ---
+const existingDocNumbers = new Set();
+async function fetchExistingDocNumbers() {
+  if (typeof firebase === 'undefined' || !firebase.firestore) return;
+  try {
+    const snapshot = await firebase.firestore().collection('contracts_cloud').get();
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.ma_so) {
+        data.ma_so.split('|').map(s => s.trim()).filter(s => s).forEach(s => existingDocNumbers.add(s));
+      }
+      if (data.document_numbers && Array.isArray(data.document_numbers)) {
+        data.document_numbers.forEach(s => existingDocNumbers.add(s.trim()));
+      }
+    });
+    console.log("Loaded existing doc numbers:", existingDocNumbers.size);
+  } catch (err) {
+    console.error("Error fetching doc numbers:", err);
+  }
+}
+
+function validateInputUnique(el) {
+  if (!el) return;
+  const val = el.value.trim();
+  if (!val || val === '...' || /^(\.)+$/.test(val)) {
+    el.style.border = '';
+    el.title = '';
+    return;
+  }
+  if (existingDocNumbers.has(val)) {
+    el.style.border = '2px solid #ef4444'; // Red border
+    el.title = 'Số văn bản này đã tồn tại trên Đám Mây!';
+  } else {
+    el.style.border = '';
+    el.title = '';
+  }
+}
+// ---------------------------------------------------
+
 // Elements
 const els = {
   steps: document.querySelectorAll('.step'),
@@ -671,6 +710,10 @@ document.querySelectorAll('input').forEach(input => {
   input.addEventListener('input', () => {
     saveFormState();
     bindDataToPreviews();
+    // Validate uniqueness on input
+    if (['so_baogia', 'so_hd', 'so_hd_kt', 'so_pl', 'so_bbgh'].includes(input.id)) {
+       validateInputUnique(input);
+    }
   });
 });
 
@@ -1034,9 +1077,26 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
 
   const totalAmountStr = document.getElementById('bg-total-rounded') ? document.getElementById('bg-total-rounded').innerText : "0";
 
+  // Document Number Validation logic
+  const currNumbers = [
+    State.client.soBaogia,
+    State.contract.sohd,
+    State.contract.sopl,
+    State.contract.soBbgh
+  ].map(s => s ? s.trim() : '').filter(s => s && s !== '...' && !/^(\.)+$/.test(s));
+
+  const duplicates = currNumbers.filter(n => existingDocNumbers.has(n));
+  if (duplicates.length > 0) {
+    alert("❌ KHÔNG THỂ LƯU!\n\nCác số văn bản sau đã TỒN TẠI trên hệ thống:\n• " + duplicates.join('\n• ') + "\n\nVui lòng kiểm tra, thay đổi số hiệu trước khi tiến hành lưu để tránh trùng lặp.");
+    btn.disabled = false;
+    btn.innerText = originalText;
+    return;
+  }
+
   try {
     const docData = {
       ma_so: (State.client.soBaogia ? State.client.soBaogia + ' | ' : '') + (State.contract.sohd || ""),
+      document_numbers: currNumbers,
       ten_cong_ty: State.client.ten || "",
       tong_tien: totalAmountStr,
       ngay_ky: State.contract.ngay || "",
@@ -1054,6 +1114,8 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
     ])
       .then(() => {
         alert("Lưu tài liệu thành công lên hệ thống Cloud!");
+        // Thêm vào cache các số hệ thống để chặn lưu trùng trong cùng một section
+        currNumbers.forEach(n => existingDocNumbers.add(n));
       })
       .catch((error) => {
         console.error(error);
@@ -1091,6 +1153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Logged in
         authOverlay.style.display = 'none';
         mainApp.style.display = 'block';
+        fetchExistingDocNumbers(); // Fetch numbers cache 
       } else {
         // Logged out
         authOverlay.style.display = 'flex';
