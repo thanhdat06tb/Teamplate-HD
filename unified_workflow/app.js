@@ -47,6 +47,34 @@ function validateInputUnique(el) {
     el.title = '';
   }
 }
+
+// --- Toast System ---
+window.showToast = function(message, type = 'info', duration = 4000) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  
+  let icon = 'ℹ️';
+  if (type === 'success') icon = '✅';
+  if (type === 'error') icon = '❌';
+  if (type === 'warning') icon = '⚠️';
+
+  toast.innerHTML = `<div class="toast-icon">${icon}</div><div>${message.replace(/\\n/g, '<br>')}</div>`;
+  container.appendChild(toast);
+  
+  // Trigger animation
+  requestAnimationFrame(() => {
+    toast.classList.add('show');
+  });
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400); // Wait for transition
+  }, duration);
+}
+// --------------------
+
 // ---------------------------------------------------
 
 // Elements
@@ -794,7 +822,7 @@ function parseExcelToState(rows) {
     }
   });
 
-  alert('Đã load xong ' + State.products.length + ' sản phẩm từ Excel ở chế độ: ' + State.tableMode);
+  showToast('Đã load xong ' + State.products.length + ' sản phẩm từ Excel ở chế độ: ' + State.tableMode, 'success');
   bindDataToPreviews();
 }
 
@@ -1057,7 +1085,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   }
 
   if (docs.length === 0) {
-    alert("Vui lòng chọn ít nhất 1 văn bản để lưu.");
+    showToast("Vui lòng chọn ít nhất 1 văn bản để lưu.", "warning");
     return;
   }
 
@@ -1069,7 +1097,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   const htmlContent = docs.map(html => `<div class="page-break">${html}</div>`).join('');
   
   if (htmlContent.length > 900000) {
-    alert("Lỗi: Dữ liệu văn bản quá lớn (vượt quá 1MB giới hạn của Cloud). Vui lòng giảm bớt hình ảnh, hoặc không xuất cùng lúc 4 văn bản chứa ảnh.");
+    showToast("Lỗi: Dữ liệu văn bản quá lớn (vượt quá 1MB giới hạn của Cloud). Vui lòng giảm bớt hình ảnh, hoặc không xuất cùng lúc 4 văn bản chứa ảnh.", "error", 6000);
     btn.disabled = false;
     btn.innerText = originalText;
     return;
@@ -1087,7 +1115,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
 
   const duplicates = currNumbers.filter(n => existingDocNumbers.has(n));
   if (duplicates.length > 0) {
-    alert("❌ KHÔNG THỂ LƯU!\n\nCác số văn bản sau đã TỒN TẠI trên hệ thống:\n• " + duplicates.join('\n• ') + "\n\nVui lòng kiểm tra, thay đổi số hiệu trước khi tiến hành lưu để tránh trùng lặp.");
+    showToast(`KHÔNG THỂ LƯU!<br>Các số văn bản sau đã TỒN TẠI trên hệ thống:<br>• ${duplicates.join('<br>• ')}<br><br>Vui lòng kiểm tra, thay đổi số hiệu trước khi tiến hành lưu để tránh trùng lặp.`, "error", 7000);
     btn.disabled = false;
     btn.innerText = originalText;
     return;
@@ -1113,13 +1141,13 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
       timeoutPromise
     ])
       .then(() => {
-        alert("Lưu tài liệu thành công lên hệ thống Cloud!");
+        showToast("Lưu tài liệu thành công lên hệ thống Cloud!", "success");
         // Thêm vào cache các số hệ thống để chặn lưu trùng trong cùng một section
         currNumbers.forEach(n => existingDocNumbers.add(n));
       })
       .catch((error) => {
         console.error(error);
-        alert("Lỗi khi lưu: " + error.message);
+        showToast("Lỗi khi lưu: " + error.message, "error");
       })
       .finally(() => {
         btn.disabled = false;
@@ -1127,7 +1155,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
       });
   } catch (err) {
     console.error(err);
-    alert("Lỗi xử lý cục bộ: " + err.message);
+    showToast("Lỗi xử lý cục bộ: " + err.message, "error");
     btn.disabled = false;
     btn.innerText = originalText;
   }
