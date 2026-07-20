@@ -482,7 +482,7 @@ function renderProducts() {
 
       hBg += `<tr style="${styleBold}">
         <td style="border:1px solid #000; padding:0; text-align:center;"><input type="text" value="${p.stt || ''}" onchange="updateRow(${i}, 'stt', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
-        <td style="border:1px solid #000; padding:0;"><div contenteditable="true" onblur="updateRow(${i}, 'ten', this.innerText)" style="min-height:45px; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px 8px; outline:none; font-family:inherit; font-size:inherit; white-space:normal; overflow-wrap:break-word; word-break:break-word;">${p.ten || ''}</div></td>
+        <td style="border:1px solid #000; padding:0;"><div contenteditable="true" onblur="updateRow(${i}, 'ten', this.innerText)" style="min-height:30px; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px 8px; outline:none; font-family:inherit; font-size:inherit; white-space:normal; overflow-wrap:break-word; word-break:break-word;">${p.ten || ''}</div></td>
         <td style="border:1px solid #000; padding:0; text-align:center;"><input type="number" value="${p.sl || 0}" onchange="updateRow(${i}, 'sl', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
         <td style="border:1px solid #000; padding:0; text-align:center;">
            <select onchange="updateDvt(${i}, this.value)" class="dvt-select-wysiwyg" style="width:100%; box-sizing:border-box; background:transparent; border:none; padding:8px; font-size:inherit; font-family:inherit; text-align:center; outline:none; -webkit-appearance:none; appearance:none; cursor:pointer;">${dvtOptions}</select>
@@ -493,7 +493,7 @@ function renderProducts() {
         <td style="border:1px solid #000; padding:0; text-align:right;"><input type="number" value="${(State.tableMode === 'complex' && !isCat && !p.gia) ? (gVatTu + gNhanCong) : gSimple}" onchange="updateRow(${i}, 'gia', this.value); if(State.tableMode === 'complex') { State.products[${i}].giaVatTu = 0; State.products[${i}].giaNhanCong = 0; State.tableMode = 'simple'; renderProducts(); }" style="width:100%; text-align:right; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
         <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td style="border:1px solid #000; padding:0;">
-           <div style="display:flex; width:100%; min-height: 45px;">
+           <div style="display:flex; width:100%; min-height: 30px;">
              <div contenteditable="true" onblur="updateRow(${i}, 'ghiChu', this.innerText)" onkeydown="checkTab(event, ${i})" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit; white-space:normal; overflow-wrap:break-word; word-break:break-word;">${p.ghiChu || ''}</div>
              <button class="no-print" onclick="window.removeProductRow(${i})" style="color:red; background:none; border:none; cursor:pointer; padding:8px;" title="Xoá dòng">✖</button>
            </div>
