@@ -5,7 +5,7 @@ const State = {
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '', soBaogia: '' },
   company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
-  products: [{stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: ''}],
+  products: [{ stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: '' }],
   tableMode: 'simple',
   vatRate: 0.08
 };
@@ -23,7 +23,7 @@ const els = {
   appProductTable: document.getElementById('app-product-table'),
   vatSelect: document.getElementById('vat-rate'),
   vatSelectKt: document.getElementById('vat-rate-kt'),
-  
+
   radioGk: document.getElementById('radio-gk'),
   radioKt: document.getElementById('radio-kt'),
   wrapperGk: document.getElementById('wrapper-gk'),
@@ -79,7 +79,7 @@ function updateNav() {
   els.contents.forEach((ct, i) => {
     ct.classList.toggle('active', i + 1 === State.currentStep);
   });
-  
+
   els.btnPrev.style.display = State.currentStep === 1 ? 'none' : 'block';
   if (State.currentStep === 5) {
     els.btnNext.style.display = 'none';
@@ -88,29 +88,29 @@ function updateNav() {
     els.btnNext.style.display = 'block';
     els.btnNext.textContent = `Tiếp Theo Bước ${State.currentStep + 1} →`;
   }
-  
+
   if (State.currentStep === 2) {
     if (State.contractType === 'gk') {
-        els.wrapperGk.style.display = 'block';
-        els.wrapperKt.style.display = 'none';
+      els.wrapperGk.style.display = 'block';
+      els.wrapperKt.style.display = 'none';
     } else {
-        els.wrapperGk.style.display = 'none';
-        els.wrapperKt.style.display = 'block';
+      els.wrapperGk.style.display = 'none';
+      els.wrapperKt.style.display = 'block';
     }
   }
-  
+
   if (State.currentStep === 4) {
     if (State.contractType === 'gk') {
-        els.wrapperBbnt.style.display = 'block';
-        if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'none';
-        if(document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'none';
+      els.wrapperBbnt.style.display = 'block';
+      if (els.wrapperBbgh) els.wrapperBbgh.style.display = 'none';
+      if (document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'none';
     } else {
-        els.wrapperBbnt.style.display = 'none';
-        if(els.wrapperBbgh) els.wrapperBbgh.style.display = 'block';
-        if(document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'block';
+      els.wrapperBbnt.style.display = 'none';
+      if (els.wrapperBbgh) els.wrapperBbgh.style.display = 'block';
+      if (document.getElementById('col-so-bbgh')) document.getElementById('col-so-bbgh').style.display = 'block';
     }
   }
-  
+
   bindDataToPreviews();
 }
 
@@ -131,15 +131,15 @@ els.btnPrev.addEventListener('click', () => {
 });
 
 
-if(els.radioGk) {
+if (els.radioGk) {
   els.radioGk.addEventListener('change', () => {
-    if(els.radioGk.checked) State.contractType = 'gk';
+    if (els.radioGk.checked) State.contractType = 'gk';
     updateNav();
   });
 }
-if(els.radioKt) {
+if (els.radioKt) {
   els.radioKt.addEventListener('change', () => {
-    if(els.radioKt.checked) State.contractType = 'kt';
+    if (els.radioKt.checked) State.contractType = 'kt';
     updateNav();
   });
 }
@@ -156,7 +156,7 @@ function saveFormState() {
   State.client.email = els.kh_email.value || '';
   State.client.ngay = els.kh_ngay.value || '';
   State.client.soBaogia = els.so_baogia ? els.so_baogia.value || '...' : '...';
-  
+
   State.company.ten = els.dn_ten.value || '...';
   State.company.mst = els.dn_mst.value || '...';
   State.company.diachi = els.dn_diachi.value || '...';
@@ -165,7 +165,7 @@ function saveFormState() {
   State.company.chucvu = els.dn_chucvu.value || '...';
   State.company.sdt = els.dn_sdt.value || '...';
   State.company.email = els.dn_email.value || '...';
-  
+
   // Remove cross-syncs
   if (State.contractType === 'kt') {
     State.contract.sohd = els.so_hd_kt ? (els.so_hd_kt.value || '...') : '...';
@@ -176,23 +176,23 @@ function saveFormState() {
     State.contract.ngay = els.ngay_ky.value || '...';
     State.contract.tamung = els.tam_ung.value || '50';
   }
-  
+
   State.contract.tenct = els.ten_ct.value || '...';
   State.contract.diadiemct = els.diadiem_ct.value || '...';
   State.contract.songaytt = els.so_ngay_tt.value || '15';
   State.contract.thoiGianGiao = els.thoi_gian_giao ? els.thoi_gian_giao.value || '...' : '...';
   State.contract.ptThanhToan = els.pt_thanh_toan ? els.pt_thanh_toan.value || '...' : '...';
-  
+
   State.contract.sopl = els.so_pl ? els.so_pl.value || '...' : '...';
   State.contract.ngaypl = els.ngay_pl ? els.ngay_pl.value || '...' : '...';
   State.contract.soBbgh = els.soBbgh ? els.soBbgh.value || '.....................................' : '.....................................';
-  
+
   if (State.contractType === 'kt') {
-      if(els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
-      if(els.vatSelect && els.vatSelectKt) els.vatSelect.value = els.vatSelectKt.value;
+    if (els.vatSelectKt) State.vatRate = parseFloat(els.vatSelectKt.value);
+    if (els.vatSelect && els.vatSelectKt) els.vatSelect.value = els.vatSelectKt.value;
   } else {
-      if(els.vatSelect) State.vatRate = parseFloat(els.vatSelect.value);
-      if(els.vatSelectKt && els.vatSelect) els.vatSelectKt.value = els.vatSelect.value;
+    if (els.vatSelect) State.vatRate = parseFloat(els.vatSelect.value);
+    if (els.vatSelectKt && els.vatSelect) els.vatSelectKt.value = els.vatSelect.value;
   }
 }
 
@@ -208,7 +208,7 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-kh-sdt').forEach(e => e.textContent = State.client.sdt);
   document.querySelectorAll('.bind-kh-email').forEach(e => e.textContent = State.client.email);
   document.querySelectorAll('.bind-so-baogia').forEach(e => e.textContent = State.client.soBaogia);
-  
+
   let ngayStr = '....... 年 ....... 月 ....... 日';
   if (State.client.ngay) {
     const parts = State.client.ngay.split('-');
@@ -217,7 +217,7 @@ function bindDataToPreviews() {
     }
   }
   document.querySelectorAll('.bind-kh-ngay').forEach(e => e.textContent = ngayStr);
-  
+
   document.querySelectorAll('.bind-dn-ten').forEach(e => e.textContent = State.company.ten);
   document.querySelectorAll('.bind-dn-mst').forEach(e => e.textContent = State.company.mst);
   document.querySelectorAll('.bind-dn-diachi').forEach(e => e.textContent = State.company.diachi);
@@ -226,7 +226,7 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-dn-chucvu').forEach(e => e.textContent = State.company.chucvu);
   document.querySelectorAll('.bind-dn-sdt').forEach(e => e.textContent = State.company.sdt);
   document.querySelectorAll('.bind-dn-email').forEach(e => e.textContent = State.company.email);
-  
+
   document.querySelectorAll('.bind-sohd').forEach(e => e.textContent = State.contract.sohd);
   document.querySelectorAll('.bind-ten-ct').forEach(e => e.textContent = State.contract.tenct);
   document.querySelectorAll('.bind-diadiem-ct').forEach(e => e.textContent = State.contract.diadiemct);
@@ -234,41 +234,41 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-so-ngay-tt').forEach(e => e.textContent = State.contract.songaytt);
   document.querySelectorAll('.bind-thoi-gian-giao').forEach(e => e.textContent = State.contract.thoiGianGiao);
   document.querySelectorAll('.bind-pt-thanh-toan').forEach(e => e.textContent = State.contract.ptThanhToan);
-  
+
   // Date parsing
   const dateStr = State.contract.ngay;
-  if(dateStr) {
-      const parts = dateStr.split('-');
-      if(parts.length === 3) {
-          document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = parts[2]);
-          document.querySelectorAll('.bind-thang').forEach(e => e.textContent = parts[1]);
-          document.querySelectorAll('.bind-nam').forEach(e => e.textContent = parts[0]);
-          document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`);
-      }
+  if (dateStr) {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = parts[2]);
+      document.querySelectorAll('.bind-thang').forEach(e => e.textContent = parts[1]);
+      document.querySelectorAll('.bind-nam').forEach(e => e.textContent = parts[0]);
+      document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`);
+    }
   } else {
-      document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = '...');
-      document.querySelectorAll('.bind-thang').forEach(e => e.textContent = '...');
-      document.querySelectorAll('.bind-nam').forEach(e => e.textContent = '...');
-      document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-ngay').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-thang').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-nam').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-ngay-ky').forEach(e => e.textContent = '...');
   }
 
   // Appendix Parsing
   document.querySelectorAll('.bind-sopl').forEach(e => e.textContent = State.contract.sopl);
   document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
   const datePl = State.contract.ngaypl;
-  if(datePl) {
-      const parts = datePl.split('-');
-      if(parts.length === 3) {
-          document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = parts[2]);
-          document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = parts[1]);
-          document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = parts[0]);
-      }
+  if (datePl) {
+    const parts = datePl.split('-');
+    if (parts.length === 3) {
+      document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = parts[2]);
+      document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = parts[1]);
+      document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = parts[0]);
+    }
   } else {
-      document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = '...');
-      document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = '...');
-      document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-pl-ngay').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-pl-thang').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-pl-nam').forEach(e => e.textContent = '...');
   }
-  
+
   // Render Product Tables for Step 1 and Step 3
   renderProducts();
 }
@@ -276,17 +276,17 @@ function bindDataToPreviews() {
 // Check if string is Roman Numeral
 function isRoman(str) {
   const s = String(str || '').trim().toUpperCase();
-  if(!s) return false;
+  if (!s) return false;
   return /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/.test(s);
 }
 
 
-window.updateSoBbgh = function(val) {
-    State.contract.soBbgh = (val || '').trim();
-    document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
+window.updateSoBbgh = function (val) {
+  State.contract.soBbgh = (val || '').trim();
+  document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
 };
 
-window.updateRow = function(index, field, value) {
+window.updateRow = function (index, field, value) {
   if (!State.products[index]) return;
   if (['sl', 'gia', 'giaVatTu', 'giaNhanCong'].includes(field)) {
     State.products[index][field] = parseFloat(value) || 0;
@@ -296,7 +296,7 @@ window.updateRow = function(index, field, value) {
   renderProducts();
 };
 
-window.addProductRow = function() {
+window.addProductRow = function () {
   State.products.push({
     stt: '',
     ten: '',
@@ -310,12 +310,12 @@ window.addProductRow = function() {
   renderProducts();
 };
 
-window.removeProductRow = function(index) {
+window.removeProductRow = function (index) {
   State.products.splice(index, 1);
   renderProducts();
 };
 
-window.updateDvt = function(index, value) {
+window.updateDvt = function (index, value) {
   if (value === '_other_') {
     let custom = prompt("Nhập Đơn vị tính mới:");
     if (custom) {
@@ -328,7 +328,7 @@ window.updateDvt = function(index, value) {
 };
 
 
-window.checkTab = function(e, index) {
+window.checkTab = function (e, index) {
   if (e.key === 'Enter') {
     if (index === State.products.length - 1) {
       e.preventDefault();
@@ -336,36 +336,57 @@ window.checkTab = function(e, index) {
       // focus the next row's ten input after rendering
       setTimeout(() => {
         let inputs = document.querySelectorAll('#bg-product-table tr:last-child input');
-        if(inputs.length > 1) inputs[1].focus();
+        if (inputs.length > 1) inputs[1].focus();
       }, 50);
     }
   }
 };
 
-window.uploadProductImage = function(index, input) {
+window.uploadProductImage = function (index, input) {
   if (input.files && input.files[0]) {
+    const file = input.files[0];
     const reader = new FileReader();
-    reader.onload = function(e) {
-      State.products[index].imgData = e.target.result;
-      renderProducts();
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 300;
+        let width = img.width;
+        let height = img.height;
+        if (width > height && width > MAX_SIZE) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        } else if (height > MAX_SIZE) {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        State.products[index].imgData = canvas.toDataURL('image/jpeg', 0.8);
+        renderProducts();
+      };
+      img.src = e.target.result;
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
   }
 };
 
 // Product Rendering
 function renderProducts() {
   if (State.products.length === 0) {
-    State.products = [{stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: ''}];
+    State.products = [{ stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: '' }];
   }
   let h1 = '', h3 = '', hBg = '', hKt = '', hBb = '';
   let sum = 0;
-  
+
   if (State.products.length === 0) {
     h1 = `<tr><td colspan="6" style="text-align:center; color:#888;">Chưa có dữ liệu</td></tr>`;
     h3 = `<tr><td colspan="5" style="text-align:center;">Vui lòng nhập dữ liệu ở Bước 1</td></tr>`;
     hBg = `<tr><td colspan="6" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
-        hKt = `<tr><td colspan="10" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
+    hKt = `<tr><td colspan="10" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
     hBb = `<tr><td colspan="6" style="text-align:center; border:1px solid #000; padding:5px;">Vui lòng nhập dữ liệu</td></tr>`;
   } else {
     // Pass 1: Compute category totals
@@ -377,7 +398,7 @@ function renderProducts() {
       const gSimple = p.gia || 0;
       const tGia = State.tableMode === 'complex' ? (gVatTu + gNhanCong) : gSimple;
       const tt = (p.sl || 0) * tGia;
-      
+
       if (isRoman(p.stt)) {
         currentCategoryIndex = i;
         categoryTotals[i] = 0;
@@ -395,31 +416,31 @@ function renderProducts() {
       const gNhanCong = p.giaNhanCong || 0;
       const gSimple = p.gia || 0;
       const tGia = State.tableMode === 'complex' ? (gVatTu + gNhanCong) : gSimple;
-      
+
       const rawTt = (p.sl || 0) * tGia;
       const displayTt = isCat ? (categoryTotals[i] || 0) : rawTt;
-      
+
       const dispSl = isCat ? '' : (Math.round((p.sl || 0) * 1000) / 1000);
-      
+
       if (!isCat) sum += rawTt;
-      
+
       const styleBold = isCat ? 'font-weight:bold;' : '';
       const bText = isCat ? 'font-weight:bold;' : 'font-weight:inherit;';
-      
-      
+
+
       const defaultDvts = ["", "Sét", "Cái", "Chiếc", "Bộ", "m2", "m", "Kg", "Lít", "Gói", "Hộp", "Cuộn"];
       let dvtOptions = "";
       let foundDvt = false;
       for (let d of defaultDvts) {
-          let sel = (p.dvt === d) ? "selected" : "";
-          if (p.dvt === d) foundDvt = true;
-          dvtOptions += `<option value="${d}" ${sel}>${d || '--'}</option>`;
+        let sel = (p.dvt === d) ? "selected" : "";
+        if (p.dvt === d) foundDvt = true;
+        dvtOptions += `<option value="${d}" ${sel}>${d || '--'}</option>`;
       }
       if (!foundDvt && p.dvt) {
-          dvtOptions += `<option value="${p.dvt}" selected>${p.dvt}</option>`;
+        dvtOptions += `<option value="${p.dvt}" selected>${p.dvt}</option>`;
       }
       dvtOptions += `<option value="_other_">Tự nhập...</option>`;
-      
+
       const dvtSelect = `<select onchange="updateDvt(${i}, this.value)" style="width:70px; background:transparent; border:1px solid #ccc; border-radius:4px; padding:2px; font-size:13px;">${dvtOptions}</select>`;
 
       // Step 1 Editor rows
@@ -431,13 +452,13 @@ function renderProducts() {
         <td class="col-simple"><input type="number" value="${gSimple}" onchange="updateRow(${i}, 'gia', this.value)" style="width:80px; ${bText} background:transparent;"></td>
         <td class="col-complex"><input type="number" value="${gVatTu}" onchange="updateRow(${i}, 'giaVatTu', this.value)" style="width:70px; ${bText} background:transparent;"></td>
         <td class="col-complex"><input type="number" value="${gNhanCong}" onchange="updateRow(${i}, 'giaNhanCong', this.value)" style="width:70px; ${bText} background:transparent;"></td>
-        <td class="col-complex" style="${bText}">${p.sl ? fmtVND((p.sl||0)*gVatTu) : ''}</td>
-        <td class="col-complex" style="${bText}">${p.sl ? fmtVND((p.sl||0)*gNhanCong) : ''}</td>
+        <td class="col-complex" style="${bText}">${p.sl ? fmtVND((p.sl || 0) * gVatTu) : ''}</td>
+        <td class="col-complex" style="${bText}">${p.sl ? fmtVND((p.sl || 0) * gNhanCong) : ''}</td>
         <td class="col-simple" style="${bText}">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td class="col-complex" style="font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td class="col-complex"><input type="text" value="${p.ghiChu || ''}" onchange="updateRow(${i}, 'ghiChu', this.value)" onkeydown="checkTab(event, ${i})" style="width:100px; ${bText} background:transparent;"></td>
       </tr>`;
-      
+
       // Step 3 Static rows (Appendix) & BBGH
       let staticImgHtml = p.imgData ? `<img src="${p.imgData}" style="max-width:50px; max-height:50px;">` : '';
       let staticRow = `<tr style="${styleBold}">
@@ -450,7 +471,7 @@ function renderProducts() {
         <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
       </tr>`;
-      
+
       h3 += staticRow;
       hBb += staticRow;
 
@@ -478,18 +499,18 @@ function renderProducts() {
            </div>
         </td>
       </tr>`;
-      
+
       // Step 2 Kinh Te Rows
       hKt += staticRow;
     });
   }
-  
+
   els.productTbody.innerHTML = h1;
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
-  if(document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
-  if(document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
-  
+  if (document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
+  if (document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
+
   // Set table modes
   const tblMode = State.tableMode === 'complex' ? 'complex-mode' : 'simple-mode';
   const noMode = State.tableMode === 'complex' ? 'simple-mode' : 'complex-mode';
@@ -499,12 +520,12 @@ function renderProducts() {
     document.querySelector('#app-product-table')?.closest('table'),
     document.querySelector('#bind-products-kt')?.closest('table')
   ].forEach(tb => {
-    if(tb) {
+    if (tb) {
       tb.classList.add(tblMode);
       tb.classList.remove(noMode);
     }
   });
-  
+
   // Update totals
   const vat = sum * State.vatRate;
   const total = sum + vat;
@@ -515,12 +536,12 @@ function renderProducts() {
   setText('app-total', fmtVND(total) + ' VNĐ');
   setText('app-vat-rate', (State.vatRate * 100));
   setText('bbnt-total', fmtVND(total));
-  
+
   // Bg logic with VAT
   const bgSubtotal = Math.round(sum);
   const bgVatAmount = Math.round(vat);
   const bgTotal = Math.round(total);
-  
+
   setText('bg-subtotal', fmtVND(bgSubtotal));
   setText('bg-subtotal-complex', fmtVND(bgSubtotal));
   setText('bg-vat-amount', fmtVND(bgVatAmount));
@@ -533,124 +554,124 @@ function renderProducts() {
   setText('kt-total-rounded', fmtVND(bgTotal));
 
   document.querySelectorAll('.bind-vat-rate').forEach(e => e.textContent = (State.vatRate * 100));
-  
+
   // Update KT contract totals
   const tamUngPerc = parseFloat(State.contract.tamung) || 0;
   const tamUngVal = Math.round(bgTotal * tamUngPerc / 100);
   const conLaiVal = bgTotal - tamUngVal;
-  
+
   document.querySelectorAll('.bind-tong-truoc-vat').forEach(e => e.textContent = fmtVND(bgSubtotal));
   document.querySelectorAll('.bind-tien-vat').forEach(e => e.textContent = fmtVND(bgVatAmount));
   document.querySelectorAll('.bind-tong-sau-vat').forEach(e => e.textContent = fmtVND(bgTotal));
   document.querySelectorAll('.bind-tong-bang-chu').forEach(e => e.textContent = docTien(bgTotal));
-  
+
 
   document.querySelectorAll('.bind-tien-tam-ung').forEach(e => e.textContent = fmtVND(tamUngVal));
   document.querySelectorAll('.bind-chu-tam-ung').forEach(e => e.textContent = docTien(tamUngVal).replace(' đồng', ''));
   document.querySelectorAll('.bind-tien-con-lai').forEach(e => e.textContent = fmtVND(conLaiVal));
   document.querySelectorAll('.bind-chu-con-lai').forEach(e => e.textContent = docTien(conLaiVal).replace(' đồng', ''));
-  
-  }
+
+}
 
 // Convert Number to Words (Vietnamese)
-const mangso = ['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
-function dochangchuc(so, daydu){
-    var chuoi = "";
-    var chuc = Math.floor(so/10);
-    var donvi = so%10;
-    if (chuc>1) {
-        chuoi = " " + mangso[chuc] + " mươi";
-        if (donvi==1) { chuoi += " mốt"; }
-    } else if (chuc==1) {
-        chuoi = " mười";
-        if (donvi==1) { chuoi += " một"; }
-    } else if (daydu && donvi>0) {
-        chuoi = " lẻ";
-    }
-    if (donvi==5 && chuc>=1) { chuoi += " lăm"; }
-    else if (donvi>1||(donvi==1&&chuc==0)) { chuoi += " " + mangso[donvi]; }
-    return chuoi;
+const mangso = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+function dochangchuc(so, daydu) {
+  var chuoi = "";
+  var chuc = Math.floor(so / 10);
+  var donvi = so % 10;
+  if (chuc > 1) {
+    chuoi = " " + mangso[chuc] + " mươi";
+    if (donvi == 1) { chuoi += " mốt"; }
+  } else if (chuc == 1) {
+    chuoi = " mười";
+    if (donvi == 1) { chuoi += " một"; }
+  } else if (daydu && donvi > 0) {
+    chuoi = " lẻ";
+  }
+  if (donvi == 5 && chuc >= 1) { chuoi += " lăm"; }
+  else if (donvi > 1 || (donvi == 1 && chuc == 0)) { chuoi += " " + mangso[donvi]; }
+  return chuoi;
 }
-function docblock(so, daydu){
-    var chuoi = "";
-    var tram = Math.floor(so/100);
-    so = so%100;
-    if (daydu || tram>0) {
-        chuoi = " " + mangso[tram] + " trăm";
-        chuoi += dochangchuc(so,true);
-    } else {
-        chuoi = dochangchuc(so,false);
-    }
-    return chuoi;
+function docblock(so, daydu) {
+  var chuoi = "";
+  var tram = Math.floor(so / 100);
+  so = so % 100;
+  if (daydu || tram > 0) {
+    chuoi = " " + mangso[tram] + " trăm";
+    chuoi += dochangchuc(so, true);
+  } else {
+    chuoi = dochangchuc(so, false);
+  }
+  return chuoi;
 }
-function dochangtrieu(so, daydu){
-    var chuoi = "";
-    var trieu = Math.floor(so/1000000);
-    so = so%1000000;
-    if (trieu>0) {
-        chuoi = docblock(trieu,daydu) + " triệu";
-        daydu = true;
-    }
-    var ngan = Math.floor(so/1000);
-    so = so%1000;
-    if (ngan>0) {
-        chuoi += docblock(ngan,daydu) + " nghìn";
-        daydu = true;
-    }
-    if (so>0) {
-        chuoi += docblock(so,daydu);
-    }
-    return chuoi;
+function dochangtrieu(so, daydu) {
+  var chuoi = "";
+  var trieu = Math.floor(so / 1000000);
+  so = so % 1000000;
+  if (trieu > 0) {
+    chuoi = docblock(trieu, daydu) + " triệu";
+    daydu = true;
+  }
+  var ngan = Math.floor(so / 1000);
+  so = so % 1000;
+  if (ngan > 0) {
+    chuoi += docblock(ngan, daydu) + " nghìn";
+    daydu = true;
+  }
+  if (so > 0) {
+    chuoi += docblock(so, daydu);
+  }
+  return chuoi;
 }
-function docTien(so){
-    if (so==0) return mangso[0] + " đồng";
-    var chuoi = "", hauto = "";
-    do {
-        var ty = so%1000000000;
-        so = Math.floor(so/1000000000);
-        if (so>0) { chuoi = dochangtrieu(ty,true) + hauto + chuoi; }
-        else { chuoi = dochangtrieu(ty,false) + hauto + chuoi; }
-        hauto = " tỷ";
-    } while (so>0);
-    chuoi = chuoi.trim();
-    if (chuoi.length>0) {
-        chuoi = chuoi.charAt(0).toUpperCase() + chuoi.slice(1);
-    }
-    return chuoi + " chẵn.";
+function docTien(so) {
+  if (so == 0) return mangso[0] + " đồng";
+  var chuoi = "", hauto = "";
+  do {
+    var ty = so % 1000000000;
+    so = Math.floor(so / 1000000000);
+    if (so > 0) { chuoi = dochangtrieu(ty, true) + hauto + chuoi; }
+    else { chuoi = dochangtrieu(ty, false) + hauto + chuoi; }
+    hauto = " tỷ";
+  } while (so > 0);
+  chuoi = chuoi.trim();
+  if (chuoi.length > 0) {
+    chuoi = chuoi.charAt(0).toUpperCase() + chuoi.slice(1);
+  }
+  return chuoi + " chẵn.";
 }
 
 // Global window function for inline handlers
 
-window.updateSoBbgh = function(val) {
-    State.contract.soBbgh = (val || '').trim();
-    document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
+window.updateSoBbgh = function (val) {
+  State.contract.soBbgh = (val || '').trim();
+  document.querySelectorAll('.bind-sobbgh').forEach(e => e.textContent = State.contract.soBbgh || '.....................................');
 };
 
-window.updateRow = function(idx, field, value) {
-  if(field === 'sl' || field === 'gia') value = parseFloat(value) || 0;
+window.updateRow = function (idx, field, value) {
+  if (field === 'sl' || field === 'gia') value = parseFloat(value) || 0;
   State.products[idx][field] = value;
   bindDataToPreviews();
 }
 
 els.vatSelect.addEventListener('change', () => {
+  saveFormState();
+  bindDataToPreviews();
+});
+if (els.vatSelectKt) {
+  els.vatSelectKt.addEventListener('change', () => {
     saveFormState();
     bindDataToPreviews();
-});
-if(els.vatSelectKt) {
-    els.vatSelectKt.addEventListener('change', () => {
-        saveFormState();
-        bindDataToPreviews();
-    });
+  });
 }
 
 // Setup realtime updates for all inputs
 document.querySelectorAll('input').forEach(input => {
-    // skip the excel file input
-    if(input.id === 'excel-file') return;
-    input.addEventListener('input', () => {
-        saveFormState();
-        bindDataToPreviews();
-    });
+  // skip the excel file input
+  if (input.id === 'excel-file') return;
+  input.addEventListener('input', () => {
+    saveFormState();
+    bindDataToPreviews();
+  });
 });
 
 // Excel Parsing Logic
@@ -661,15 +682,15 @@ function handleExcelUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, {type: 'array'});
-    
+    const workbook = XLSX.read(data, { type: 'array' });
+
     // Assume first sheet
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-    
+    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
     parseExcelToState(json);
   };
   reader.readAsArrayBuffer(file);
@@ -678,7 +699,7 @@ function handleExcelUpload(e) {
 function parseExcelToState(rows) {
   State.products = [];
   State.tableMode = 'simple'; // Default
-  
+
   // Detect Complex mode by checking first 10 rows for "VẬT TƯ"
   for (let i = 0; i < Math.min(rows.length, 10); i++) {
     const rowStr = (rows[i] || []).join(' ').toUpperCase();
@@ -687,35 +708,35 @@ function parseExcelToState(rows) {
       break;
     }
   }
-  
+
   rows.forEach((row, i) => {
     // Skip empty or header rows roughly
     if (!row[1] || typeof row[1] !== 'string') return;
-    if (row[1].toLowerCase().includes('tên')) return; 
-    
+    if (row[1].toLowerCase().includes('tên')) return;
+
     // Check if STT is valid or it's a Roman numeral cat
     const sttStr = String(row[0] || '').trim();
     if (!sttStr) return; // Must have STT or Cat identifier to avoid picking up arbitrary rows
-    
+
     // In Complex mode: Array usually length is longer
     // Image 2 format: 0:STT, 1:Tên, 2:ĐVT, 3:SL, 4:GiaVT, 5:GiaNC, 9:Ghi Chu
     const isCat = isRoman(sttStr);
     const sl = parseFloat(row[3]);
-    
+
     let gia = 0, giaVatTu = 0, giaNhanCong = 0, ghiChu = '';
-    
+
     if (State.tableMode === 'complex') {
-        giaVatTu = parseFloat(row[4]);
-        giaNhanCong = parseFloat(row[5]);
-        ghiChu = String(row[9] || '');
-        if (isNaN(giaVatTu)) giaVatTu = 0;
-        if (isNaN(giaNhanCong)) giaNhanCong = 0;
+      giaVatTu = parseFloat(row[4]);
+      giaNhanCong = parseFloat(row[5]);
+      ghiChu = String(row[9] || '');
+      if (isNaN(giaVatTu)) giaVatTu = 0;
+      if (isNaN(giaNhanCong)) giaNhanCong = 0;
     } else {
-        gia = parseFloat(row[4]);
-        ghiChu = String(row[6] || '');
-        if (isNaN(gia)) gia = 0;
+      gia = parseFloat(row[4]);
+      ghiChu = String(row[6] || '');
+      if (isNaN(gia)) gia = 0;
     }
-    
+
     if (!isNaN(sl) || isCat) {
       State.products.push({
         stt: sttStr,
@@ -729,74 +750,74 @@ function parseExcelToState(rows) {
       });
     }
   });
-  
+
   alert('Đã load xong ' + State.products.length + ' sản phẩm từ Excel ở chế độ: ' + State.tableMode);
   bindDataToPreviews();
 }
 
 
 function cleanHtml(htmlStr) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = htmlStr;
-    tmp.querySelectorAll('button.no-print').forEach(el => el.remove());
-    tmp.querySelectorAll('input').forEach(el => {
-        const span = document.createElement('span');
-        span.innerText = el.value || el.getAttribute('value') || '';
-        el.parentNode.replaceChild(span, el);
-    });
-    tmp.querySelectorAll('select').forEach(el => {
-        const span = document.createElement('span');
-        span.innerText = el.options[el.selectedIndex] ? el.options[el.selectedIndex].innerText : '';
-        el.parentNode.replaceChild(span, el);
-    });
-    tmp.querySelectorAll('[contenteditable]').forEach(el => {
-        const span = document.createElement('span');
-        span.innerHTML = el.innerHTML;
-        el.parentNode.replaceChild(span, el);
-    });
-    return tmp.innerHTML;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = htmlStr;
+  tmp.querySelectorAll('button.no-print').forEach(el => el.remove());
+  tmp.querySelectorAll('input').forEach(el => {
+    const span = document.createElement('span');
+    span.innerText = el.value || el.getAttribute('value') || '';
+    el.parentNode.replaceChild(span, el);
+  });
+  tmp.querySelectorAll('select').forEach(el => {
+    const span = document.createElement('span');
+    span.innerText = el.options[el.selectedIndex] ? el.options[el.selectedIndex].innerText : '';
+    el.parentNode.replaceChild(span, el);
+  });
+  tmp.querySelectorAll('[contenteditable]').forEach(el => {
+    const span = document.createElement('span');
+    span.innerHTML = el.innerHTML;
+    el.parentNode.replaceChild(span, el);
+  });
+  return tmp.innerHTML;
 }
 
 // Step 6: Previews
 function prepareFinalPreviews() {
 
   document.getElementById('mini-preview-1').innerHTML = cleanHtml(document.getElementById('preview-baogia').innerHTML);
-  
+
   if (State.contractType === 'gk') {
-      document.getElementById('mini-preview-2').innerHTML = cleanHtml(document.getElementById('preview-contract-gk').innerHTML);
-      document.getElementById('chk-contract-gk').checked = true;
-      document.getElementById('chk-contract-kt').checked = false;
-      document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
-      
-      document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbnt').innerHTML);
-      document.getElementById('chk-bbnt').checked = true;
-      if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
+    document.getElementById('mini-preview-2').innerHTML = cleanHtml(document.getElementById('preview-contract-gk').innerHTML);
+    document.getElementById('chk-contract-gk').checked = true;
+    document.getElementById('chk-contract-kt').checked = false;
+    document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
+
+    document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbnt').innerHTML);
+    document.getElementById('chk-bbnt').checked = true;
+    if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
   } else {
-      document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
-      document.getElementById('chk-contract-kt').checked = true;
-      document.getElementById('chk-contract-gk').checked = false;
-      document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
-      
-      if(document.getElementById('preview-bbgh')) {
-          document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
-          // rename the label 
-          document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
-      }
-      document.getElementById('chk-bbnt').checked = true;
-      if(document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
+    document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
+    document.getElementById('chk-contract-kt').checked = true;
+    document.getElementById('chk-contract-gk').checked = false;
+    document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
+
+    if (document.getElementById('preview-bbgh')) {
+      document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
+      // rename the label 
+      document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
+    }
+    document.getElementById('chk-bbnt').checked = true;
+    if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
   }
-  
+
   const appPreview = document.getElementById('preview-appendix').cloneNode(true);
-  
+
   if (State.contractType === 'kt') {
-      const appTable = appPreview.querySelector('table:nth-of-type(1)');
-      const ktTableTbody = document.getElementById('bind-products-kt');
-      const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
-      if (appTable && ktTable) {
-        appTable.parentNode.replaceChild(ktTable, appTable);
-      }
-      const appSub = appPreview.querySelector('#app-subtotal');
-          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
+    const appTable = appPreview.querySelector('table:nth-of-type(1)');
+    const ktTableTbody = document.getElementById('bind-products-kt');
+    const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+    if (appTable && ktTable) {
+      appTable.parentNode.replaceChild(ktTable, appTable);
+    }
+    const appSub = appPreview.querySelector('#app-subtotal');
+    if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
   }
   document.getElementById('mini-preview-3').innerHTML = cleanHtml(appPreview.innerHTML);
 }
@@ -808,32 +829,32 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
-  
+
   const docs = [];
 
   if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
-  
+
   if (chk3) {
-      if (State.contractType === 'kt') {
-          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
-          const appTable = appPreview.querySelector('table:nth-of-type(1)');
-          const ktTableTbody = document.getElementById('bind-products-kt');
+    if (State.contractType === 'kt') {
+      const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+      const appTable = appPreview.querySelector('table:nth-of-type(1)');
+      const ktTableTbody = document.getElementById('bind-products-kt');
       const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
-          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
-          const appSub = appPreview.querySelector('#app-subtotal');
-          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';docs.push(cleanHtml(appPreview.outerHTML));
-      } else {
-          docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
-      }
+      if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+      const appSub = appPreview.querySelector('#app-subtotal');
+      if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none'; docs.push(cleanHtml(appPreview.outerHTML));
+    } else {
+      docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
+    }
   }
-  
+
   if (chk4) {
-      if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
-      else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
+    if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
+    else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
   }
-  
+
   if (docs.length === 0) {
     alert("Vui lòng chọn ít nhất 1 văn bản để lưu PDF.");
     return;
@@ -842,7 +863,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
     alert("Vui lòng chọn ít nhất 1 văn bản để lưu PDF.");
     return;
   }
-  
+
   const btn = document.getElementById('btn-export-pdf');
   btn.disabled = true;
   btn.innerText = 'Đang chuẩn bị trang in...';
@@ -854,9 +875,9 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
     btn.innerText = '⎙ LƯU DƯỚI DẠNG PDF (HOẶC IN)';
     return;
   }
-  
+
   printZone.innerHTML = docs.map(html => `<div class="page-break">${html}</div>`).join('');
-  
+
   // Timeout for DOM to render the printZone hidden elements properly
   setTimeout(() => {
     window.print();
@@ -869,42 +890,42 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
 document.getElementById('btn-export-all').addEventListener('click', () => {
   const zip = new JSZip();
   const folder = zip.folder("HopDong_XuatKhang");
-  
+
   const chk1 = document.getElementById('chk-quote').checked;
   const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
-  
+
   if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(cleanHtml(document.getElementById('preview-baogia').outerHTML)));
   if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-gk').outerHTML)));
   if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-kt').outerHTML)));
-  
+
   if (chk3) {
-      if (State.contractType === 'kt') {
-          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
-          const appTable = appPreview.querySelector('table:nth-of-type(1)');
-          const ktTableTbody = document.getElementById('bind-products-kt');
+    if (State.contractType === 'kt') {
+      const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+      const appTable = appPreview.querySelector('table:nth-of-type(1)');
+      const ktTableTbody = document.getElementById('bind-products-kt');
       const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
-          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
-          const appSub = appPreview.querySelector('#app-subtotal');
-          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(appPreview.outerHTML)));
-      } else {
-          folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(document.getElementById('preview-appendix').outerHTML)));
-      }
-  }
-  
-  if (chk4) {
-      if (State.contractType === 'gk') {
-          folder.file("04_BBNT.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbnt').outerHTML)));
-      } else {
-          folder.file("04_BBGH.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbgh').outerHTML)));
-      }
+      if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+      const appSub = appPreview.querySelector('#app-subtotal');
+      if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none'; folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(appPreview.outerHTML)));
+    } else {
+      folder.file("03_PhuLuc.doc", generateWordBlob(cleanHtml(document.getElementById('preview-appendix').outerHTML)));
+    }
   }
 
-  
-  zip.generateAsync({type:"blob"}).then(function(content) {
-      saveAs(content, "TaiLieu.zip");
+  if (chk4) {
+    if (State.contractType === 'gk') {
+      folder.file("04_BBNT.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbnt').outerHTML)));
+    } else {
+      folder.file("04_BBGH.doc", generateWordBlob(cleanHtml(document.getElementById('preview-bbgh').outerHTML)));
+    }
+  }
+
+
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    saveAs(content, "TaiLieu.zip");
   });
 });
 
@@ -918,10 +939,10 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   document.getElementById('kh_chucvu').value = "Tổng Giám Đốc";
   document.getElementById('kh_sdt').value = "0987654321";
   document.getElementById('kh_email').value = "contact@demotech.com";
-  
+
   document.getElementById('ten_ct').value = "Hệ thống làm mát nhà máy Demo Tech";
   document.getElementById('diadiem_ct').value = "KCN ABC, TP HCM";
-  
+
   State.tableMode = 'simple';
   State.products = [
     { stt: "I", ten: "Xây mới nhà vệ sinh nữ", dvt: "", sl: 0, gia: 0, giaVatTu: 0, giaNhanCong: 0 },
@@ -930,22 +951,22 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
     { stt: "3", ten: "Sơn tường ngoài", dvt: "m2", sl: 19.8, gia: 100000, giaVatTu: 65000, giaNhanCong: 35000, ghiChu: "" },
     { stt: "4", ten: "Nhân công lắp đặt cửa nhôm kính", dvt: "Bộ", sl: 1, gia: 650000, giaVatTu: 0, giaNhanCong: 650000, ghiChu: "Lắp đặt lại" }
   ];
-  
+
   alert("Đã điền dữ liệu mẫu thành công!");
   handleInputBind();
 });
 
-function exportHTMLToWord(htmlContent, filename){
+function exportHTMLToWord(htmlContent, filename) {
   const preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export Word</title></head><body>";
   const postHtml = "</body></html>";
   const html = preHtml + htmlContent + postHtml;
 
   const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
   const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
-  
+
   const downloadLink = document.createElement("a");
   document.body.appendChild(downloadLink);
-  
+
   if (navigator.msSaveOrOpenBlob) {
     navigator.msSaveOrOpenBlob(blob, filename + '.doc');
   } else {
@@ -965,80 +986,88 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
-  
+
   const docs = [];
 
   if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
-  
+
   if (chk3) {
-      if (State.contractType === 'kt') {
-          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
-          const appTable = appPreview.querySelector('table:nth-of-type(1)');
-          const ktTableTbody = document.getElementById('bind-products-kt');
-          const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
-          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
-          const appSub = appPreview.querySelector('#app-subtotal');
-          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
-          docs.push(cleanHtml(appPreview.outerHTML));
-      } else {
-          docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
-      }
+    if (State.contractType === 'kt') {
+      const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+      const appTable = appPreview.querySelector('table:nth-of-type(1)');
+      const ktTableTbody = document.getElementById('bind-products-kt');
+      const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+      if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+      const appSub = appPreview.querySelector('#app-subtotal');
+      if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
+      docs.push(cleanHtml(appPreview.outerHTML));
+    } else {
+      docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
+    }
   }
-  
+
   if (chk4) {
-      if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
-      else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
+    if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
+    else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
   }
-  
+
   if (docs.length === 0) {
     alert("Vui lòng chọn ít nhất 1 văn bản để lưu.");
     return;
   }
-  
+
   const btn = document.getElementById('btn-save-cloud');
   const originalText = btn.innerText;
   btn.disabled = true;
   btn.innerText = 'Đang lưu lên đám mây...';
 
   const htmlContent = docs.map(html => `<div class="page-break">${html}</div>`).join('');
+  
+  if (htmlContent.length > 900000) {
+    alert("Lỗi: Dữ liệu văn bản quá lớn (vượt quá 1MB giới hạn của Cloud). Vui lòng giảm bớt hình ảnh, hoặc không xuất cùng lúc 4 văn bản chứa ảnh.");
+    btn.disabled = false;
+    btn.innerText = originalText;
+    return;
+  }
+
   const totalAmountStr = document.getElementById('bg-total-rounded') ? document.getElementById('bg-total-rounded').innerText : "0";
 
   try {
-      const docData = {
-          ma_so: (State.client.soBaogia ? State.client.soBaogia + ' | ' : '') + (State.contract.sohd || ""),
-          ten_cong_ty: State.client.ten || "",
-          tong_tien: totalAmountStr,
-          ngay_ky: State.contract.ngay || "",
-          html_content: htmlContent,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      };
+    const docData = {
+      ma_so: (State.client.soBaogia ? State.client.soBaogia + ' | ' : '') + (State.contract.sohd || ""),
+      ten_cong_ty: State.client.ten || "",
+      tong_tien: totalAmountStr,
+      ngay_ky: State.contract.ngay || "",
+      html_content: htmlContent,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
 
-      const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Quá thời gian kết nối. Xin kiểm tra kết nối mạng hoặc xem Firestore Database ở Firebase Console đã được bấm 'Create Database' chưa. (Firebase sẽ treo vĩnh viễn nếu DB chưa khởi tạo)")), 15000);
-      });
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Quá thời gian kết nối (30s). Xin kiểm tra mạng hoặc Firebase Database có hoạt động không.")), 30000);
+    });
 
-      Promise.race([
-          firebase.firestore().collection('contracts_cloud').add(docData),
-          timeoutPromise
-      ])
+    Promise.race([
+      firebase.firestore().collection('contracts_cloud').add(docData),
+      timeoutPromise
+    ])
       .then(() => {
-          alert("Lưu tài liệu thành công lên hệ thống Cloud!");
+        alert("Lưu tài liệu thành công lên hệ thống Cloud!");
       })
       .catch((error) => {
-          console.error(error);
-          alert("Lỗi khi lưu: " + error.message);
+        console.error(error);
+        alert("Lỗi khi lưu: " + error.message);
       })
       .finally(() => {
-          btn.disabled = false;
-          btn.innerText = originalText;
+        btn.disabled = false;
+        btn.innerText = originalText;
       });
   } catch (err) {
-      console.error(err);
-      alert("Lỗi xử lý cục bộ: " + err.message);
-      btn.disabled = false;
-      btn.innerText = originalText;
+    console.error(err);
+    alert("Lỗi xử lý cục bộ: " + err.message);
+    btn.disabled = false;
+    btn.innerText = originalText;
   }
 });
 
@@ -1047,61 +1076,61 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
 // FIREBASE AUTHENTICATION LOGIC
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    const authOverlay = document.getElementById('auth-overlay');
-    const mainApp = document.getElementById('main-app');
-    const btnLogin = document.getElementById('btn-login');
-    const btnLogout = document.getElementById('btn-logout');
-    const emailInput = document.getElementById('login-email');
-    const passInput = document.getElementById('login-pass');
-    const errorMsg = document.getElementById('login-error');
+  const authOverlay = document.getElementById('auth-overlay');
+  const mainApp = document.getElementById('main-app');
+  const btnLogin = document.getElementById('btn-login');
+  const btnLogout = document.getElementById('btn-logout');
+  const emailInput = document.getElementById('login-email');
+  const passInput = document.getElementById('login-pass');
+  const errorMsg = document.getElementById('login-error');
 
-    if(auth) {
-        // Listen to Auth State
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // Logged in
-                authOverlay.style.display = 'none';
-                mainApp.style.display = 'block';
-            } else {
-                // Logged out
-                authOverlay.style.display = 'flex';
-                mainApp.style.display = 'none';
-            }
-        });
+  if (auth) {
+    // Listen to Auth State
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Logged in
+        authOverlay.style.display = 'none';
+        mainApp.style.display = 'block';
+      } else {
+        // Logged out
+        authOverlay.style.display = 'flex';
+        mainApp.style.display = 'none';
+      }
+    });
 
-        // Login Action
-        if(btnLogin) {
-            btnLogin.addEventListener('click', () => {
-                const email = emailInput.value.trim();
-                const pass = passInput.value;
-                errorMsg.style.display = 'none';
-                btnLogin.innerText = 'Đang xử lý...';
-                
-                auth.signInWithEmailAndPassword(email, pass)
-                .then((userCredential) => {
-                    btnLogin.innerText = 'ĐĂNG NHẬP';
-                })
-                .catch((error) => {
-                    btnLogin.innerText = 'ĐĂNG NHẬP';
-                    errorMsg.innerText = error.message;
-                    errorMsg.style.display = 'block';
-                    console.error(error);
-                });
-            });
-        }
+    // Login Action
+    if (btnLogin) {
+      btnLogin.addEventListener('click', () => {
+        const email = emailInput.value.trim();
+        const pass = passInput.value;
+        errorMsg.style.display = 'none';
+        btnLogin.innerText = 'Đang xử lý...';
 
-        // Logout Action
-        if(btnLogout) {
-            btnLogout.addEventListener('click', () => {
-                auth.signOut().then(() => {
-                    // Sign-out successful.
-                    emailInput.value = '';
-                    passInput.value = '';
-                }).catch((error) => {
-                    console.error(error);
-                });
-            });
-        }
+        auth.signInWithEmailAndPassword(email, pass)
+          .then((userCredential) => {
+            btnLogin.innerText = 'ĐĂNG NHẬP';
+          })
+          .catch((error) => {
+            btnLogin.innerText = 'ĐĂNG NHẬP';
+            errorMsg.innerText = error.message;
+            errorMsg.style.display = 'block';
+            console.error(error);
+          });
+      });
     }
+
+    // Logout Action
+    if (btnLogout) {
+      btnLogout.addEventListener('click', () => {
+        auth.signOut().then(() => {
+          // Sign-out successful.
+          emailInput.value = '';
+          passInput.value = '';
+        }).catch((error) => {
+          console.error(error);
+        });
+      });
+    }
+  }
 });
 

@@ -282,7 +282,6 @@
       appId: "1:443139409005:web:4c5f46d8fe852327752b64"
     };
     firebase.initializeApp(firebaseConfig);
-    firebase.firestore().settings({ experimentalForceLongPolling: true });
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
