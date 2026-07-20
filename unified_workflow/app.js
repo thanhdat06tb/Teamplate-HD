@@ -2,7 +2,7 @@
 const State = {
   currentStep: 1,
   contractType: 'gk',
-  client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '' },
+  client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '', soBaogia: '' },
   company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
   products: [{stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: ''}],
@@ -42,6 +42,7 @@ const els = {
   kh_sdt: document.getElementById('kh_sdt'),
   kh_email: document.getElementById('kh_email'),
   kh_ngay: document.getElementById('kh_ngay'),
+  so_baogia: document.getElementById('so_baogia'),
   dn_ten: document.getElementById('dn_ten'),
   dn_mst: document.getElementById('dn_mst'),
   dn_diachi: document.getElementById('dn_diachi'),
@@ -154,6 +155,7 @@ function saveFormState() {
   State.client.sdt = els.kh_sdt.value || '';
   State.client.email = els.kh_email.value || '';
   State.client.ngay = els.kh_ngay.value || '';
+  State.client.soBaogia = els.so_baogia ? els.so_baogia.value || '...' : '...';
   
   State.company.ten = els.dn_ten.value || '...';
   State.company.mst = els.dn_mst.value || '...';
@@ -205,6 +207,7 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-kh-chucvu').forEach(e => e.textContent = State.client.chucvu);
   document.querySelectorAll('.bind-kh-sdt').forEach(e => e.textContent = State.client.sdt);
   document.querySelectorAll('.bind-kh-email').forEach(e => e.textContent = State.client.email);
+  document.querySelectorAll('.bind-so-baogia').forEach(e => e.textContent = State.client.soBaogia);
   
   let ngayStr = '....... 年 ....... 月 ....... 日';
   if (State.client.ngay) {
@@ -458,7 +461,7 @@ function renderProducts() {
 
       hBg += `<tr style="${styleBold}">
         <td style="border:1px solid #000; padding:0; text-align:center;"><input type="text" value="${p.stt || ''}" onchange="updateRow(${i}, 'stt', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
-        <td style="border:1px solid #000; padding:0;"><input type="text" value="${p.ten || ''}" onchange="updateRow(${i}, 'ten', this.value)" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
+        <td style="border:1px solid #000; padding:0;"><div contenteditable="true" onblur="updateRow(${i}, 'ten', this.innerText)" style="min-height:45px; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px 8px; outline:none; font-family:inherit; font-size:inherit; white-space:normal; overflow-wrap:break-word; word-break:break-word;">${p.ten || ''}</div></td>
         <td style="border:1px solid #000; padding:0; text-align:center;"><input type="number" value="${p.sl || 0}" onchange="updateRow(${i}, 'sl', this.value)" style="width:100%; text-align:center; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
         <td style="border:1px solid #000; padding:0; text-align:center;">
            <select onchange="updateDvt(${i}, this.value)" class="dvt-select-wysiwyg" style="width:100%; box-sizing:border-box; background:transparent; border:none; padding:8px; font-size:inherit; font-family:inherit; text-align:center; outline:none; -webkit-appearance:none; appearance:none; cursor:pointer;">${dvtOptions}</select>
@@ -469,8 +472,8 @@ function renderProducts() {
         <td style="border:1px solid #000; padding:0; text-align:right;"><input type="number" value="${(State.tableMode === 'complex' && !isCat && !p.gia) ? (gVatTu + gNhanCong) : gSimple}" onchange="updateRow(${i}, 'gia', this.value); if(State.tableMode === 'complex') { State.products[${i}].giaVatTu = 0; State.products[${i}].giaNhanCong = 0; State.tableMode = 'simple'; renderProducts(); }" style="width:100%; text-align:right; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;"></td>
         <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
         <td style="border:1px solid #000; padding:0;">
-           <div style="display:flex; width:100%;">
-             <input type="text" value="${p.ghiChu || ''}" onchange="updateRow(${i}, 'ghiChu', this.value)" onkeydown="checkTab(event, ${i})" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit;">
+           <div style="display:flex; width:100%; min-height: 45px;">
+             <div contenteditable="true" onblur="updateRow(${i}, 'ghiChu', this.innerText)" onkeydown="checkTab(event, ${i})" style="width:100%; box-sizing:border-box; ${bGText} background:transparent; border:none; padding:8px; outline:none; font-family:inherit; font-size:inherit; white-space:normal; overflow-wrap:break-word; word-break:break-word;">${p.ghiChu || ''}</div>
              <button class="no-print" onclick="window.removeProductRow(${i})" style="color:red; background:none; border:none; cursor:pointer; padding:8px;" title="Xoá dòng">✖</button>
            </div>
         </td>
@@ -733,7 +736,25 @@ function parseExcelToState(rows) {
 
 
 function cleanHtml(htmlStr) {
-    return htmlStr.replace(/<button[^>]*class="no-print"[^>]*>.*?<\/button>/g, '');
+    const tmp = document.createElement('div');
+    tmp.innerHTML = htmlStr;
+    tmp.querySelectorAll('button.no-print').forEach(el => el.remove());
+    tmp.querySelectorAll('input').forEach(el => {
+        const span = document.createElement('span');
+        span.innerText = el.value || el.getAttribute('value') || '';
+        el.parentNode.replaceChild(span, el);
+    });
+    tmp.querySelectorAll('select').forEach(el => {
+        const span = document.createElement('span');
+        span.innerText = el.options[el.selectedIndex] ? el.options[el.selectedIndex].innerText : '';
+        el.parentNode.replaceChild(span, el);
+    });
+    tmp.querySelectorAll('[contenteditable]').forEach(el => {
+        const span = document.createElement('span');
+        span.innerHTML = el.innerHTML;
+        el.parentNode.replaceChild(span, el);
+    });
+    return tmp.innerHTML;
 }
 
 // Step 6: Previews
@@ -938,4 +959,149 @@ function exportHTMLToWord(htmlContent, filename){
 // Initial binding
 bindDataToPreviews();
 
+document.getElementById('btn-save-cloud').addEventListener('click', () => {
+  const chk1 = document.getElementById('chk-quote').checked;
+  const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
+  const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
+  const chk3 = document.getElementById('chk-appendix').checked;
+  const chk4 = document.getElementById('chk-bbnt').checked;
+  
+  const docs = [];
+
+  if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
+  if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
+  if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
+  
+  if (chk3) {
+      if (State.contractType === 'kt') {
+          const appPreview = document.getElementById('preview-appendix').cloneNode(true);
+          const appTable = appPreview.querySelector('table:nth-of-type(1)');
+          const ktTableTbody = document.getElementById('bind-products-kt');
+          const ktTable = ktTableTbody ? ktTableTbody.closest('table').cloneNode(true) : null;
+          if (appTable && ktTable) appTable.parentNode.replaceChild(ktTable, appTable);
+          const appSub = appPreview.querySelector('#app-subtotal');
+          if (appSub && appSub.parentNode) appSub.parentNode.style.display = 'none';
+          docs.push(cleanHtml(appPreview.outerHTML));
+      } else {
+          docs.push(cleanHtml(document.getElementById('preview-appendix').outerHTML));
+      }
+  }
+  
+  if (chk4) {
+      if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
+      else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
+  }
+  
+  if (docs.length === 0) {
+    alert("Vui lòng chọn ít nhất 1 văn bản để lưu.");
+    return;
+  }
+  
+  const btn = document.getElementById('btn-save-cloud');
+  const originalText = btn.innerText;
+  btn.disabled = true;
+  btn.innerText = 'Đang lưu lên đám mây...';
+
+  const htmlContent = docs.map(html => `<div class="page-break">${html}</div>`).join('');
+  const totalAmountStr = document.getElementById('bg-total-rounded') ? document.getElementById('bg-total-rounded').innerText : "0";
+
+  try {
+      const docData = {
+          ma_so: (State.client.soBaogia ? State.client.soBaogia + ' | ' : '') + (State.contract.sohd || ""),
+          ten_cong_ty: State.client.ten || "",
+          tong_tien: totalAmountStr,
+          ngay_ky: State.contract.ngay || "",
+          html_content: htmlContent,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Quá thời gian kết nối. Xin kiểm tra kết nối mạng hoặc xem Firestore Database ở Firebase Console đã được bấm 'Create Database' chưa. (Firebase sẽ treo vĩnh viễn nếu DB chưa khởi tạo)")), 15000);
+      });
+
+      Promise.race([
+          firebase.firestore().collection('contracts_cloud').add(docData),
+          timeoutPromise
+      ])
+      .then(() => {
+          alert("Lưu tài liệu thành công lên hệ thống Cloud!");
+      })
+      .catch((error) => {
+          console.error(error);
+          alert("Lỗi khi lưu: " + error.message);
+      })
+      .finally(() => {
+          btn.disabled = false;
+          btn.innerText = originalText;
+      });
+  } catch (err) {
+      console.error(err);
+      alert("Lỗi xử lý cục bộ: " + err.message);
+      btn.disabled = false;
+      btn.innerText = originalText;
+  }
+});
+
+
+// ==========================================
+// FIREBASE AUTHENTICATION LOGIC
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const authOverlay = document.getElementById('auth-overlay');
+    const mainApp = document.getElementById('main-app');
+    const btnLogin = document.getElementById('btn-login');
+    const btnLogout = document.getElementById('btn-logout');
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-pass');
+    const errorMsg = document.getElementById('login-error');
+
+    if(auth) {
+        // Listen to Auth State
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Logged in
+                authOverlay.style.display = 'none';
+                mainApp.style.display = 'block';
+            } else {
+                // Logged out
+                authOverlay.style.display = 'flex';
+                mainApp.style.display = 'none';
+            }
+        });
+
+        // Login Action
+        if(btnLogin) {
+            btnLogin.addEventListener('click', () => {
+                const email = emailInput.value.trim();
+                const pass = passInput.value;
+                errorMsg.style.display = 'none';
+                btnLogin.innerText = 'Đang xử lý...';
+                
+                auth.signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    btnLogin.innerText = 'ĐĂNG NHẬP';
+                })
+                .catch((error) => {
+                    btnLogin.innerText = 'ĐĂNG NHẬP';
+                    errorMsg.innerText = error.message;
+                    errorMsg.style.display = 'block';
+                    console.error(error);
+                });
+            });
+        }
+
+        // Logout Action
+        if(btnLogout) {
+            btnLogout.addEventListener('click', () => {
+                auth.signOut().then(() => {
+                    // Sign-out successful.
+                    emailInput.value = '';
+                    passInput.value = '';
+                }).catch((error) => {
+                    console.error(error);
+                });
+            });
+        }
+    }
+});
 
