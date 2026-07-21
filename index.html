@@ -257,7 +257,7 @@
   /* --- Card Grid --- */
   .hub-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 28px;
   }
 
@@ -291,6 +291,7 @@
   .hub-card.blue::before  { background: linear-gradient(90deg, var(--primary), #0ea5e9); }
   .hub-card.orange::before { background: linear-gradient(90deg, var(--orange), #f59e0b); }
   .hub-card.dark::before  { background: linear-gradient(90deg, var(--dark), #475569); }
+  .hub-card.red::before  { background: linear-gradient(90deg, var(--rose), #fb7185); }
 
   .hub-card:hover {
     transform: translateY(-6px);
@@ -318,6 +319,10 @@
   .card-icon-wrap.dark {
     background: linear-gradient(135deg, var(--dark) 0%, #475569 100%);
     box-shadow: 0 8px 20px -4px var(--dark-glow);
+  }
+  .card-icon-wrap.red {
+    background: linear-gradient(135deg, var(--rose) 0%, #fb7185 100%);
+    box-shadow: 0 8px 20px -4px rgba(244, 63, 94, 0.35);
   }
 
   .card-icon-wrap .material-symbols-outlined {
@@ -359,6 +364,7 @@
   .card-stat .value.blue  { color: var(--primary); }
   .card-stat .value.orange { color: var(--orange); }
   .card-stat .value.dark  { color: var(--dark); }
+  .card-stat .value.red  { color: var(--rose); }
 
   .card-go {
     display: flex; align-items: center; gap: 6px;
@@ -377,6 +383,7 @@
   .card-go.blue  { color: var(--primary); }
   .card-go.orange { color: var(--orange); }
   .card-go.dark  { color: var(--dark); }
+  .card-go.red  { color: var(--rose); }
 
   /* --- Footer --- */
   .hub-footer {
@@ -427,6 +434,8 @@
     <div id="login-error">Sai thông tin đăng nhập!</div>
   </div>
 </div>
+<!-- Weather Canvas Script -->
+<script src="weather.js"></script>
 
 <!-- ====== MAIN HUB ====== -->
 <div id="main-app">
@@ -471,6 +480,22 @@
         </div>
       </a>
 
+      <!-- Card 1.5: Liên Hợp Đồng HuaSen -->
+      <a href="huasen_workflow/index.html" class="hub-card red">
+        <div class="card-icon-wrap red">
+          <span class="material-symbols-outlined">handshake</span>
+        </div>
+        <div class="card-title">Hợp Đồng HuaSen</div>
+        <p class="card-desc">Luồng công việc chuyên biệt xuất các hợp đồng gắn mặc định vào hệ thống HuaSen.</p>
+        <div class="card-stat">
+          <span class="label">Tổng sản lượng</span>
+          <span class="value red" id="huasen-hop-dong-count">—</span>
+        </div>
+        <div class="card-go red">
+          Truy cập <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </div>
+      </a>
+
       <!-- Card 2: Đơn Hợp Đồng -->
       <a href="hop_dong.html" class="hub-card orange">
         <div class="card-icon-wrap orange">
@@ -505,7 +530,7 @@
 
     </div>
 
-    <div class="hub-footer">Nền tảng quản lý hợp đồng / Được tạo bởi Jull06_tb / Liên hệ: 0369038160</div>
+    <div class="hub-footer">Hệ Thống Quản Lý Hợp Đồng Thông Minh © 2026 | Vận hành Trí Tuệ Nhân Tạo | Bảo mật & Đồng bộ Đám mây</div>
 
   </div>
 </div>
@@ -532,6 +557,18 @@
     const passInput = document.getElementById('login-pass');
     const errorMsg = document.getElementById('login-error');
 
+    // Weather Interaction
+    if (typeof setWeatherState === 'function') {
+      const triggerSun = () => setWeatherState(0);
+      const triggerStorm = () => setWeatherState(1);
+      const triggerRainCity = () => setWeatherState(2);
+      
+      emailInput.addEventListener('focus', triggerStorm);
+      emailInput.addEventListener('blur', triggerSun);
+      passInput.addEventListener('focus', triggerRainCity);
+      passInput.addEventListener('blur', triggerSun);
+    }
+
     // Dynamic greeting
     const hour = new Date().getHours();
     const greetEl = document.getElementById('hub-greeting');
@@ -552,8 +589,25 @@
           const count = snap.size;
 
           let totalBytes = 0;
+          let huasenCount = 0;
+          let khachCount = 0;
+
           snap.docs.forEach(doc => {
-            totalBytes += new Blob([JSON.stringify(doc.data())]).size;
+            const data = doc.data();
+            totalBytes += new Blob([JSON.stringify(data)]).size;
+            
+            let isHuasen = false;
+            if (data.category === 'huasen') {
+               isHuasen = true;
+            } else if (!data.category && data.html_content) {
+               const htmlLower = data.html_content.toLowerCase();
+               if (htmlLower.includes('hua sen') || htmlLower.includes('huasen') || htmlLower.includes('华森')) {
+                   isHuasen = true;
+               }
+            }
+
+            if (isHuasen) huasenCount++;
+            else khachCount++;
           });
 
           const maxStorage = 1073741824; // 1 GB Firebase Free Tier
@@ -562,10 +616,12 @@
 
           const elLien = document.getElementById('lien-hop-dong-count');
           const elDon = document.getElementById('don-hop-dong-count');
+          const elHuasen = document.getElementById('huasen-hop-dong-count');
           const elStor = document.getElementById('storage-used-val');
 
-          if (elLien) elLien.textContent = count + ' văn bản';
-          if (elDon) elDon.textContent = count + ' văn bản';
+          if (elLien) elLien.textContent = khachCount + ' văn bản';
+          if (elDon) elDon.textContent = khachCount + ' văn bản';
+          if (elHuasen) elHuasen.textContent = huasenCount + ' văn bản';
           if (elStor) elStor.textContent = usedMb + ' / ' + maxMb + ' MB';
         } catch (e) {
           console.error('Stats error:', e);

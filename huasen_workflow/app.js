@@ -1179,7 +1179,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
 
   try {
     const docData = {
-      category: 'khach',
+      category: 'huasen',
       ma_so: (State.client.soBaogia ? State.client.soBaogia + ' | ' : '') + (State.contract.sohd || ""),
       document_numbers: currNumbers,
       ten_cong_ty: State.client.ten || "",

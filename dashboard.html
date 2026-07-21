@@ -53,6 +53,22 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(201,166,97,0.2);
     }
     .search-bar button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,166,97,0.4); }
+    .tabs { display: flex; gap: 12px; margin-bottom: 24px; }
+    .tab-btn {
+      padding: 12px 24px; font-size: 15px; font-weight: bold; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #94a3b8;
+      border-radius: 8px; transition: 0.3s;
+    }
+    .tab-btn.active#tab-khach {
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      color: #111; border-color: transparent;
+      box-shadow: 0 4px 15px rgba(201,166,97,0.3);
+    }
+    .tab-btn.active#tab-huasen {
+      background: linear-gradient(135deg, #F43F5E, #E11D48);
+      color: #fff; border-color: transparent;
+      box-shadow: 0 4px 15px rgba(244,63,94,0.3);
+    }
     #contracts-table { 
       width: 100%; border-collapse: separate; border-spacing: 0; background: rgba(26, 39, 68, 0.4); 
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -271,6 +287,10 @@
       <button id="btn-logout" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.3); padding:8px 16px; border-radius:6px; cursor:pointer; font-weight: bold; transition: 0.2s;">Đăng xuất</button>
     </div>
     <div class="container">
+      <div class="tabs">
+        <button id="tab-khach" class="tab-btn active" onclick="switchTab('khach')">HỢP ĐỒNG KHÁCH</button>
+        <button id="tab-huasen" class="tab-btn" onclick="switchTab('huasen')">HỢP ĐỒNG HUASEN</button>
+      </div>
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="Tìm kiếm theo mã số hợp đồng, mã báo giá...">
         <button id="btn-search">Tìm Kiếm</button>
@@ -338,6 +358,40 @@
     document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
 
     let allContracts = [];
+    let currentTab = 'khach';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-khach').classList.toggle('active', tab === 'khach');
+      document.getElementById('tab-huasen').classList.toggle('active', tab === 'huasen');
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const val = document.getElementById('search-input').value.toLowerCase().trim();
+      let filtered = allContracts.filter(c => {
+         let isHuasen = c.category === 'huasen';
+         if (!c.category && c.html_content) {
+             const htmlLower = c.html_content.toLowerCase();
+             if (htmlLower.includes('hua sen') || htmlLower.includes('huasen') || htmlLower.includes('华森')) {
+                 isHuasen = true;
+             }
+         }
+         
+         if (currentTab === 'huasen' && !isHuasen) return false;
+         if (currentTab === 'khach' && isHuasen) return false;
+         return true;
+      });
+
+      if (val) {
+        filtered = filtered.filter(c =>
+          (c.ma_so || '').toLowerCase().includes(val) ||
+          (c.ten_cong_ty || '').toLowerCase().includes(val) ||
+          (c.html_content || '').toLowerCase().includes(val)
+        );
+      }
+      renderTable(filtered);
+    }
 
     function loadData() {
       db.collection('contracts_cloud').orderBy('timestamp', 'desc').limit(200).get().then(snapshot => {
@@ -353,16 +407,8 @@
             if (searchInput) {
                 searchInput.value = urlQuery;
             }
-            const val = urlQuery.toLowerCase().trim();
-            const filtered = allContracts.filter(c =>
-                (c.ma_so || '').toLowerCase().includes(val) ||
-                (c.ten_cong_ty || '').toLowerCase().includes(val)
-            );
-            renderTable(filtered);
-        } else {
-            renderTable(allContracts);
         }
-
+        applyFilters();
       });
     }
 
@@ -393,13 +439,7 @@
     }
 
     document.getElementById('search-input').addEventListener('input', (e) => {
-      const val = e.target.value.toLowerCase().trim();
-      const filtered = allContracts.filter(c =>
-        (c.ma_so || '').toLowerCase().includes(val) ||
-        (c.ten_cong_ty || '').toLowerCase().includes(val) ||
-        (c.html_content || '').toLowerCase().includes(val)
-      );
-      renderTable(filtered);
+      applyFilters();
     });
 
     // ========== Modal ==========
