@@ -436,6 +436,19 @@
     table.complex-mode td {
       padding: 4px !important;
     }
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .masthead { padding: 12px 20px; flex-direction: column; gap: 10px; text-align: center; }
+      .stepper { padding: 12px; gap: 10px; overflow-x: auto; justify-content: flex-start;  white-space: nowrap; -webkit-overflow-scrolling: touch; }
+      .stepper::-webkit-scrollbar { display: none; }
+      .stepper { -ms-overflow-style: none; scrollbar-width: none; }
+      .wrap { padding: 20px 12px; }
+      .card { padding: 20px; }
+      .row { grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+      .doc-preview { padding: 20px 15px; }
+      #toast-container { right: 10px; top: 10px; left: 10px; }
+      .toast { margin: 0 auto; width: 100%; box-sizing: border-box; }
+    }
   </style>
 
   <!-- Firebase SDKs -->

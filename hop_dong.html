@@ -472,19 +472,16 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* ======================== RESPONSIVE ======================== */
+        /* ===== MOBILE RESPONSIVE ===== */
         @media (max-width: 800px) {
             .main { padding: 30px 16px; }
             .header { margin-bottom: 40px; }
-            .footer-stats { gap: 24px; }
-        }
-
-        /* ======================== MOUSE TRAIL EFFECT ======================== */
-        .trail-dot {
-            position: fixed; width: 6px; height: 6px;
-            background: var(--primary);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            opacity: 0; transition: opacity 0.3s ease;
+            .header-title { font-size: 28px; }
+            .header-subtitle { font-size: 15px; }
+            .footer-stats { gap: 24px; flex-direction: column; }
+            .glass-card { padding: 25px; }
+            .card-header h2 { font-size: 18px; }
+            .login-box { width: 90%; max-width: 400px; padding: 30px 20px; box-sizing: border-box; }
         }
     </style>
 

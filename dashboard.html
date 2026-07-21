@@ -229,6 +229,18 @@
         page-break-after: auto;
       }
     }
+    /* ===== MOBILE RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; padding: 15px 20px; gap: 15px; text-align: center; }
+      .container { padding: 20px 15px; }
+      .search-bar { flex-direction: column; }
+      .search-bar button { padding: 16px 32px; }
+      #contracts-table_wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      #contracts-table { min-width: 800px; }
+      #modal-toolbar { flex-direction: column; padding: 10px; gap: 10px; }
+      #modal-content { padding: 15px; }
+      .login-box { width: 90%; padding: 25px; box-sizing: border-box; }
+    }
   </style>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -263,14 +275,16 @@
         <input type="text" id="search-input" placeholder="Tìm kiếm theo mã số hợp đồng, mã báo giá...">
         <button id="btn-search">Tìm Kiếm</button>
       </div>
-      <table id="contracts-table">
-        <thead>
-          <tr><th>Mã Số</th><th>Tên Khách Hàng</th><th>Tổng Tiền</th><th>Ngày Lập</th><th>Thao Tác</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="5" style="text-align:center;">Đang tải dữ liệu...</td></tr>
-        </tbody>
-      </table>
+      <div id="contracts-table-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+        <table id="contracts-table">
+          <thead>
+            <tr><th>Mã Số</th><th>Tên Khách Hàng</th><th>Tổng Tiền</th><th>Ngày Lập</th><th>Thao Tác</th></tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;">Đang tải dữ liệu...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
