@@ -535,7 +535,7 @@
     
 <div class="flex min-h-screen" id="main-app">
 <!-- SideNavBar -->
-<aside class="fixed left-0 top-0 h-screen w-[280px] bg-[#ecedf6] flex flex-col p-4 gap-2 z-50 print:hidden">
+<aside class="hidden md:flex fixed left-0 top-0 h-screen w-[280px] bg-[#ecedf6] flex-col p-4 gap-2 z-50 print:hidden">
 <div class="mb-10 px-2">
 <h1 class="text-2xl font-bold text-[#005dac]">ContractCore</h1>
 <p class="text-sm text-[#414752] opacity-70">Hệ thống Đồng bộ</p>
@@ -559,11 +559,14 @@
 </aside>
 
 <!-- Main Content Area -->
-<main class="ml-[280px] flex-1 min-h-screen flex flex-col relative print:ml-0">
+<main class="ml-0 md:ml-[280px] flex-1 min-h-screen flex flex-col relative print:ml-0">
 <!-- TopAppBar -->
 <header class="h-16 flex justify-between items-center px-8 bg-[#f9f9ff] border-b border-[#c1c6d4] shadow-sm sticky top-0 z-40 print:hidden">
 <div class="flex items-center gap-4">
-<span class="text-xl font-bold text-[#005dac]">Đơn Hợp đồng Đồng bộ</span>
+<a href="../index.html" class="md:hidden flex items-center justify-center bg-gray-200 rounded p-2 text-gray-700">
+  <span class="material-symbols-outlined text-sm">arrow_back</span>
+</a>
+<span class="text-xl font-bold text-[#005dac] truncate">Đơn Hợp đồng Đồng bộ</span>
 </div>
 <div class="flex items-center gap-6">
 <div class="flex items-center gap-4">
