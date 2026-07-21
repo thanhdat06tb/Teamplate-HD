@@ -176,6 +176,16 @@
         color: #000 !important;
       }
 
+      #print-zone p, 
+      #print-zone .doc-title, 
+      #print-zone table, 
+      #print-zone tr,
+      #print-zone li,
+      #print-zone h1, #print-zone h2, #print-zone h3, #print-zone h4 {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
       .doc-preview {
         box-shadow: none !important;
         padding: 24px 0 0 0 !important;
