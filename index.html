@@ -1,905 +1,618 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Hệ thống xuất Hợp đồng chuyên nghiệp - Giao khoán & Điều lệ" />
-    <title>Hệ thống xuất Hợp đồng</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --ink: #0B1120;
-            --ink-2: #1A2744;
-            --paper: #F7F5EF;
-            --gold: #C9A661;
-            --gold-2: #E8C97A;
-            --gold-dark: #8B6914;
-            --emerald: #10B981;
-            --emerald-dark: #047857;
-            --blue: #3B82F6;
-            --blue-dark: #1D4ED8;
-            --purple: #8B5CF6;
-            --rose: #F43F5E;
-            --slate: #64748B;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--ink);
-            color: #F1F5F9;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* ======================== VIDEO BACKGROUND ======================== */
-        #bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background: rgba(11, 17, 32, 0.5); /* Giảm độ tối nền để video sáng hơn chút */
-            backdrop-filter: blur(15px); /* Hiệu ứng kính mờ cho không gian */
-            -webkit-backdrop-filter: blur(15px);
-            pointer-events: none;
-        }
-
-        /* ======================== MAIN LAYOUT ======================== */
-        .main {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 24px;
-        }
-
-        /* ======================== HEADER ======================== */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: headerAppear 0.8s ease-out;
-        }
-
-        @keyframes headerAppear {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(201, 166, 97, 0.1);
-            border: 1px solid rgba(201, 166, 97, 0.25);
-            border-radius: 40px;
-            padding: 6px 18px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gold);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-badge .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--emerald);
-            border-radius: 50%;
-            animation: dotPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes dotPulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-            }
-
-            50% {
-                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
-            }
-        }
-
-        .header h1 {
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: clamp(32px, 5vw, 52px);
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #F1F5F9 0%, var(--gold-2) 50%, #F1F5F9 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmerText 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmerText {
-            0% {
-                background-position: 0% center;
-            }
-
-            50% {
-                background-position: 100% center;
-            }
-
-            100% {
-                background-position: 0% center;
-            }
-        }
-
-        .header p {
-            font-size: 16px;
-            color: #94A3B8;
-            max-width: 480px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* ======================== CONTRACT CARDS ======================== */
-        .cards-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 32px;
-            perspective: 1200px;
-            animation: cardsAppear 0.8s 0.2s ease-out both;
-        }
-
-        @keyframes cardsAppear {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 800px) {
-            .cards-wrapper {
-                flex-direction: column;
-                gap: 24px;
-            }
-        }
-
-        .contract-card {
-            position: relative;
-            width: 340px;
-            min-height: 420px;
-            cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @media (max-width: 800px) {
-            .contract-card {
-                width: 100%;
-                max-width: 380px;
-            }
-        }
-
-        .contract-card:hover {
-            transform: translateY(-12px) rotateX(2deg);
-        }
-
-        .card-inner {
-            position: relative;
-            height: 100%;
-            border-radius: 20px;
-            padding: 32px 28px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s;
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-        }
-
-        /* Card 1 - Giao khoán */
-        .card-gk .card-inner {
-            background: linear-gradient(165deg,
-                    rgba(26, 39, 68, 0.4) 0%,
-                    rgba(17, 24, 45, 0.5) 100%);
-            border: 1px solid rgba(201, 166, 97, 0.2);
-            box-shadow:
-                0 4px 24px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(201, 166, 97, 0.05),
-                inset 0 1px 0 rgba(201, 166, 97, 0.08);
-        }
-
-        .card-gk:hover .card-inner {
-            border-color: rgba(201, 166, 97, 0.4);
-            box-shadow:
-                0 20px 60px rgba(201, 166, 97, 0.15),
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(201, 166, 97, 0.2),
-                inset 0 1px 0 rgba(201, 166, 97, 0.15);
-        }
-
-        /* Card 2 - Điều lệ */
-        .card-dl .card-inner {
-            background: linear-gradient(165deg,
-                    rgba(20, 30, 55, 0.95) 0%,
-                    rgba(13, 20, 40, 0.98) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            box-shadow:
-                0 4px 24px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(59, 130, 246, 0.05),
-                inset 0 1px 0 rgba(59, 130, 246, 0.08);
-        }
-
-        .card-dl:hover .card-inner {
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow:
-                0 20px 60px rgba(59, 130, 246, 0.12),
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(59, 130, 246, 0.2),
-                inset 0 1px 0 rgba(59, 130, 246, 0.15);
-        }
-
-        /* Card glow effect on hover */
-        .card-glow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .card-gk .card-glow {
-            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(201, 166, 97, 0.08), transparent);
-        }
-
-        .card-dl .card-glow {
-            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(59, 130, 246, 0.08), transparent);
-        }
-
-        .contract-card:hover .card-glow {
-            opacity: 1;
-        }
-
-        /* Card icon area */
-        .card-icon-wrap {
-            position: relative;
-            z-index: 1;
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .contract-card:hover .card-icon-wrap {
-            transform: scale(1.08);
-        }
-
-        .card-gk .card-icon-wrap {
-            background: linear-gradient(135deg, rgba(201, 166, 97, 0.15), rgba(201, 166, 97, 0.05));
-            border: 1px solid rgba(201, 166, 97, 0.2);
-            box-shadow: 0 4px 16px rgba(201, 166, 97, 0.1);
-        }
-
-        .card-gk:hover .card-icon-wrap {
-            box-shadow: 0 8px 32px rgba(201, 166, 97, 0.2);
-        }
-
-        .card-dl .card-icon-wrap {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
-        }
-
-        .card-dl:hover .card-icon-wrap {
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
-        }
-
-        .card-icon {
-            font-size: 36px;
-            line-height: 1;
-        }
-
-        /* Card animated line decoration */
-        .card-deco-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            border-radius: 20px 20px 0 0;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .card-deco-line::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            transition: left 0.6s ease;
-        }
-
-        .card-gk .card-deco-line::after {
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        }
-
-        .card-dl .card-deco-line::after {
-            background: linear-gradient(90deg, transparent, var(--blue), transparent);
-        }
-
-        .contract-card:hover .card-deco-line::after {
-            left: 100%;
-        }
-
-        /* Card content */
-        .card-label {
-            position: relative;
-            z-index: 1;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .card-gk .card-label {
-            color: var(--gold);
-        }
-
-        .card-dl .card-label {
-            color: var(--blue);
-        }
-
-        .card-title {
-            position: relative;
-            z-index: 1;
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: #F1F5F9;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .card-desc {
-            position: relative;
-            z-index: 1;
-            font-size: 14px;
-            color: #94A3B8;
-            line-height: 1.65;
-            margin-bottom: 24px;
-            flex: 1;
-        }
-
-        /* Card features list */
-        .card-features {
-            position: relative;
-            z-index: 1;
-            list-style: none;
-            margin-bottom: 28px;
-        }
-
-        .card-features li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #CBD5E1;
-            padding: 5px 0;
-        }
-
-        .card-features li .feat-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            flex-shrink: 0;
-        }
-
-        .card-gk .feat-icon {
-            background: rgba(201, 166, 97, 0.15);
-            color: var(--gold);
-        }
-
-        .card-dl .feat-icon {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--blue);
-        }
-
-        /* Card CTA button */
-        .card-cta {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            overflow: hidden;
-        }
-
-        .card-cta::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .card-cta:hover::before {
-            left: 100%;
-        }
-
-        .card-gk .card-cta {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-2) 100%);
-            color: #1A0E00;
-            box-shadow: 0 4px 16px rgba(201, 166, 97, 0.3);
-        }
-
-        .card-gk .card-cta:hover {
-            box-shadow: 0 8px 32px rgba(201, 166, 97, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .card-dl .card-cta {
-            background: linear-gradient(135deg, var(--blue) 0%, #60A5FA 100%);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
-        }
-
-        .card-dl .card-cta:hover {
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .card-cta .arrow {
-            transition: transform 0.3s ease;
-            font-size: 16px;
-        }
-
-        .contract-card:hover .card-cta .arrow {
-            transform: translateX(4px);
-        }
-
-        /* Card corner decoration */
-        .card-corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .card-corner-tr {
-            top: -1px;
-            right: -1px;
-            border-top: 2px solid;
-            border-right: 2px solid;
-            border-radius: 0 20px 0 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card-corner-bl {
-            bottom: -1px;
-            left: -1px;
-            border-bottom: 2px solid;
-            border-left: 2px solid;
-            border-radius: 0 0 0 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card-gk .card-corner {
-            border-color: rgba(201, 166, 97, 0.3);
-        }
-
-        .card-dl .card-corner {
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .contract-card:hover .card-corner {
-            opacity: 1;
-        }
-
-        /* Status indicator */
-        .card-status {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            z-index: 2;
-        }
-
-        .card-gk .card-status {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--emerald);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .card-dl .card-status {
-            background: rgba(251, 191, 36, 0.1);
-            color: #FBBF24;
-            border: 1px solid rgba(251, 191, 36, 0.2);
-        }
-
-        .card-status .status-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-        }
-
-        .card-gk .status-dot {
-            background: var(--emerald);
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
-        }
-
-        .card-dl .status-dot {
-            background: #FBBF24;
-            box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
-        }
-
-
-        /* Card 3 - Kinh Tế */
-        .card-kt .card-inner {
-            background: linear-gradient(165deg, rgba(8, 47, 73, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(56, 189, 248, 0.05), inset 0 1px 0 rgba(56, 189, 248, 0.08);
-        }
-
-        .card-kt:hover .card-inner {
-            border-color: rgba(16, 185, 129, 0.4);
-            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.15);
-        }
-
-        .card-kt .card-glow {
-            background: radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), rgba(16, 185, 129, 0.08), transparent);
-        }
-
-        .card-kt .card-icon-wrap {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
-        }
-
-        .card-kt:hover .card-icon-wrap {
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
-        }
-
-        .card-kt .card-deco-line::after {
-            background: linear-gradient(90deg, transparent, var(--emerald), transparent);
-        }
-
-        .card-kt .card-label {
-            color: var(--emerald);
-        }
-
-        .card-kt .feat-icon {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--emerald);
-        }
-
-        .card-kt .card-cta {
-            background: linear-gradient(135deg, var(--emerald) 0%, #34D399 100%);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
-        }
-
-        .card-kt .card-cta:hover {
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .card-kt .card-corner {
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .card-kt .card-status {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--emerald);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .card-kt .status-dot {
-            background: var(--emerald);
-            box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
-        }
-
-        /* ======================== FOOTER ======================== */
-        .footer {
-            margin-top: 60px;
-            text-align: center;
-            animation: cardsAppear 0.8s 0.4s ease-out both;
-        }
-
-        .footer p {
-            font-size: 13px;
-            color: #475569;
-            line-height: 1.6;
-        }
-
-        .footer a {
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-        .footer-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 20px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-family: 'Source Serif 4', serif;
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--gold), var(--gold-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #64748B;
-            margin-top: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* ======================== RESPONSIVE ======================== */
-        @media (max-width: 800px) {
-            .main {
-                padding: 30px 16px;
-            }
-
-            .header {
-                margin-bottom: 40px;
-            }
-
-            .footer-stats {
-                gap: 24px;
-            }
-        }
-
-        /* ======================== MOUSE TRAIL EFFECT ======================== */
-        .trail-dot {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: var(--gold);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hệ thống Quản Lý & Xuất Hợp Đồng</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #005dac;
+    --primary-light: #1976d2;
+    --primary-glow: rgba(0, 93, 172, 0.15);
+    --surface: #f0f4fa;
+    --card-bg: rgba(255, 255, 255, 0.55);
+    --card-border: rgba(255, 255, 255, 0.7);
+    --text-primary: #111827;
+    --text-secondary: #64748b;
+    --orange: #ea580c;
+    --orange-glow: rgba(234, 88, 12, 0.15);
+    --dark: #1e293b;
+    --dark-glow: rgba(30, 41, 59, 0.15);
+    --danger: #dc2626;
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-full: 9999px;
+    --shadow-card: 0 8px 32px -8px rgba(0, 93, 172, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 20px 60px -15px rgba(0, 93, 172, 0.18), 0 4px 8px rgba(0, 0, 0, 0.04);
+    --shadow-btn: 0 4px 14px -4px rgba(0, 93, 172, 0.35);
+    --transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--surface);
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(0, 93, 172, 0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(234, 88, 12, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ======= AUTH OVERLAY (Login Screen) ======= */
+  #auth-overlay {
+    position: fixed; inset: 0;
+    background: linear-gradient(160deg, #e8edf5 0%, #dce4f0 40%, #d5dced 100%);
+    background-image:
+      radial-gradient(ellipse at 30% 0%, rgba(0, 93, 172, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, rgba(234, 88, 12, 0.08) 0%, transparent 50%);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .login-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 36px;
+    padding: 56px 44px;
+    width: 100%; max-width: 440px;
+    text-align: center;
+    box-shadow:
+      0 30px 80px -20px rgba(0, 93, 172, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    animation: loginAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes loginAppear {
+    0% { opacity: 0; transform: scale(0.92) translateY(24px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .login-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px auto;
+    color: #fff;
+    box-shadow: 0 12px 28px -6px rgba(0, 93, 172, 0.4);
+    font-size: 38px;
+  }
+
+  .login-card h2 {
+    font-size: 28px; font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.8px;
+    margin-bottom: 6px;
+  }
+
+  .login-card .login-sub {
+    font-size: 14px; color: var(--text-secondary);
+    margin-bottom: 36px;
+  }
+
+  .login-card input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 15px; font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    transition: var(--transition);
+    margin-bottom: 16px;
+  }
+
+  .login-card input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+
+  .login-card button {
+    width: 100%;
+    padding: 17px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff;
+    border: none; border-radius: var(--radius-md);
+    font-size: 16px; font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-btn);
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+  }
+
+  .login-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(0, 93, 172, 0.45);
+  }
+
+  .login-card button:active { transform: translateY(1px); }
+
+  #login-error {
+    display: none;
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: rgba(220, 38, 38, 0.08);
+    color: var(--danger);
+    border-radius: 12px;
+    border: 1px solid rgba(220, 38, 38, 0.15);
+    font-size: 13px; font-weight: 600;
+  }
+
+  /* ======= MAIN APP (Hub Layout) ======= */
+  #main-app { display: none; }
+
+  .hub-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    display: flex; flex-direction: column;
+    gap: 48px;
+    animation: hubFadeIn 0.6s ease-out;
+  }
+
+  @keyframes hubFadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Top Bar --- */
+  .hub-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .hub-brand {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+
+  .hub-brand h1 {
+    font-size: 32px; font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--primary) 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+
+  .hub-brand p {
+    font-size: 14px; color: var(--text-secondary); font-weight: 500;
+  }
+
+  .hub-topbar-actions {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .logout-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 22px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(220, 38, 38, 0.15);
+    color: var(--danger);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer; text-decoration: none;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .logout-btn:hover {
+    background: #fef2f2;
+    border-color: rgba(220, 38, 38, 0.3);
+  }
+
+  /* --- Search --- */
+  .hub-search {
+    position: relative;
+    width: 100%;
+  }
+
+  .hub-search .search-icon {
+    position: absolute;
+    left: 22px; top: 50%; transform: translateY(-50%);
+    color: var(--primary);
+    font-size: 24px;
+    pointer-events: none;
+  }
+
+  .hub-search input {
+    width: 100%;
+    padding: 22px 24px 22px 60px;
+    border-radius: var(--radius-xl);
+    border: 1.5px solid rgba(255, 255, 255, 0.6);
+    background: var(--card-bg);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    font-size: 16px; font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+  }
+
+  .hub-search input:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-glow), var(--shadow-card);
+    transform: translateY(-2px);
+  }
+
+  .hub-search input::placeholder {
+    color: #94a3b8;
+  }
+
+  /* --- Card Grid --- */
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .hub-card {
+    position: relative;
+    background: var(--card-bg);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px 32px;
+    display: flex; flex-direction: column;
+    gap: 18px;
+    text-decoration: none; color: inherit;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+    cursor: pointer;
+  }
+
+  .hub-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .hub-card:hover::before { opacity: 1; }
+  .hub-card.blue::before  { background: linear-gradient(90deg, var(--primary), #0ea5e9); }
+  .hub-card.orange::before { background: linear-gradient(90deg, var(--orange), #f59e0b); }
+  .hub-card.dark::before  { background: linear-gradient(90deg, var(--dark), #475569); }
+
+  .hub-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: var(--shadow-card-hover);
+    border-color: #fff;
+  }
+
+  .card-icon-wrap {
+    width: 64px; height: 64px;
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .card-icon-wrap.blue {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    box-shadow: 0 8px 20px -4px rgba(0, 93, 172, 0.35);
+  }
+  .card-icon-wrap.orange {
+    background: linear-gradient(135deg, var(--orange) 0%, #f59e0b 100%);
+    box-shadow: 0 8px 20px -4px var(--orange-glow);
+  }
+  .card-icon-wrap.dark {
+    background: linear-gradient(135deg, var(--dark) 0%, #475569 100%);
+    box-shadow: 0 8px 20px -4px var(--dark-glow);
+  }
+
+  .card-icon-wrap .material-symbols-outlined {
+    font-size: 30px;
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .card-title {
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text-primary);
+  }
+
+  .card-desc {
+    font-size: 14px; line-height: 1.65;
+    color: var(--text-secondary);
+    flex-grow: 1;
+  }
+
+  .card-stat {
+    margin-top: 8px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .card-stat .label {
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--text-secondary);
+  }
+
+  .card-stat .value {
+    font-size: 20px; font-weight: 800;
+  }
+
+  .card-stat .value.blue  { color: var(--primary); }
+  .card-stat .value.orange { color: var(--orange); }
+  .card-stat .value.dark  { color: var(--dark); }
+
+  .card-go {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700;
+    margin-top: 4px;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: var(--transition);
+  }
+
+  .hub-card:hover .card-go {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .card-go.blue  { color: var(--primary); }
+  .card-go.orange { color: var(--orange); }
+  .card-go.dark  { color: var(--dark); }
+
+  /* --- Footer --- */
+  .hub-footer {
+    text-align: center;
+    font-size: 12px; color: #94a3b8;
+    padding-top: 8px;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 960px) {
+    .hub-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .hub-grid { grid-template-columns: 1fr; }
+    .hub-brand h1 { font-size: 26px; }
+    .hub-wrapper { padding: 28px 16px 48px; gap: 32px; }
+  }
+</style>
 </head>
-
 <body>
-    <!-- Video Background -->
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="3194277-hd_1920_1080_30fps.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
 
-    <div class="main">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-badge">
-                <span class="dot"></span>
-                Hệ thống quản lý tài liệu
-            </div>
-            <h1>Bảng Điều Khiển<br>Trung Tâm</h1>
-            <p>Chọn các phân hệ chức năng tương ứng để bắt đầu xử lý tài liệu.
-            </p>
-        </div>
+<!-- ====== Firebase SDK ====== -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-        <!-- 4 Main Modules -->
-        <div class="cards-wrapper">
-            <!-- Module 1: Liên Hợp Đồng -->
-            <div class="contract-card card-gk" onclick="window.location.href='unified_workflow/index.html'">
-                <div class="card-inner">
-                    <div class="card-deco-line"></div>
-                    <div class="card-glow"></div>
-                    <div class="card-corner card-corner-tr"></div>
-                    <div class="card-corner card-corner-bl"></div>
-                    <div class="card-status">
-                        <span class="status-dot"></span>
-                        Sẵn sàng
-                    </div>
+<!-- ====== LOGIN SCREEN ====== -->
+<div id="auth-overlay">
+  <div class="login-card">
+    <div class="login-icon">
+      <span class="material-symbols-outlined" style="font-size:38px;font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+    </div>
+    <h2>Hệ thống Hợp Đồng</h2>
+    <p class="login-sub">Hệ thống đồng bộ hợp đồng nội bộ</p>
 
-                    <div class="card-icon-wrap">
-                        <span class="card-icon">📝</span>
-                    </div>
+    <input type="email" id="login-email" placeholder="Email quản trị viên" />
+    <input type="password" id="login-pass" placeholder="Mật khẩu" />
 
-                    <div class="card-label">Phân hệ 01</div>
-                    <div class="card-title">Liên Hợp Đồng</div>
-                    <div class="card-desc">
-                        Hệ thống quy trình liên hợp: xuất Báo giá, Hợp đồng, Phụ lục và Nghiệm thu hoàn toàn tự động.
-                    </div>
+    <button id="btn-login">VÀO HỆ THỐNG</button>
+    <div id="login-error">Sai thông tin đăng nhập!</div>
+  </div>
+</div>
 
-                    <button class="card-cta">
-                        Bắt đầu xử lý <span class="arrow">→</span>
-                    </button>
-                </div>
-            </div>
+<!-- ====== MAIN HUB ====== -->
+<div id="main-app">
+  <div class="hub-wrapper">
 
-            <!-- Module 2: Hợp đồng -->
-            <div class="contract-card card-dl" onclick="window.location.href='hop_dong.html'">
-                <div class="card-inner">
-                    <div class="card-deco-line"></div>
-                    <div class="card-glow"></div>
-                    <div class="card-corner card-corner-tr"></div>
-                    <div class="card-corner card-corner-bl"></div>
-                    <div class="card-status" style="background: rgba(59, 130, 246, 0.1); color: var(--blue); border-color: rgba(59, 130, 246, 0.2);">
-                        <span class="status-dot" style="background: var(--blue); box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);"></span>
-                        Sẵn sàng
-                    </div>
-
-                    <div class="card-icon-wrap">
-                        <span class="card-icon">📋</span>
-                    </div>
-
-                    <div class="card-label">Phân hệ 02</div>
-                    <div class="card-title">Hợp Đồng Đơn</div>
-                    <div class="card-desc">
-                        Điều hướng xử lý văn bản độc lập (Hợp đồng, Phụ lục, BBNT...).
-                    </div>
-
-                    <button class="card-cta">
-                        Truy cập
-                        <span class="arrow">→</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Module 3: Tra Cứu (Dashboard) -->
-            <div class="contract-card card-kt" onclick="window.location.href='dashboard.html'">
-                <div class="card-inner">
-                    <div class="card-deco-line"></div>
-                    <div class="card-glow"></div>
-                    <div class="card-corner card-corner-tr"></div>
-                    <div class="card-corner card-corner-bl"></div>
-                    <div class="card-status">
-                        <span class="status-dot"></span>
-                        Đã kết nối
-                    </div>
-                    <div class="card-icon-wrap">
-                        <span class="card-icon">☁️</span>
-                    </div>
-                    <div class="card-label">Phân hệ 03</div>
-                    <div class="card-title">Kho Lưu Trữ</div>
-                    <div class="card-desc">
-                        Tra cứu, xem trước và tái xuất File PDF gốc cho các hợp đồng, báo giá đã làm.
-                    </div>
-                    <button class="card-cta">
-                        Truy vãn Dữ Liệu
-                        <span class="arrow">→</span>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <div class="footer-stats">
-                <div class="stat">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Loại hợp đồng</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">Word</div>
-                    <div class="stat-label">& PDF Export</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Giữ nguyên mẫu</div>
-                </div>
-            </div>
-            <p>
-                Định dạng gốc (font, khung bảng, tiêu đề) được giữ nguyên 100% từ file mẫu —<br>
-                công cụ chỉ thay thế đúng các vị trí cần điền bằng dữ liệu bạn nhập.
-            </p>
-        </div>
+    <!-- Top Bar -->
+    <div class="hub-topbar">
+      <div class="hub-brand">
+        <h1>Hệ thống Quản Lý & Xuất Hợp Đồng</h1>
+        <p id="hub-greeting">Chào mừng trở lại, Quản trị viên</p>
+      </div>
+      <div class="hub-topbar-actions">
+        <a href="#" id="btn-logout" class="logout-btn">
+          <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+          Đăng xuất
+        </a>
+      </div>
     </div>
 
-    <script>
-        /* ======================== CARD GLOW FOLLOW MOUSE ======================== */
-        document.querySelectorAll('.contract-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width * 100);
-                const y = ((e.clientY - rect.top) / rect.height * 100);
-                card.querySelector('.card-glow').style.setProperty('--mx', x + '%');
-                card.querySelector('.card-glow').style.setProperty('--my', y + '%');
+    <!-- Search -->
+    <div class="hub-search">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input id="main-search-input" type="text" placeholder="Tìm kiếm hợp đồng theo tên, mã số… (nhấn Enter)" />
+    </div>
 
-                // Subtle 3D tilt
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const tiltX = (e.clientY - rect.top - centerY) / centerY * 3;
-                const tiltY = -(e.clientX - rect.left - centerX) / centerX * 3;
-                card.style.transform = `translateY(-12px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-            });
+    <!-- Cards -->
+    <div class="hub-grid">
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = '';
-            });
-        });
-    </script>
+      <!-- Card 1: Liên Hợp Đồng -->
+      <a href="unified_workflow/index.html" class="hub-card blue">
+        <div class="card-icon-wrap blue">
+          <span class="material-symbols-outlined">description</span>
+        </div>
+        <div class="card-title">Liên Hợp Đồng</div>
+        <p class="card-desc">Hệ thống tạo chuỗi văn bản liên hoàn. Tự động xuất Hợp đồng, Phụ lục, Báo giá và Biên bản bàn giao với dữ liệu đồng bộ xuyên suốt.</p>
+        <div class="card-stat">
+          <span class="label">Tổng sản lượng</span>
+          <span class="value blue" id="lien-hop-dong-count">—</span>
+        </div>
+        <div class="card-go blue">
+          Truy cập <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card 2: Đơn Hợp Đồng -->
+      <a href="hop_dong.html" class="hub-card orange">
+        <div class="card-icon-wrap orange">
+          <span class="material-symbols-outlined">edit_document</span>
+        </div>
+        <div class="card-title">Đơn Hợp Đồng</div>
+        <p class="card-desc">Mẫu hợp đồng độc lập thông minh. Điền trực tiếp, tính phí thời gian thực, xuất bản nhanh cho các văn bản đơn lẻ.</p>
+        <div class="card-stat">
+          <span class="label">Đã số hóa</span>
+          <span class="value orange" id="don-hop-dong-count">—</span>
+        </div>
+        <div class="card-go orange">
+          Truy cập <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </div>
+      </a>
+
+      <!-- Card 3: Kho Lưu Trữ -->
+      <a href="dashboard.html" class="hub-card dark">
+        <div class="card-icon-wrap dark">
+          <span class="material-symbols-outlined">cloud_circle</span>
+        </div>
+        <div class="card-title">Kho Lưu Trữ</div>
+        <p class="card-desc">Tự động sao lưu hồ sơ lên Firebase Cloud. Tìm kiếm, trích xuất và quản lý hợp đồng đã tạo với tốc độ cực nhanh.</p>
+        <div class="card-stat">
+          <span class="label">Dung lượng đã dùng</span>
+          <span class="value dark" id="storage-used-val">—</span>
+        </div>
+        <div class="card-go dark">
+          Truy cập <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="hub-footer">Nền tảng quản lý hợp đồng / Được tạo bởi Jull06_tb / Liên hệ: 0369038160</div>
+
+  </div>
+</div>
+
+<!-- ====== JAVASCRIPT ====== -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3VAwCZbtmpqyNYB9XT2vSDZT4isF0rlc",
+    authDomain: "quanlyhopdong-298e9.firebaseapp.com",
+    projectId: "quanlyhopdong-298e9",
+    storageBucket: "quanlyhopdong-298e9.firebasestorage.app",
+    messagingSenderId: "443139409005",
+    appId: "1:443139409005:web:4c5f46d8fe852327752b64"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const authOverlay = document.getElementById('auth-overlay');
+    const mainApp = document.getElementById('main-app');
+    const btnLogin = document.getElementById('btn-login');
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-pass');
+    const errorMsg = document.getElementById('login-error');
+
+    // Dynamic greeting
+    const hour = new Date().getHours();
+    const greetEl = document.getElementById('hub-greeting');
+    if (greetEl) {
+      const g = hour < 12 ? 'Chào buổi sáng' : hour < 18 ? 'Chào buổi chiều' : 'Chào buổi tối';
+      greetEl.textContent = g + ', Quản trị viên';
+    }
+
+    // Auth state
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        authOverlay.style.display = 'none';
+        mainApp.style.display = 'block';
+
+        // Fetch stats from Firestore
+        try {
+          const snap = await db.collection('contracts_cloud').get();
+          const count = snap.size;
+
+          let totalBytes = 0;
+          snap.docs.forEach(doc => {
+            totalBytes += new Blob([JSON.stringify(doc.data())]).size;
+          });
+
+          const maxStorage = 1073741824; // 1 GB Firebase Free Tier
+          const usedMb = (totalBytes / (1024 * 1024)).toFixed(2);
+          const maxMb = (maxStorage / (1024 * 1024)).toFixed(0);
+
+          const elLien = document.getElementById('lien-hop-dong-count');
+          const elDon = document.getElementById('don-hop-dong-count');
+          const elStor = document.getElementById('storage-used-val');
+
+          if (elLien) elLien.textContent = count + ' văn bản';
+          if (elDon) elDon.textContent = count + ' văn bản';
+          if (elStor) elStor.textContent = usedMb + ' / ' + maxMb + ' MB';
+        } catch (e) {
+          console.error('Stats error:', e);
+        }
+      } else {
+        authOverlay.style.display = 'flex';
+        mainApp.style.display = 'none';
+      }
+    });
+
+    // Login
+    if (btnLogin) {
+      btnLogin.addEventListener('click', () => {
+        const email = emailInput.value.trim();
+        const pass = passInput.value;
+        errorMsg.style.display = 'none';
+        btnLogin.textContent = 'Đang xử lý...';
+
+        auth.signInWithEmailAndPassword(email, pass)
+          .then(() => { btnLogin.textContent = 'VÀO HỆ THỐNG'; })
+          .catch((err) => {
+            btnLogin.textContent = 'VÀO HỆ THỐNG';
+            errorMsg.textContent = err.message;
+            errorMsg.style.display = 'block';
+          });
+      });
+
+      // Allow Enter key to trigger login
+      passInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') btnLogin.click();
+      });
+    }
+
+    // Logout
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+      btnLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        auth.signOut();
+      });
+    }
+
+    // Search -> navigate to dashboard.html?q=...
+    const mainSearch = document.getElementById('main-search-input');
+    if (mainSearch) {
+      mainSearch.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const val = mainSearch.value.trim();
+          if (val) {
+            window.location.href = 'dashboard.html?q=' + encodeURIComponent(val);
+          }
+        }
+      });
+    }
+  });
+</script>
 </body>
-
 </html>

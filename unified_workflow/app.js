@@ -49,12 +49,12 @@ function validateInputUnique(el) {
 }
 
 // --- Toast System ---
-window.showToast = function(message, type = 'info', duration = 4000) {
+window.showToast = function (message, type = 'info', duration = 4000) {
   const container = document.getElementById('toast-container');
   if (!container) return;
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
-  
+
   let icon = 'ℹ️';
   if (type === 'success') icon = '✅';
   if (type === 'error') icon = '❌';
@@ -62,7 +62,7 @@ window.showToast = function(message, type = 'info', duration = 4000) {
 
   toast.innerHTML = `<div class="toast-icon">${icon}</div><div>${message.replace(/\\n/g, '<br>')}</div>`;
   container.appendChild(toast);
-  
+
   // Trigger animation
   requestAnimationFrame(() => {
     toast.classList.add('show');
@@ -415,7 +415,7 @@ window.uploadProductImage = function (index, input) {
     const reader = new FileReader();
     reader.onload = function (e) {
       const img = new Image();
-      img.onload = function() {
+      img.onload = function () {
         const canvas = document.createElement('canvas');
         const MAX_SIZE = 300;
         let width = img.width;
@@ -431,7 +431,7 @@ window.uploadProductImage = function (index, input) {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
-        
+
         State.products[index].imgData = canvas.toDataURL('image/jpeg', 0.8);
         renderProducts();
       };
@@ -740,7 +740,7 @@ document.querySelectorAll('input').forEach(input => {
     bindDataToPreviews();
     // Validate uniqueness on input
     if (['so_baogia', 'so_hd', 'so_hd_kt', 'so_pl', 'so_bbgh'].includes(input.id)) {
-       validateInputUnique(input);
+      validateInputUnique(input);
     }
   });
 });
@@ -1095,7 +1095,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   btn.innerText = 'Đang lưu lên đám mây...';
 
   const htmlContent = docs.map(html => `<div class="page-break">${html}</div>`).join('');
-  
+
   if (htmlContent.length > 900000) {
     showToast("Lỗi: Dữ liệu văn bản quá lớn (vượt quá 1MB giới hạn của Cloud). Vui lòng giảm bớt hình ảnh, hoặc không xuất cùng lúc 4 văn bản chứa ảnh.", "error", 6000);
     btn.disabled = false;

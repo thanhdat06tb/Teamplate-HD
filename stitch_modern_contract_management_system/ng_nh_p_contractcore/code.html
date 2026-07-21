@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đăng nhập | ContractCore</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#ba5b00",
+                    "inverse-primary": "#a5c8ff",
+                    "secondary": "#4f6169",
+                    "surface": "#f9f9ff",
+                    "secondary-fixed": "#d2e6ef",
+                    "surface-bright": "#f9f9ff",
+                    "on-background": "#181c21",
+                    "on-secondary-container": "#55676f",
+                    "surface-container": "#ecedf6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#001c3a",
+                    "surface-tint": "#005faf",
+                    "on-surface": "#181c21",
+                    "on-secondary-fixed": "#0b1e24",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#e6e8f0",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#d4e3ff",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#374951",
+                    "on-tertiary-container": "#fffeff",
+                    "on-primary-container": "#fffdff",
+                    "on-primary-fixed-variant": "#004786",
+                    "background": "#f9f9ff",
+                    "surface-container-highest": "#e0e2ea",
+                    "surface-container-low": "#f2f3fc",
+                    "error": "#ba1a1a",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#c1c6d4",
+                    "tertiary": "#944700",
+                    "primary-container": "#1976d2",
+                    "outline": "#717783",
+                    "inverse-surface": "#2d3037",
+                    "inverse-on-surface": "#eff0f9",
+                    "on-tertiary-fixed-variant": "#733600",
+                    "on-tertiary-fixed": "#311300",
+                    "surface-variant": "#e0e2ea",
+                    "tertiary-fixed-dim": "#ffb688",
+                    "primary-fixed-dim": "#a5c8ff",
+                    "tertiary-fixed": "#ffdbc7",
+                    "on-surface-variant": "#414752",
+                    "secondary-fixed-dim": "#b6cad2",
+                    "secondary-container": "#d2e6ef",
+                    "primary": "#005dac",
+                    "surface-dim": "#d8dae2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xs": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px",
+                    "sm": "8px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "xl": "40px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9ff;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 95, 175, 0.05);
+        }
+        .shimmer-bg {
+            background: linear-gradient(135deg, #f9f9ff 0%, #e0e2ea 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        .shimmer-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 93, 172, 0.03) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="shimmer-bg min-h-screen flex items-center justify-center p-margin-mobile md:p-0">
+<!-- Abstract Office-Feel Background Decoration -->
+<div class="fixed top-20 right-[-10%] w-96 h-96 bg-primary-container/5 rounded-full blur-3xl"></div>
+<div class="fixed bottom-10 left-[-5%] w-72 h-72 bg-tertiary/5 rounded-full blur-3xl"></div>
+<main class="relative z-10 w-full max-w-[440px]">
+<!-- Login Card -->
+<div class="glass-card p-xl rounded-xl">
+<!-- Branding/Identity -->
+<div class="flex flex-col items-center mb-xl">
+<div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-md shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary text-[32px]">description</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface text-center mb-xs">Đăng nhập Hệ thống</h1>
+<p class="font-body-md text-body-md text-on-surface-variant text-center px-md">
+                    Quản lý và Xuất hợp đồng Doanh nghiệp
+                </p>
+</div>
+<!-- Login Form -->
+<form class="space-y-lg" id="login-form">
+<!-- Email Field -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="email">Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" id="email" name="email" placeholder="user@enterprise.vn" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center px-1">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">Mật khẩu</label>
+<a class="font-label-md text-label-md text-primary hover:underline transition-all" href="#">Quên mật khẩu?</a>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+<input class="w-full pl-12 pr-12 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="pass-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me (Optional but useful for UI balance) -->
+<div class="flex items-center space-x-sm px-1">
+<input class="w-4 h-4 text-primary border-outline-variant rounded focus:ring-primary" id="remember" type="checkbox"/>
+<label class="font-body-md text-body-md text-on-surface-variant select-none" for="remember">Duy trì đăng nhập</label>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary hover:bg-surface-tint text-on-primary font-title-lg text-title-lg py-md rounded-lg shadow-md hover:shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-sm group" id="submit-btn" type="submit">
+<span>Đăng nhập</span>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">login</span>
+</button>
+</form>
+<!-- Footer Compliance/Status -->
+<div class="mt-xl pt-lg border-t border-outline-variant/30 text-center">
+<div class="flex items-center justify-center gap-xs text-outline mb-xs">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="font-label-md text-label-md">Hệ thống bảo mật TLS 1.3</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant/60">
+                    © 2024 ContractCore Enterprise. All rights reserved.
+                </p>
+</div>
+</div>
+<!-- Feedback Notification (Hidden by default) -->
+<div class="hidden mt-md p-md bg-error-container text-on-error-container rounded-lg flex items-start gap-md animate-bounce" id="error-toast">
+<span class="material-symbols-outlined">error</span>
+<div class="flex-1">
+<p class="font-label-md font-bold">Lỗi đăng nhập</p>
+<p class="font-body-md text-[12px]">Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại.</p>
+</div>
+<button class="text-on-error-container opacity-50 hover:opacity-100" onclick="this.parentElement.classList.add('hidden')">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</main>
+<!-- Visual Enhancements: Office Element Illustrations -->
+<div class="absolute bottom-10 right-10 hidden xl:block opacity-40">
+<div class="flex gap-lg">
+<div class="w-48 h-64 bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm rotate-3 flex flex-col p-md">
+<div class="w-full h-4 bg-primary-fixed rounded mb-sm"></div>
+<div class="w-3/4 h-2 bg-outline-variant rounded mb-xs"></div>
+<div class="w-full h-2 bg-outline-variant rounded mb-xs"></div>
+<div class="w-1/2 h-2 bg-outline-variant rounded mb-xl"></div>
+<div class="mt-auto flex justify-end">
+<div class="w-12 h-6 bg-secondary-container rounded"></div>
+</div>
+</div>
+<div class="w-48 h-64 bg-surface-container-lowest rounded-lg border border-outline-variant shadow-sm -rotate-6 flex flex-col p-md">
+<div class="w-full h-4 bg-tertiary-fixed rounded mb-sm"></div>
+<div class="w-full h-2 bg-outline-variant rounded mb-xs"></div>
+<div class="w-2/3 h-2 bg-outline-variant rounded mb-xs"></div>
+<div class="w-full h-2 bg-outline-variant rounded mb-xl"></div>
+<div class="mt-auto flex justify-between items-center">
+<div class="w-8 h-8 rounded-full bg-outline-variant"></div>
+<div class="w-16 h-4 bg-primary-fixed rounded"></div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Password Visibility Toggle
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const icon = document.getElementById('pass-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                icon.innerText = 'visibility_off';
+            } else {
+                passInput.type = 'password';
+                icon.innerText = 'visibility';
+            }
+        }
+
+        // Form Submission Logic Placeholder
+        const loginForm = document.getElementById('login-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorToast = document.getElementById('error-toast');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // UI State Change
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="animate-spin material-symbols-outlined text-[20px]">sync</span>
+                <span>Đang xử lý...</span>
+            `;
+
+            // Simulation of authentication delay
+            setTimeout(() => {
+                /*
+                -----------------------------------------------------------
+                FIREBASE AUTHENTICATION PLACEHOLDER
+                -----------------------------------------------------------
+                // Import Firebase functions
+                import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+                const auth = getAuth();
+                const email = loginForm.email.value;
+                const password = loginForm.password.value;
+
+                signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    window.location.href = "/dashboard";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // Handle errors (show errorToast)
+                });
+                -----------------------------------------------------------
+                */
+
+                // For prototype demonstration: show error if "error" is in the email
+                if (loginForm.email.value.includes('error')) {
+                    errorToast.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `
+                        <span>Đăng nhập</span>
+                        <span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">login</span>
+                    `;
+                } else {
+                    // Success state simulation
+                    submitBtn.classList.replace('bg-primary', 'bg-green-600');
+                    submitBtn.innerHTML = `
+                        <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                        <span>Đăng nhập thành công</span>
+                    `;
+                    console.log("Redirecting to Dashboard...");
+                }
+            }, 1500);
+        });
+    </script>
+</body></html>
