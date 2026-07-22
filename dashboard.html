@@ -262,6 +262,10 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <style>
+    #auth-overlay { display: none !important; }
+    #main-app { display: block !important; }
+  </style>
 </head>
 <body>
 
@@ -290,7 +294,6 @@
       <div class="tabs">
         <button id="tab-khach" class="tab-btn active" onclick="switchTab('khach')">HỢP ĐỒNG KHÁCH</button>
         <button id="tab-huasen" class="tab-btn" onclick="switchTab('huasen')">HỢP ĐỒNG HUASEN</button>
-        <button id="tab-don" class="tab-btn" onclick="switchTab('don')">ĐƠN HỢP ĐỒNG</button>
       </div>
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="Tìm kiếm theo mã số hợp đồng, mã báo giá...">

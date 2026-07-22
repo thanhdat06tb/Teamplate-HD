@@ -239,19 +239,59 @@ els.steps.forEach((st, i) => {
   });
 });
 
+window.setContractType = function(type) {
+  State.contractType = type;
+  
+  // Update sidebar UI
+  const menuKt = document.getElementById('menu-mua-ban');
+  const menuGk = document.getElementById('menu-dich-vu');
+  
+  if (type === 'kt') {
+    if(menuKt) {
+      menuKt.classList.add('bg-[#d2e6ef]', 'text-[#55676f]', 'font-bold');
+      menuKt.classList.remove('text-[#414752]', 'hover:bg-[#e0e2ea]');
+    }
+    if(menuGk) {
+      menuGk.classList.remove('bg-[#d2e6ef]', 'text-[#55676f]', 'font-bold');
+      menuGk.classList.add('text-[#414752]', 'hover:bg-[#e0e2ea]');
+    }
+    const st2 = document.getElementById('st-2-text');
+    if(st2) st2.textContent = 'Kinh Tế';
+    const st4 = document.getElementById('st-4-text');
+    if(st4) st4.textContent = 'Giao Hàng';
+  } else {
+    if(menuGk) {
+      menuGk.classList.add('bg-[#d2e6ef]', 'text-[#55676f]', 'font-bold');
+      menuGk.classList.remove('text-[#414752]', 'hover:bg-[#e0e2ea]');
+    }
+    if(menuKt) {
+      menuKt.classList.remove('bg-[#d2e6ef]', 'text-[#55676f]', 'font-bold');
+      menuKt.classList.add('text-[#414752]', 'hover:bg-[#e0e2ea]');
+    }
+    const st2 = document.getElementById('st-2-text');
+    if(st2) st2.textContent = 'Giao Khoán';
+    const st4 = document.getElementById('st-4-text');
+    if(st4) st4.textContent = 'Nghiệm Thu';
+  }
+  
+  updateNav();
+};
 
 if (els.radioBranchDv) {
   els.radioBranchDv.addEventListener('change', () => {
-    if (els.radioBranchDv.checked) State.contractType = 'gk';
-    updateNav();
+    if (els.radioBranchDv.checked) window.setContractType('gk');
   });
 }
 if (els.radioBranchKt) {
   els.radioBranchKt.addEventListener('change', () => {
-    if (els.radioBranchKt.checked) State.contractType = 'kt';
-    updateNav();
+    if (els.radioBranchKt.checked) window.setContractType('kt');
   });
 }
+
+// Initialize with default
+window.addEventListener('DOMContentLoaded', () => {
+  window.setContractType('gk');
+});
 
 // Update State from Inputs
 function saveFormState() {
@@ -519,7 +559,7 @@ window.uploadProductImage = function (index, input) {
       const img = new Image();
       img.onload = function () {
         const canvas = document.createElement('canvas');
-        const MAX_SIZE = 300;
+        const MAX_SIZE = 200; // Giảm kích thước tối đa xuống 200 thay vì 300
         let width = img.width;
         let height = img.height;
         if (width > height && width > MAX_SIZE) {
@@ -534,7 +574,8 @@ window.uploadProductImage = function (index, input) {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
 
-        State.products[index].imgData = canvas.toDataURL('image/jpeg', 0.8);
+        // Nén ảnh chất lượng 50% thay vì 80% để giảm dung lượng file base64
+        State.products[index].imgData = canvas.toDataURL('image/jpeg', 0.5);
         renderProducts();
       };
       img.src = e.target.result;

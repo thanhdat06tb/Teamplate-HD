@@ -501,8 +501,8 @@
       .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #DCD6C6; border-radius: 6px; box-sizing:border-box;}
       .login-box button { width: 100%; padding: 12px; background: #9C7A3C; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
       .login-box button:hover { background: #B8934F; }
-      #login-error { color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
-      #main-app { display: none; }
+      #auth-overlay { display: none !important; }
+      #main-app { display: flex !important; }
     </style>
     
 
@@ -559,9 +559,14 @@
 <span class="material-symbols-outlined">dashboard</span>
 <span class="font-medium text-sm">Trang Chủ</span>
 </a>
-<a class="flex items-center gap-4 px-4 py-2 bg-[#d2e6ef] text-[#55676f] rounded-lg font-bold transition-all group" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assignment</span>
-<span class="font-medium text-sm">Hợp đồng & Báo giá</span>
+<div class="px-2 mt-4 mb-2"><p class="text-xs font-bold text-[#414752] uppercase tracking-wider">Liên hợp đồng</p></div>
+<a id="menu-mua-ban" class="flex items-center gap-4 px-4 py-2 text-[#414752] hover:bg-[#e0e2ea] transition-all rounded-lg group" href="#" onclick="window.setContractType('kt'); return false;">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-medium text-sm">Hợp đồng mua bán</span>
+</a>
+<a id="menu-dich-vu" class="flex items-center gap-4 px-4 py-2 bg-[#d2e6ef] text-[#55676f] rounded-lg font-bold transition-all group" href="#" onclick="window.setContractType('gk'); return false;">
+<span class="material-symbols-outlined">design_services</span>
+<span class="font-medium text-sm">Hợp đồng dịch vụ</span>
 </a>
 </nav>
 <div class="mt-auto space-y-1 pt-4 border-t border-[#c1c6d4]">
@@ -597,12 +602,12 @@
 
   <div class="stepper">
     <div class="step active" id="st-1">
-      <div class="step-num">1</div> Dữ liệu Báo Giá
+      <div class="step-num">1</div> Báo Giá
     </div>
-    <div class="step" id="st-2"><div class="step-num">2</div> Hợp Đồng</div>
+    <div class="step" id="st-2"><div class="step-num">2</div> <span id="st-2-text">Hợp Đồng</span></div>
     
     <div class="step" id="st-3"><div class="step-num">3</div> Phụ Lục</div>
-    <div class="step" id="st-4"><div class="step-num">4</div> Biên Bản</div>
+    <div class="step" id="st-4"><div class="step-num">4</div> <span id="st-4-text">Biên Bản</span></div>
     <div class="step" id="st-5"><div class="step-num">5</div> Tổng Duyệt</div>
   </div>
 
@@ -905,7 +910,7 @@
 
         <!-- STEP 2: CONTRACT -->
     <div class="step-content" id="step-2">
-      <div class="card" style="margin-bottom: 24px;">
+      <div class="card" style="margin-bottom: 24px; display: none;">
         <h2>Chọn Phân Loại Giao Dịch</h2>
         <div style="display:flex; gap: 30px; margin-top: 10px;">
           <label style="display:flex; align-items:center; gap:8px; font-size:15px; cursor:pointer;">
@@ -1786,7 +1791,7 @@
   </div>
 
   <div id="toast-container"></div>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=14"></script>
 
 </div></main>
 </div></body>
