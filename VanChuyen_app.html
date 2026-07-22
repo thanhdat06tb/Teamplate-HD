@@ -1086,10 +1086,11 @@
           <button class="btn" id="btn-preview"
             style="background:linear-gradient(135deg,#2980B9 0%,#3498DB 100%);color:#fff;box-shadow:0 2px 8px rgba(41,128,185,.3);margin-top:16px;">👁
             Xem trước hợp đồng</button>
-          <div class="btn-group">
+           <div class="btn-group">
             <button class="btn" id="btn-generate">📄 Xuất Word</button>
             <button class="btn pdf-btn" id="btn-pdf">📕 Xuất PDF</button>
           </div>
+          <button class="btn" id="btn-save-cloud" style="background:#5B6472; margin-top: 10px;">☁️ Lưu Lên Hệ Thống Cloud</button>
           <button class="btn secondary" id="btn-fill-sample">Điền dữ liệu mẫu để xem thử</button>
           <div class="status" id="status"></div>
         </div>
@@ -1492,6 +1493,168 @@
 
     document.getElementById('btn-pdf').addEventListener('click', generatePdf);
 
+  </script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3VAwCZbtmpqyNYB9XT2vSDZT4isF0rlc",
+      authDomain: "quanlyhopdong-298e9.firebaseapp.com",
+      projectId: "quanlyhopdong-298e9",
+      storageBucket: "quanlyhopdong-298e9.firebasestorage.app",
+      messagingSenderId: "443139409005",
+      appId: "1:443139409005:web:4c5f46d8fe852327752b64"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    db.settings({ experimentalForceLongPolling: true });
+
+    // Authentication Guard
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("Vui lòng đăng nhập từ trang chủ trước!");
+        window.location.href = "index.html";
+      }
+    });
+
+    const existingDocNumbers = new Set();
+    async function fetchExistingDocNumbers() {
+      try {
+        const snapshot = await db.collection('contracts_cloud').get();
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.ma_so) {
+            data.ma_so.split('|').map(s => s.trim()).filter(s => s).forEach(s => existingDocNumbers.add(s));
+          }
+          if (data.document_numbers) {
+            data.document_numbers.forEach(s => existingDocNumbers.add(s.trim()));
+          }
+        });
+        const input = document.getElementById('so_hd');
+        if (input) validateInputUnique(input);
+      } catch (err) {
+        console.error("Error fetching doc numbers:", err);
+      }
+    }
+
+    function validateInputUnique(el) {
+      if (!el) return;
+      const val = el.value.trim();
+      let parent = el.parentElement;
+      let errEl = parent.querySelector('.cloud-dup-error');
+      if (!errEl) {
+        errEl = document.createElement('div');
+        errEl.className = 'cloud-dup-error';
+        errEl.style.color = '#ef4444';
+        errEl.style.fontSize = '12px';
+        errEl.style.fontWeight = '600';
+        errEl.style.marginTop = '4px';
+        parent.appendChild(errEl);
+      }
+
+      if (!val || val === '...' || /^(\.)+$/.test(val)) {
+        el.style.border = '';
+        el.style.boxShadow = '';
+        el.title = '';
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+        return;
+      }
+
+      if (existingDocNumbers.has(val)) {
+        el.style.border = '2px solid #ef4444';
+        el.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.2)';
+        el.title = 'Số văn bản này đã tồn tại trên Đám Mây!';
+        errEl.textContent = '❌ Số văn bản này đã tồn tại trên Cloud!';
+        errEl.style.display = 'block';
+      } else {
+        el.style.border = '';
+        el.style.boxShadow = '';
+        el.title = '';
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+      }
+    }
+
+    fetchExistingDocNumbers();
+
+    document.getElementById('so_hd').addEventListener('input', (e) => {
+      validateInputUnique(e.target);
+    });
+
+    document.getElementById('btn-save-cloud').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-save-cloud');
+      const status = document.getElementById('status');
+      btn.disabled = true;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+      status.className = 'status';
+      status.textContent = 'Đang lưu tài liệu lên Cloud...';
+
+      try {
+        const soHd = document.getElementById('so_hd').value.trim();
+        if (!soHd || soHd === '...' || /^(\.)+$/.test(soHd)) {
+          alert("Vui lòng nhập Số hợp đồng hợp lệ trước khi lưu!");
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          status.className = 'status err';
+          status.textContent = 'Lỗi: Thiếu Số hợp đồng';
+          return;
+        }
+
+        if (existingDocNumbers.has(soHd)) {
+          alert(`KHÔNG THỂ LƯU! Số hợp đồng "${soHd}" đã tồn tại trên hệ thống.`);
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          status.className = 'status err';
+          status.textContent = 'Lỗi: Trùng số hợp đồng';
+          return;
+        }
+
+        const clientName = document.getElementById('ben_b_ten').value.trim() || 'Chưa nhập';
+        const totalAmountStr = 'Theo chuyến';
+        const ngayKy = document.getElementById('ngay_ky_date').value || '';
+        const htmlContent = buildPreviewHtml(true);
+
+        const docData = {
+          category: 'don',
+          ma_so: soHd,
+          document_numbers: [soHd],
+          ten_cong_ty: clientName,
+          tong_tien: totalAmountStr,
+          ngay_ky: ngayKy,
+          html_content: htmlContent,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Quá thời gian kết nối (30s). Xin kiểm tra mạng hoặc Firebase Database.")), 30000);
+        });
+
+        await Promise.race([
+          db.collection('contracts_cloud').add(docData),
+          timeoutPromise
+        ]);
+
+        existingDocNumbers.add(soHd);
+        status.className = 'status ok';
+        status.textContent = '✓ Đã lưu thành công lên hệ thống Cloud!';
+        alert("Lưu tài liệu thành công lên hệ thống Cloud!");
+      } catch (err) {
+        console.error(err);
+        status.className = 'status err';
+        status.textContent = 'Lỗi khi lưu: ' + err.message;
+        alert("Lỗi khi lưu: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    });
   </script>
 </body>
 

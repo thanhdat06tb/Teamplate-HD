@@ -1,9 +1,9 @@
 // State Management
 const State = {
   currentStep: 1,
-  contractType: 'nt',
+  contractType: 'gk',
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '', soBaogia: '' },
-  company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
+  company: { ten: '', tenCn: '', mst: '', diachi: '', diachiCn: '', stk: '', daidien: '', chucvu: '', sdt: '', email: '', logoData: '', stampData: '' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
   products: [{ stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: '' }],
   tableMode: 'simple',
@@ -26,6 +26,10 @@ async function fetchExistingDocNumbers() {
       }
     });
     console.log("Loaded existing doc numbers:", existingDocNumbers.size);
+    ['so_baogia', 'so_hd', 'so_hd_kt', 'so_hd_nt', 'so_pl', 'so_bbgh'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) validateInputUnique(input);
+    });
   } catch (err) {
     console.error("Error fetching doc numbers:", err);
   }
@@ -34,17 +38,40 @@ async function fetchExistingDocNumbers() {
 function validateInputUnique(el) {
   if (!el) return;
   const val = el.value.trim();
+  
+  let parent = el.parentElement;
+  let errEl = parent.querySelector('.cloud-dup-error');
+  if (!errEl) {
+    errEl = document.createElement('div');
+    errEl.className = 'cloud-dup-error';
+    errEl.style.color = '#ef4444';
+    errEl.style.fontSize = '12px';
+    errEl.style.fontWeight = '600';
+    errEl.style.marginTop = '4px';
+    parent.appendChild(errEl);
+  }
+
   if (!val || val === '...' || /^(\.)+$/.test(val)) {
     el.style.border = '';
+    el.style.boxShadow = '';
     el.title = '';
+    errEl.textContent = '';
+    errEl.style.display = 'none';
     return;
   }
+
   if (existingDocNumbers.has(val)) {
     el.style.border = '2px solid #ef4444'; // Red border
+    el.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.2)';
     el.title = 'Số văn bản này đã tồn tại trên Đám Mây!';
+    errEl.textContent = '❌ Số văn bản này đã tồn tại trên Cloud!';
+    errEl.style.display = 'block';
   } else {
     el.style.border = '';
+    el.style.boxShadow = '';
     el.title = '';
+    errEl.textContent = '';
+    errEl.style.display = 'none';
   }
 }
 
@@ -91,8 +118,8 @@ const els = {
   vatSelect: document.getElementById('vat-rate'),
   vatSelectKt: document.getElementById('vat-rate-kt'),
 
-  radioGk: document.getElementById('radio-gk'),
-  radioKt: document.getElementById('radio-kt'),
+  radioBranchDv: document.getElementById('radio-branch-dv'),
+  radioBranchKt: document.getElementById('radio-branch-kt'),
   wrapperGk: document.getElementById('wrapper-gk'),
   wrapperKt: document.getElementById('wrapper-kt'),
   wrapperNt: document.getElementById('wrapper-nt'),
@@ -100,7 +127,8 @@ const els = {
   wrapperBbgh: document.getElementById('wrapper-bbgh'),
   bbghProductTable: document.getElementById('bbgh-product-table'),
   
-  radioNt: document.getElementById('radio-nt'),
+  dnLogoFile: document.getElementById('dn_logo_file'),
+  dnStampFile: document.getElementById('dn_stamp_file'),
 
   // Inputs
   kh_ten: document.getElementById('kh_ten'),
@@ -146,6 +174,7 @@ function fmtVND(n) {
 
 // Navigation Logic
 function updateNav() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   els.steps.forEach((st, i) => {
     st.classList.toggle('active', i + 1 === State.currentStep);
   });
@@ -202,22 +231,24 @@ els.btnPrev.addEventListener('click', () => {
   }
 });
 
+els.steps.forEach((st, i) => {
+  st.addEventListener('click', () => {
+    saveFormState();
+    State.currentStep = i + 1;
+    updateNav();
+  });
+});
 
-if (els.radioGk) {
-  els.radioGk.addEventListener('change', () => {
-    if (els.radioGk.checked) State.contractType = 'gk';
+
+if (els.radioBranchDv) {
+  els.radioBranchDv.addEventListener('change', () => {
+    if (els.radioBranchDv.checked) State.contractType = 'gk';
     updateNav();
   });
 }
-if (els.radioKt) {
-  els.radioKt.addEventListener('change', () => {
-    if (els.radioKt.checked) State.contractType = 'kt';
-    updateNav();
-  });
-}
-if (els.radioNt) {
-  els.radioNt.addEventListener('change', () => {
-    if (els.radioNt.checked) State.contractType = 'nt';
+if (els.radioBranchKt) {
+  els.radioBranchKt.addEventListener('change', () => {
+    if (els.radioBranchKt.checked) State.contractType = 'kt';
     updateNav();
   });
 }
@@ -236,8 +267,10 @@ function saveFormState() {
   State.client.soBaogia = els.so_baogia ? els.so_baogia.value || '...' : '...';
 
   State.company.ten = els.dn_ten.value || '...';
+  State.company.tenCn = document.getElementById('dn_ten_cn') ? (document.getElementById('dn_ten_cn').value || '') : '';
   State.company.mst = els.dn_mst.value || '...';
   State.company.diachi = els.dn_diachi.value || '...';
+  State.company.diachiCn = document.getElementById('dn_diachi_cn') ? (document.getElementById('dn_diachi_cn').value || '') : '';
   State.company.stk = els.dn_stk.value || '...';
   State.company.daidien = els.dn_daidien.value || '...';
   State.company.chucvu = els.dn_chucvu.value || '...';
@@ -308,6 +341,44 @@ function bindDataToPreviews() {
   document.querySelectorAll('.bind-dn-chucvu').forEach(e => e.textContent = State.company.chucvu);
   document.querySelectorAll('.bind-dn-sdt').forEach(e => e.textContent = State.company.sdt);
   document.querySelectorAll('.bind-dn-email').forEach(e => e.textContent = State.company.email);
+
+  // Bind Chinese info and custom attachments
+  document.querySelectorAll('.bind-dn-ten-cn').forEach(e => {
+    e.textContent = State.company.tenCn || '';
+  });
+  document.querySelectorAll('.bind-dn-ten-cn-wrapper').forEach(e => {
+    e.style.display = State.company.tenCn ? 'inline' : 'none';
+  });
+
+  document.querySelectorAll('.bind-dn-diachi-cn').forEach(e => {
+    e.textContent = State.company.diachiCn || '';
+  });
+  document.querySelectorAll('.bind-dn-diachi-cn-wrapper').forEach(e => {
+    e.style.display = State.company.diachiCn ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('.bind-logo-img').forEach(e => {
+    if (State.company.logoData) {
+      e.src = State.company.logoData;
+      e.style.display = 'block';
+    } else {
+      e.src = '';
+      e.style.display = 'none';
+    }
+  });
+  document.querySelectorAll('.bind-logo-cell').forEach(e => {
+    e.style.display = State.company.logoData ? 'table-cell' : 'none';
+  });
+
+  document.querySelectorAll('.bind-stamp-img').forEach(e => {
+    if (State.company.stampData) {
+      e.src = State.company.stampData;
+      e.style.display = 'block';
+    } else {
+      e.src = '';
+      e.style.display = 'none';
+    }
+  });
 
   document.querySelectorAll('.bind-sohd').forEach(e => e.textContent = State.contract.sohd);
   document.querySelectorAll('.bind-ten-ct').forEach(e => e.textContent = State.contract.tenct);
@@ -882,54 +953,50 @@ function cleanHtml(htmlStr) {
 
 // Step 6: Previews
 function prepareFinalPreviews() {
-
   document.getElementById('mini-preview-1').innerHTML = cleanHtml(document.getElementById('preview-baogia').innerHTML);
 
+  const boxGk = document.getElementById('box-contract-gk');
+  const boxKt = document.getElementById('box-contract-kt');
+  const boxNt = document.getElementById('box-contract-nt');
+  const labelBbnt = document.getElementById('label-bbnt');
+
   if (State.contractType === 'gk') {
+    // Show Giao Khoán preview, Hide Kinh Tế / Nguyên Tắc
+    if (boxGk) boxGk.style.display = 'block';
+    if (boxKt) boxKt.style.display = 'none';
+    if (boxNt) boxNt.style.display = 'none';
+
     document.getElementById('mini-preview-2').innerHTML = cleanHtml(document.getElementById('preview-contract-gk').innerHTML);
     document.getElementById('chk-contract-gk').checked = true;
-    if(document.getElementById('chk-contract-kt')) document.getElementById('chk-contract-kt').checked = false;
-    if(document.getElementById('chk-contract-nt')) document.getElementById('chk-contract-nt').checked = false;
-    if(document.getElementById('mini-preview-kt')) document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
-    if(document.getElementById('mini-preview-nt')) document.getElementById('mini-preview-nt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ NGUYÊN TẮC</i>";
+    document.getElementById('chk-contract-kt').checked = false;
+    document.getElementById('chk-contract-nt').checked = false;
 
+    // Show BBNT
     document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbnt').innerHTML);
     document.getElementById('chk-bbnt').checked = true;
-    if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
-  } else if (State.contractType === 'nt') {
-    document.getElementById('mini-preview-nt').innerHTML = cleanHtml(document.getElementById('preview-contract-nt').innerHTML);
-    document.getElementById('chk-contract-nt').checked = true;
-    if(document.getElementById('chk-contract-kt')) document.getElementById('chk-contract-kt').checked = false;
-    if(document.getElementById('chk-contract-gk')) document.getElementById('chk-contract-gk').checked = false;
-    document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
-    if(document.getElementById('mini-preview-kt')) document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
+    if (labelBbnt) labelBbnt.textContent = 'BIÊN BẢN NGHIỆM THU HOÀN THÀNH';
 
-    if (document.getElementById('preview-bbgh')) {
-      document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
-      // rename the label 
-      document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
-    }
-    document.getElementById('chk-bbnt').checked = true;
-    if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
   } else {
-    document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
-    document.getElementById('chk-contract-kt').checked = true;
-    if(document.getElementById('chk-contract-gk')) document.getElementById('chk-contract-gk').checked = false;
-    if(document.getElementById('chk-contract-nt')) document.getElementById('chk-contract-nt').checked = false;
-    document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
-    if(document.getElementById('mini-preview-nt')) document.getElementById('mini-preview-nt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ NGUYÊN TẮC</i>";
+    // Show Kinh Tế preview, Hide Giao Khoán / Nguyên Tắc
+    if (boxGk) boxGk.style.display = 'none';
+    if (boxKt) boxKt.style.display = 'block';
+    if (boxNt) boxNt.style.display = 'none';
 
+    document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
+    document.getElementById('chk-contract-gk').checked = false;
+    document.getElementById('chk-contract-kt').checked = true;
+    document.getElementById('chk-contract-nt').checked = false;
+
+    // Show BBGH
     if (document.getElementById('preview-bbgh')) {
       document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
-      // rename the label 
-      document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
     }
     document.getElementById('chk-bbnt').checked = true;
-    if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
+    if (labelBbnt) labelBbnt.textContent = 'BIÊN BẢN GIAO HÀNG';
   }
 
+  // Appendix Preview
   const appPreview = document.getElementById('preview-appendix').cloneNode(true);
-
   if (State.contractType === 'kt') {
     const appTable = appPreview.querySelector('table:nth-of-type(1)');
     const ktTableTbody = document.getElementById('bind-products-kt');
@@ -1064,9 +1131,35 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   document.getElementById('kh_chucvu').value = "Tổng Giám Đốc";
   document.getElementById('kh_sdt').value = "0987654321";
   document.getElementById('kh_email').value = "contact@demotech.com";
+  document.getElementById('kh_ngay').value = "2026-07-22";
+  if (document.getElementById('so_baogia')) document.getElementById('so_baogia').value = "BG-2026-99";
 
+  document.getElementById('dn_ten').value = "CÔNG TY TNHH KỸ THUẬT CÔNG NGHỆ THÀNH ĐẠT VN";
+  if (document.getElementById('dn_ten_cn')) document.getElementById('dn_ten_cn').value = "成达科技工程有限公司";
+  document.getElementById('dn_mst').value = "0316789012";
+  document.getElementById('dn_diachi').value = "Số 10, Đường 3/2, Quận 10, TP HCM";
+  if (document.getElementById('dn_diachi_cn')) document.getElementById('dn_diachi_cn').value = "胡志明市第十郡3/2路10号";
+  document.getElementById('dn_stk').value = "VNĐ: 999988886666 tại MB Bank";
+  document.getElementById('dn_daidien').value = "Nguyễn Thành Đạt";
+  document.getElementById('dn_chucvu').value = "Giám Đốc";
+  document.getElementById('dn_sdt').value = "0909123456";
+  document.getElementById('dn_email').value = "thanhdat.tech@company.com";
+
+  if (document.getElementById('so_hd')) document.getElementById('so_hd').value = "02/2026/HDGK";
+  if (document.getElementById('ngay_ky')) document.getElementById('ngay_ky').value = "2026-07-22";
   document.getElementById('ten_ct').value = "Hệ thống làm mát nhà máy Demo Tech";
   document.getElementById('diadiem_ct').value = "KCN ABC, TP HCM";
+  document.getElementById('tam_ung').value = "40";
+  document.getElementById('so_ngay_tt').value = "10";
+  if (document.getElementById('thoi_gian_giao')) document.getElementById('thoi_gian_giao').value = "30";
+  if (document.getElementById('pt_thanh_toan')) document.getElementById('pt_thanh_toan').value = "Chuyển khoản (VNĐ)";
+
+  if (document.getElementById('so_hd_kt')) document.getElementById('so_hd_kt').value = "02/2026/HDKT";
+  if (document.getElementById('ngay_ky_kt')) document.getElementById('ngay_ky_kt').value = "2026-07-22";
+  
+  if (document.getElementById('so_pl')) document.getElementById('so_pl').value = "01/PLHD";
+  if (document.getElementById('ngay_pl')) document.getElementById('ngay_pl').value = "2026-07-25";
+  if (document.getElementById('so_bbgh')) document.getElementById('so_bbgh').value = "BBGH-002";
 
   State.tableMode = 'simple';
   State.products = [
@@ -1077,8 +1170,9 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
     { stt: "4", ten: "Nhân công lắp đặt cửa nhôm kính", dvt: "Bộ", sl: 1, gia: 650000, giaVatTu: 0, giaNhanCong: 650000, ghiChu: "Lắp đặt lại" }
   ];
 
-  alert("Đã điền dữ liệu mẫu thành công!");
-  handleInputBind();
+  saveFormState();
+  bindDataToPreviews();
+  showToast("Đã điền dữ liệu mẫu thành công!", "success");
 });
 
 function exportHTMLToWord(htmlContent, filename) {
@@ -1100,6 +1194,41 @@ function exportHTMLToWord(htmlContent, filename) {
     downloadLink.click();
   }
   document.body.removeChild(downloadLink);
+}
+
+// File Upload Action Listeners
+if (els.dnLogoFile) {
+  els.dnLogoFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        State.company.logoData = evt.target.result;
+        bindDataToPreviews();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      State.company.logoData = '';
+      bindDataToPreviews();
+    }
+  });
+}
+
+if (els.dnStampFile) {
+  els.dnStampFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        State.company.stampData = evt.target.result;
+        bindDataToPreviews();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      State.company.stampData = '';
+      bindDataToPreviews();
+    }
+  });
 }
 
 // Initial binding

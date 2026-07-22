@@ -296,6 +296,16 @@
       padding: 12px 14px; text-align: left; border: 1px solid #e2e8f0;
     }
     td { border: 1px solid #e2e8f0; padding: 10px 14px; color: var(--text); }
+    .bold-grid-table {
+      width: calc(100% - 2px) !important;
+      box-sizing: border-box !important;
+      border: 1px solid #000 !important;
+      border-collapse: collapse !important;
+    }
+    .bold-grid-table td, .bold-grid-table th {
+      border: 1px solid #000 !important;
+      color: #000 !important;
+    }
 
     /* ===== FILE DROP ===== */
     .file-drop {
@@ -396,12 +406,16 @@
 
       #print-zone p, 
       #print-zone .doc-title, 
-      #print-zone table, 
       #print-zone tr,
       #print-zone li,
       #print-zone h1, #print-zone h2, #print-zone h3, #print-zone h4 {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+      }
+
+      #print-zone table {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
       }
 
       .doc-preview {
@@ -595,6 +609,20 @@
   <div class="wrap">
     <!-- STEP 1: IMPORT & FORM -->
     <div class="step-content active" id="step-1">
+      <div class="card" style="border: 1.5px solid rgba(0, 93, 172, 0.25); background: linear-gradient(135deg, rgba(0, 93, 172, 0.05) 0%, rgba(25, 118, 210, 0.02) 100%);">
+        <h2>Thông tin Báo Giá & Hợp Đồng</h2>
+        <div class="row">
+          <div class="col">
+            <label style="color: var(--primary); font-weight: 700; font-size: 13px;">Ngày báo giá</label>
+            <input type="date" id="kh_ngay" style="border: 2px solid rgba(0, 93, 172, 0.4); box-shadow: 0 0 8px rgba(0, 93, 172, 0.15); background: #ffffff; font-weight: 600;">
+          </div>
+          <div class="col">
+            <label style="color: var(--primary); font-weight: 700; font-size: 13px;">Số báo giá</label>
+            <input type="text" id="so_baogia" placeholder="Ví dụ: BG01/2026..." style="border: 2px solid rgba(0, 93, 172, 0.4); box-shadow: 0 0 8px rgba(0, 93, 172, 0.15); background: #ffffff; font-weight: 600;">
+          </div>
+        </div>
+      </div>
+
       <div class="file-drop" id="file-drop" style="position:relative;">
         <button id="btn-fill-dummy" class="btn btn-secondary"
           style="position:absolute; top: 10px; right: 10px; font-size: 12px; padding: 6px 12px;">🧪 Dữ liệu Mẫu</button>
@@ -622,33 +650,45 @@
           <div class="col"><label>Số điện thoại</label><input type="text" id="kh_sdt"></div>
           <div class="col"><label>Email</label><input type="text" id="kh_email"></div>
         </div>
-        <div class="row">
-          <div class="col"><label>Ngày báo giá</label><input type="date" id="kh_ngay"></div>
-          <div class="col"><label>Số báo giá</label><input type="text" id="so_baogia" placeholder="Ví dụ: BG01/2026..."></div>
-        </div>
       </div>
 
       <div class="card">
-        <h2>Thông tin Doanh Nghiệp (Bên Nhận Giao Khoán - BÊN A)</h2>
+        <h2>Thông tin Doanh Nghiệp (Bên Nhận Giao Khoán/Bán Hàng - BÊN A)</h2>
         <div class="row">
-          <div class="col"><label>Tên Công Ty</label><input type="text" id="dn_ten"
-              value="CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM"></div>
-          <div class="col"><label>Mã số thuế</label><input type="text" id="dn_mst" value="3703486766"></div>
+          <div class="col"><label>Tên Công Ty</label><input type="text" id="dn_ten" placeholder="Ví dụ: Công ty TNHH ABC"></div>
+          <div class="col"><label>Mã số thuế</label><input type="text" id="dn_mst" placeholder="Mã số thuế doanh nghiệp"></div>
         </div>
         <div class="row">
-          <div class="col"><label>Địa chỉ</label><input type="text" id="dn_diachi"
-              value="Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam"></div>
-          <div class="col"><label>Số tài khoản</label><input type="text" id="dn_stk"
-              value="VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD"></div>
+          <div class="col"><label>Tên Công Ty (Tiếng Trung)</label><input type="text" id="dn_ten_cn" placeholder="Ví dụ: 越南华森... (nếu có)"></div>
+          <div class="col"><label>Địa chỉ (Tiếng Trung)</label><input type="text" id="dn_diachi_cn" placeholder="Địa chỉ bằng tiếng Trung nếu có"></div>
         </div>
         <div class="row">
-          <div class="col"><label>Người đại diện (Ông/Bà)</label><input type="text" id="dn_daidien" value="LIN. ZHIHUA">
+          <div class="col"><label>Địa chỉ</label><input type="text" id="dn_diachi" placeholder="Địa chỉ chính thức của công ty"></div>
+          <div class="col"><label>Số tài khoản</label><input type="text" id="dn_stk" placeholder="Ví dụ: 123456789 tại VietinBank"></div>
+        </div>
+        <div class="row">
+          <div class="col"><label>Người đại diện (Ông/Bà)</label><input type="text" id="dn_daidien" placeholder="Tên người đại diện"></div>
+          <div class="col"><label>Chức vụ</label><input type="text" id="dn_chucvu" placeholder="Chức vụ người đại diện"></div>
+        </div>
+        <div class="row">
+          <div class="col"><label>Số điện thoại</label><input type="text" id="dn_sdt" placeholder="Số điện thoại liên lạc"></div>
+          <div class="col"><label>Email</label><input type="text" id="dn_email" placeholder="Email doanh nghiệp"></div>
+        </div>
+        <div class="row" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px;">
+          <div class="col">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <span class="material-symbols-outlined" style="font-size:18px;">upload_file</span>
+              Tải Logo Doanh Nghiệp (Bên A)
+            </label>
+            <input type="file" id="dn_logo_file" accept="image/*" style="background:transparent; border:none; color:inherit; font-size:12px; padding:0;">
           </div>
-          <div class="col"><label>Chức vụ</label><input type="text" id="dn_chucvu" value=""></div>
-        </div>
-        <div class="row">
-          <div class="col"><label>Số điện thoại</label><input type="text" id="dn_sdt" value="0921115868"></div>
-          <div class="col"><label>Email</label><input type="text" id="dn_email" value="huasen2026@gmail.com"></div>
+          <div class="col">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <span class="material-symbols-outlined" style="font-size:18px;">upload_file</span>
+              Tải Con Dấu/Chữ Ký (Bên A)
+            </label>
+            <input type="file" id="dn_stamp_file" accept="image/*" style="background:transparent; border:none; color:inherit; font-size:12px; padding:0;">
+          </div>
         </div>
       </div>
 
@@ -707,23 +747,23 @@
       <div class="doc-preview" id="preview-baogia" style="margin-top: 40px; font-family: 'Times New Roman', serif;">
         <table style="width:100%; border:none; margin-bottom: 5px;">
           <tr>
-            <td style="width:160px; border:none; vertical-align:top; text-align:left; padding-right:0;">
+            <td class="bind-logo-cell" style="width:160px; border:none; vertical-align:top; text-align:left; padding-right:0; display:none;">
               <!-- LOGO -->
-              <img src="./Picture1.png" alt="Logo"
-                style="width:160px; max-width:none; position:relative; top:-20px; left:0;">
+              <img class="bind-logo-img" src="" alt="Logo"
+                style="width:160px; max-width:none; position:relative; top:-20px; left:0; display:none;">
             </td>
             <td style="text-align:center; border:none; vertical-align:top; padding-left:10px;">
               <h2
                 style="margin:0; line-height: 1.1; font-size: 19px; font-weight: bold; font-family: 'Times New Roman', serif;">
-                CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM<br>
-                <span style="font-size: 17px;">越南华森国际商贸有限公司</span>
+                <span class="bind-dn-ten">...</span><br>
+                <span class="bind-dn-ten-cn-wrapper" style="display:none;"><span class="bind-dn-ten-cn" style="font-size: 17px;">...</span></span>
               </h2>
               <div style="border-bottom: 2px solid #14068f; margin: 8px 0;"></div>
               <p style="margin:4px 0; font-size: 14.5px; font-family: 'Times New Roman', serif; white-space:nowrap;">
                 <strong>Địa chỉ:</strong> <span class="bind-dn-diachi">...</span>
               </p>
-              <p style="margin:4px 0; font-size: 14.5px; font-family: 'Times New Roman', serif; white-space:nowrap;">地址:
-                越南，胡志明市，安富坊，胡志明市安富坊省道743号1B街区24组2/1号</p>
+              <p class="bind-dn-diachi-cn-wrapper" style="margin:4px 0; font-size: 14.5px; font-family: 'Times New Roman', serif; white-space:nowrap; display:none;">地址:
+                <span class="bind-dn-diachi-cn">...</span></p>
               <p style="margin:4px 0; font-size: 14.5px; font-family: 'Times New Roman', serif; white-space:nowrap;">
                 <strong>Mã số thuế/税号:</strong> <span class="bind-dn-mst">...</span> &nbsp;&nbsp;&nbsp;
                 <strong>Tel/电话:</strong> <span class="bind-dn-sdt">...</span> &nbsp;&nbsp;&nbsp;
@@ -735,9 +775,7 @@
 
         <div
           style="text-align: left; margin-bottom: 20px; font-family: 'Times New Roman', serif; position: relative; z-index: 0;">
-          <p style="margin:8px 0; font-size: 15px;">Tên tài khoản: VN Hua Sen CO.,LTD</p>
-          <p style="margin:8px 0; font-size: 15px;">Số tài khoản VNĐ (Bank account)越南银行账号: 3703486766</p>
-          <p style="margin:8px 0; font-size: 15px;">Số tài khoản USD (Bank account)美金账号: 0584723984634</p>
+          <p style="margin:8px 0; font-size: 15px;"><strong>Số tài khoản (Bank Account):</strong> <span class="bind-dn-stk">...</span></p>
         </div>
         <div class="doc-title"
           style="margin-top:10px; margin-bottom: 15px; font-family: 'Times New Roman', serif; text-align: center; line-height: 1.1;">
@@ -853,12 +891,12 @@
 
         <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: 10px;">
           <div style="text-align: center; font-family: 'Times New Roman', serif; break-inside: avoid; page-break-inside: avoid;">
-            <p style="margin: 0; line-height: 1.1; font-weight:bold; font-size:15.5px; white-space: nowrap;">CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM</p>
-            <p style="margin: 3px 0 0 0; line-height: 1.1; font-weight:bold; font-size:15px; font-family: 'SimSun', 'Times New Roman', serif; white-space: nowrap;">越南华森国际商贸有限公司</p>
+            <p style="margin: 0; line-height: 1.1; font-weight:bold; font-size:15.5px; white-space: nowrap;"><span class="bind-dn-ten">...</span></p>
+            <p style="margin: 3px 0 0 0; line-height: 1.1; font-weight:bold; font-size:15px; font-family: 'SimSun', 'Times New Roman', serif; white-space: nowrap; display:none;" class="bind-dn-ten-cn-wrapper"><span class="bind-dn-ten-cn">...</span></p>
             
             <div style="height: 130px; margin-top: 10px;">
                <p style="margin: 0; margin-bottom: 5px; font-size:14px; font-style:italic; transform: translateY(0); position: relative; z-index: 2;">(Ký tên & đóng dấu / 签字盖章)</p>
-               <img src="./Picture2.png" style="width:180px; display: block; margin: 0 auto; transform: translateY(0); position: relative; z-index: 1;">
+               <img class="bind-stamp-img" src="" style="width:180px; display: none; margin: 0 auto; transform: translateY(0); position: relative; z-index: 1;">
             </div>
           </div>
         </div>
@@ -868,16 +906,13 @@
         <!-- STEP 2: CONTRACT -->
     <div class="step-content" id="step-2">
       <div class="card" style="margin-bottom: 24px;">
-        <h2>Chọn Loại Hợp Đồng</h2>
+        <h2>Chọn Phân Loại Giao Dịch</h2>
         <div style="display:flex; gap: 30px; margin-top: 10px;">
           <label style="display:flex; align-items:center; gap:8px; font-size:15px; cursor:pointer;">
-            <input type="radio" name="contract_type" id="radio-gk" value="gk"> Hợp Đồng Giao Khoán
-          </label>
-          <label style="display:none; align-items:center; gap:8px; font-size:15px; cursor:pointer;">
-            <input type="radio" name="contract_type" id="radio-kt" value="kt"> Hợp Đồng Kinh Tế
+            <input type="radio" name="contract_branch" id="radio-branch-dv" value="dv" checked> Dịch Vụ Công Trình
           </label>
           <label style="display:flex; align-items:center; gap:8px; font-size:15px; cursor:pointer;">
-            <input type="radio" name="contract_type" id="radio-nt" value="nt" checked> Hợp Đồng Nguyên Tắc
+            <input type="radio" name="contract_branch" id="radio-branch-kt" value="kt"> Kinh Tế Mua Bán
           </label>
         </div>
       </div>
@@ -1259,8 +1294,8 @@
         <div style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; break-inside: avoid; page-break-inside: avoid;">
           <div style="width: 50%; font-weight: bold;">
             <p style="margin: 0;">ĐẠI DIỆN BÊN A</p>
-            <img src="./Picture2.png"
-              style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
+            <img class="bind-stamp-img" src=""
+              style="width: 200px; display: none; margin: -10px auto 0 auto; position: relative; z-index: -1;">
           </div>
           <div style="width: 50%; font-weight: bold;">
             <p style="margin: 0;">ĐẠI DIỆN BÊN B</p>
@@ -1292,44 +1327,44 @@
           </div>
           <p style="margin-top:10px;">Hôm nay, ngày <strong class="bind-ngay">...</strong> tháng <strong class="bind-thang">...</strong> năm <strong class="bind-nam">...</strong>, chúng tôi gồm có :<br>今日，<strong class="bind-nam">...</strong>年 <strong class="bind-thang">...</strong> 月 <strong class="bind-ngay">...</strong> 日，雙方包括：</p>
 
-          <table style="width:100%; border-collapse:collapse; margin-top:10px; margin-bottom:20px;" border="1">
+          <table style="width:calc(100% - 2px); box-sizing:border-box; border:1px solid #000; border-collapse:collapse; margin-top:10px; margin-bottom:20px;">
             <tr>
-              <td style="width:15%; padding:10px; text-align:center;"></td>
-              <td style="width:42.5%; padding:10px; text-align:center;"><strong>BÊN A 方 (BÊN BÁN 賣方)</strong></td>
-              <td style="width:42.5%; padding:10px; text-align:center;"><strong>BÊN B 方 (BÊN MUA 買方)</strong></td>
+              <td style="border:1px solid #000; width:15%; padding:10px; text-align:center;"></td>
+              <td style="border:1px solid #000; width:42.5%; padding:10px; text-align:center;"><strong>BÊN A 方 (BÊN BÁN 賣方)</strong></td>
+              <td style="border:1px solid #000; width:42.5%; padding:10px; text-align:center;"><strong>BÊN B 方 (BÊN MUA 買方)</strong></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center;"><strong>Đơn vị<br>單位</strong></td>
-              <td style="padding:8px 10px; text-align:center;"><strong><span class="bind-dn-ten">...</span></strong></td>
-              <td style="padding:8px 10px; text-align:center;"><strong><span class="bind-kh-ten">...</span></strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong>Đơn vị<br>單位</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong><span class="bind-dn-ten">...</span></strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong><span class="bind-kh-ten">...</span></strong></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center;"><strong>Địa chỉ<br>地址</strong></td>
-              <td style="padding:8px 10px;"><span class="bind-dn-diachi">...</span></td>
-              <td style="padding:8px 10px;"><span class="bind-kh-diachi">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong>Địa chỉ<br>地址</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px;"><span class="bind-dn-diachi">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px;"><span class="bind-kh-diachi">...</span></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center; vertical-align:middle;"><strong>Điện thoại<br>電話</strong></td>
-              <td style="padding:8px 10px; text-align:center; vertical-align:middle;"><span class="bind-dn-sdt">...</span></td>
-              <td style="padding:8px 10px; text-align:center; vertical-align:middle;"><span class="bind-kh-sdt">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center; vertical-align:middle;"><strong>Điện thoại<br>電話</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center; vertical-align:middle;"><span class="bind-dn-sdt">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center; vertical-align:middle;"><span class="bind-kh-sdt">...</span></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center; vertical-align:middle;"><strong>Tài khoản<br>帳號</strong></td>
-              <td style="padding:8px 10px; vertical-align:middle;"><span class="bind-dn-stk">...</span></td>
-              <td style="padding:8px 10px; vertical-align:middle;"><span class="bind-kh-stk">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center; vertical-align:middle;"><strong>Tài khoản<br>帳號</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; vertical-align:middle;"><span class="bind-dn-stk">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; vertical-align:middle;"><span class="bind-kh-stk">...</span></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center;"><strong>MST<br>統一編號</strong></td>
-              <td style="padding:8px 10px; text-align:center;"><span class="bind-dn-mst">...</span></td>
-              <td style="padding:8px 10px; text-align:center;"><span class="bind-kh-mst">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong>MST<br>統一編號</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><span class="bind-dn-mst">...</span></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><span class="bind-kh-mst">...</span></td>
             </tr>
             <tr>
-              <td style="padding:8px 10px; text-align:center;"><strong>Đại diện<br>代理人</strong></td>
-              <td style="padding:8px 10px; text-align:center;">
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;"><strong>Đại diện<br>代理人</strong></td>
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;">
                 <strong><span class="bind-dn-daidien">...</span></strong><br>
                 <strong>Chức vụ: <span class="bind-dn-chucvu">...</span></strong>
               </td>
-              <td style="padding:8px 10px; text-align:center;">
+              <td style="border:1px solid #000; padding:8px 10px; text-align:center;">
                 <strong><span class="bind-kh-daidien">...</span></strong><br>
                 <strong>Chức vụ: <span class="bind-kh-chucvu">...</span></strong>
               </td>
@@ -1411,7 +1446,7 @@
           <div style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; break-inside: avoid; page-break-inside: avoid;">
             <div style="width: 50%; font-weight: bold;">
               <p style="margin: 0;">ĐẠI DIỆN BÊN A<br>A 方 (賣方)</p>
-              <img src="./Picture2.png" style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
+              <img class="bind-stamp-img" src="" style="width: 200px; display: none; margin: -10px auto 0 auto; position: relative; z-index: -1;">
             </div>
             <div style="width: 50%; font-weight: bold;">
               <p style="margin: 0;">ĐẠI DIỆN BÊN B<br>B 方(買方)</p>
@@ -1504,8 +1539,8 @@
             style="display: flex; justify-content: space-between; margin-top: 15px; text-align: center; min-height: 250px;">
             <div style="width: 50%; font-weight: bold;">
               <p style="margin: 0;">ĐẠI DIỆN BÊN A</p>
-              <img src="./Picture2.png"
-                style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
+              <img class="bind-stamp-img" src=""
+                style="width: 200px; display: none; margin: -10px auto 0 auto; position: relative; z-index: -1;">
             </div>
             <div style="width: 50%; font-weight: bold;">
               <p style="margin: 0;">ĐẠI DIỆN BÊN B</p>
@@ -1560,8 +1595,8 @@
           style="display: flex; justify-content: space-between; margin-top: 30px; text-align: center; break-inside: avoid; page-break-inside: avoid;">
           <div style="width: 50%; font-weight: bold;">
             <p style="margin: 0;">ĐẠI DIỆN BÊN A</p>
-            <img src="./Picture2.png"
-              style="width: 200px; display: block; margin: -10px auto 0 auto; position: relative; z-index: -1;">
+            <img class="bind-stamp-img" src=""
+              style="width: 200px; display: none; margin: -10px auto 0 auto; position: relative; z-index: -1;">
           </div>
           <div style="width: 50%; font-weight: bold;">
             <p style="margin: 0;">ĐẠI DIỆN BÊN B</p>
@@ -1575,19 +1610,20 @@
         <div class="doc-preview" id="preview-bbgh" style="margin-top: 40px; font-family: 'Times New Roman', serif;">
           <table style="width:100%; border:none; margin-bottom: 5px;">
             <tr>
-              <td style="width:160px; border:none; vertical-align:top; text-align:left; padding-right:0;">
-                <img src="./Picture1.png" alt="Logo" style="width:160px; max-width:none; position:relative; top:-20px; left:0;">
+              <td class="bind-logo-cell" style="width:160px; border:none; vertical-align:top; text-align:left; padding-right:0; display:none;">
+                <!-- LOGO -->
+                <img class="bind-logo-img" src="" alt="Logo" style="width:160px; max-width:none; position:relative; top:-20px; left:0; display:none;">
               </td>
               <td style="text-align:center; border:none; vertical-align:top; padding-left:10px;">
                 <h2 style="margin:0; line-height: 1.1; font-size: 19px; font-weight: bold;">
-                  CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM<br>
-                  <span style="font-size: 17px;">越南华森国际商贸有限公司</span>
+                  <span class="bind-dn-ten">...</span><br>
+                  <span class="bind-dn-ten-cn-wrapper" style="display:none;"><span class="bind-dn-ten-cn" style="font-size: 17px;">...</span></span>
                 </h2>
                 <div style="border-bottom: 2px solid #14068f; margin: 8px 0;"></div>
                 <p style="margin:4px 0; font-size: 14.5px; white-space:nowrap;">
                   <strong>Địa chỉ:</strong> <span class="bind-dn-diachi">...</span>
                 </p>
-                <p style="margin:4px 0; font-size: 14.5px; white-space:nowrap;">地址: 越南，胡志明市，安富坊，胡志明市安富坊省道743号1B街区24组2/1号</p>
+                <p class="bind-dn-diachi-cn-wrapper" style="margin:4px 0; font-size: 14.5px; white-space:nowrap; display:none;">地址: <span class="bind-dn-diachi-cn">...</span></p>
                 <p style="margin:4px 0; font-size: 14.5px; white-space:nowrap;">
                   <strong>Mã số thuế/税号:</strong> <span class="bind-dn-mst">...</span> &nbsp;&nbsp;&nbsp;
                   <strong>Tel/电话:</strong> <span class="bind-dn-sdt">...</span> &nbsp;&nbsp;&nbsp;
@@ -1598,15 +1634,8 @@
           </table>
 
           <div style="display:flex; justify-content:space-between; font-size:15px; margin-bottom: 20px;">
-            <div style="width:50%;">
-              <p style="margin:4px 0;"><strong>Tên tài khoản:</strong> VN Hua Sen CO.,LTD</p>
-              <p style="margin:4px 0;"><strong>Số TK VNĐ:</strong> 3703486766</p>
-              <p style="margin:4px 0;"><strong>Số TK USD:</strong> 0584723984634</p>
-            </div>
-            <div style="width:50%; text-align:right;">
-              <p style="margin:4px 0;">Tại: Ngân hàng thương mại Cổ phần</p>
-              <p style="margin:4px 0;">Quân Đội Việt Nam (MB Bank)</p>
-              <p style="margin:4px 0;">- CN Bình Dương - PGD Đông Bình Dương</p>
+            <div style="width:100%;">
+              <p style="margin:4px 0;"><strong>Thông tin thanh toán (Bank Account):</strong> <span class="bind-dn-stk">...</span></p>
             </div>
           </div>
 
@@ -1674,7 +1703,7 @@
             <div style="width: 50%; font-weight: bold; font-size:16px;">
               <p style="margin: 0; margin-bottom:5px;">Người giao hàng / <span style="font-family:'SimSun';">送货人</span></p>
               <p style="margin: 0; font-size:14px; font-style:italic; font-weight:normal;">(Ký, ghi rõ họ tên / <span style="font-family:'SimSun';">签字全名</span>)</p>
-              <img src="./Picture2.png" style="width: 180px; display: block; margin: 0 auto; position: relative; z-index: -1;">
+              <img class="bind-stamp-img" src="" style="width: 180px; display: none; margin: 0 auto; position: relative; z-index: -1;">
             </div>
           </div>
         </div>
@@ -1687,7 +1716,8 @@
         <p>Kiểm tra các văn bản bên dưới và chọn để xuất cùng lúc dưới dạng Word.</p>
       </div>
       <div class="preview-grid">
-        <div class="preview-box">
+
+        <div class="preview-box" id="box-quote">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
               <input type="checkbox" id="chk-quote" checked> BÁO GIÁ
@@ -1695,15 +1725,15 @@
           </div>
           <div class="box-content" id="mini-preview-1"></div>
         </div>
-        <div class="preview-box">
+        <div class="preview-box" id="box-contract-gk">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
-              <input type="checkbox" id="chk-contract-gk"> HỢP ĐỒNG GIAO KHOÁN
+              <input type="checkbox" id="chk-contract-gk" checked> HỢP ĐỒNG GIAO KHOÁN
             </label>
           </div>
           <div class="box-content" id="mini-preview-2"></div>
         </div>
-        <div class="preview-box" style="display:none;">
+        <div class="preview-box" id="box-contract-kt" style="display:none;">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
               <input type="checkbox" id="chk-contract-kt"> HỢP ĐỒNG KINH TẾ
@@ -1711,15 +1741,15 @@
           </div>
           <div class="box-content" id="mini-preview-kt"></div>
         </div>
-        <div class="preview-box">
+        <div class="preview-box" id="box-contract-nt" style="display:none;">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
-              <input type="checkbox" id="chk-contract-nt" checked> HỢP ĐỒNG NGUYÊN TẮC
+              <input type="checkbox" id="chk-contract-nt"> HỢP ĐỒNG NGUYÊN TẮC
             </label>
           </div>
           <div class="box-content" id="mini-preview-nt"></div>
         </div>
-        <div class="preview-box">
+        <div class="preview-box" id="box-appendix">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
               <input type="checkbox" id="chk-appendix" checked> PHỤ LỤC
@@ -1727,10 +1757,10 @@
           </div>
           <div class="box-content" id="mini-preview-3"></div>
         </div>
-        <div class="preview-box">
+        <div class="preview-box" id="box-bbnt">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
-              <input type="checkbox" id="chk-bbnt" checked> BIÊN BẢN NGHIỆM THU
+              <input type="checkbox" id="chk-bbnt" checked> <span id="label-bbnt">BIÊN BẢN NGHIỆM THU</span>
             </label>
           </div>
           <div class="box-content" id="mini-preview-4"></div>
@@ -1756,7 +1786,7 @@
   </div>
 
   <div id="toast-container"></div>
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=12"></script>
 
 </div></main>
 </div></body>

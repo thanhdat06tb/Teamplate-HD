@@ -290,6 +290,7 @@
       <div class="tabs">
         <button id="tab-khach" class="tab-btn active" onclick="switchTab('khach')">HỢP ĐỒNG KHÁCH</button>
         <button id="tab-huasen" class="tab-btn" onclick="switchTab('huasen')">HỢP ĐỒNG HUASEN</button>
+        <button id="tab-don" class="tab-btn" onclick="switchTab('don')">ĐƠN HỢP ĐỒNG</button>
       </div>
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="Tìm kiếm theo mã số hợp đồng, mã báo giá...">
@@ -364,22 +365,25 @@
       currentTab = tab;
       document.getElementById('tab-khach').classList.toggle('active', tab === 'khach');
       document.getElementById('tab-huasen').classList.toggle('active', tab === 'huasen');
+      document.getElementById('tab-don').classList.toggle('active', tab === 'don');
       applyFilters();
     }
 
     function applyFilters() {
       const val = document.getElementById('search-input').value.toLowerCase().trim();
       let filtered = allContracts.filter(c => {
+         const isDon = c.category === 'don';
          let isHuasen = c.category === 'huasen';
-         if (!c.category && c.html_content) {
+         if (!c.category && c.html_content && !isDon) {
              const htmlLower = c.html_content.toLowerCase();
              if (htmlLower.includes('hua sen') || htmlLower.includes('huasen') || htmlLower.includes('华森')) {
                  isHuasen = true;
              }
          }
          
-         if (currentTab === 'huasen' && !isHuasen) return false;
-         if (currentTab === 'khach' && isHuasen) return false;
+         if (currentTab === 'don') return isDon;
+         if (currentTab === 'huasen') return isHuasen && !isDon;
+         if (currentTab === 'khach') return !isHuasen && !isDon;
          return true;
       });
 

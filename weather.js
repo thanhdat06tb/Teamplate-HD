@@ -1,302 +1,389 @@
 /**
- * Hệ Thống Thời Tiết 4D - AntiGravity AI
- * Kịch bản Điện Ảnh: Bầu trời -> Video Background
+ * Hệ Thống Thời Tiết 4 Mùa & Ngôi Nhà Cấp 4 Nông Thôn 1945
+ * Xuân (Sáng) -> Thu (Hoàng hôn, đèn mờ) -> Mưa bão (Đèn sáng rực)
  */
 
-// 1. TẠO LỚP VIDEO NỀN
-const video = document.createElement('video');
-video.id = "weather-video";
-video.src = "assets/city_rain.mp4"; // Nguồn cấp từ người dùng
-video.autoplay = true;
-video.loop = true;
-video.muted = true;
-video.style.position = "absolute";
-video.style.top = "0";
-video.style.left = "0";
-video.style.width = "100%";
-video.style.height = "100%";
-video.style.objectFit = "cover";
-video.style.zIndex = "-2"; 
-video.style.opacity = "0"; // Ẩn lúc ban đầu
-video.style.transition = "opacity 2s ease-in-out"; // Fade hiệu ứng mượt mà
-video.style.pointerEvents = "none";
-
-// 2. TẠO LỚP CANVAS BẦU TRỜI
 const canvas = document.createElement('canvas');
 canvas.id = "weather-canvas";
-canvas.style.position = "absolute";
-canvas.style.top = "0";
-canvas.style.left = "0";
-canvas.style.width = "100%";
-canvas.style.height = "100%";
-canvas.style.zIndex = "-1"; 
-canvas.style.opacity = "1";
-canvas.style.transition = "opacity 1.5s ease-in-out"; // Chuyển cảnh mờ Canvas
-canvas.style.pointerEvents = "none";
+Object.assign(canvas.style, {
+  position: "absolute", top: "0", left: "0",
+  width: "100%", height: "100%",
+  zIndex: "-1", pointerEvents: "none"
+});
 
 document.addEventListener("DOMContentLoaded", () => {
-    const overlay = document.getElementById("auth-overlay");
-    if (overlay) {
-        overlay.appendChild(video);
-        overlay.appendChild(canvas);
-        overlay.style.background = "transparent"; 
-    }
+  const overlay = document.getElementById("auth-overlay");
+  if (!overlay) return;
+  overlay.appendChild(canvas);
+  overlay.style.background = "transparent";
+
+  const emailInput = document.getElementById("login-email");
+  const passInput = document.getElementById("login-pass");
+
+  if (emailInput) {
+    emailInput.addEventListener("focus", () => setWeatherState(1)); // Autumn & Window Light
+    emailInput.addEventListener("blur", () => {
+      if (document.activeElement !== passInput) setWeatherState(0); // Spring
+    });
+  }
+  if (passInput) {
+    passInput.addEventListener("focus", () => setWeatherState(2)); // Storm & Full Light
+    passInput.addEventListener("blur", () => setWeatherState(0));
+  }
 });
 
 const ctx = canvas.getContext('2d');
 let w, h;
-let weatherLevel = 0; // 0 = Sunny, 1 = Storm, 2 = Video Rain
+let weatherLevel = 0; // 0=Spring, 1=Autumn, 2=Storm
+let frameCount = 0;
+
+// -------- SCENE DATA --------
+const sky = { r: 135, g: 206, b: 235, r2: 240, g2: 250, b2: 255 };
+const targetSpring = { r: 135, g: 206, b: 235, r2: 240, g2: 250, b2: 255 };
+const targetAutumn = { r: 240, g: 140, b: 70,  r2: 255, g2: 200, b2: 120 };
+const targetStorm  = { r: 30,  g: 40,  b: 55,  r2: 50,  g2: 60,  b2: 75 };
+
+const clouds = [];
+const birds = [];
+const raindrops = [];
+const branches = [];
+const leaves = [];
 let lightningFlash = 0;
-let stormCloudX = -1000; 
+let lightningBolts = [];
+let lightningTimer = 0;
+let houseLightOpacity = 0;
 
 function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  initTree();
 }
 window.addEventListener('resize', resize);
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function initScene() {
+  for (let i = 0; i < 15; i++) clouds.push({ x: Math.random() * 2000 - 200, y: Math.random() * 300 + 50, size: Math.random() * 80 + 40, speed: Math.random() * 0.3 + 0.1 });
+  for (let i = 0; i < 6; i++) birds.push({ x: Math.random() * w, y: Math.random() * 200 + 100, size: Math.random() * 3 + 3, speed: Math.random() * 1 + 0.5, flap: Math.random() * Math.PI * 2, flapSpeed: Math.random() * 0.05 + 0.05 });
+  for (let i = 0; i < 400; i++) raindrops.push({ x: Math.random() * 3000 - 500, y: Math.random() * 1200 - 200, len: Math.random() * 20 + 10, speed: Math.random() * 20 + 15, windX: Math.random() * 10 + 5, z: Math.random() * 2 + 1 });
+}
+
+function initTree() {
+  branches.length = 0;
+  leaves.length = 0;
+  const treeRootX = w < 800 ? w * 0.2 : w * 0.15;
+  const treeRootY = h + 20;
+
+  function build(x, y, len, angle, depth) {
+    const endX = x + Math.cos(angle) * len;
+    const endY = y + Math.sin(angle) * len;
+    branches.push({x1: x, y1: y, x2: endX, y2: endY, width: (depth + 1.5) * 2});
+    
+    if (depth > 0) {
+      build(endX, endY, len * (0.75 + Math.random()*0.1), angle - 0.25 - Math.random()*0.2, depth - 1);
+      build(endX, endY, len * (0.75 + Math.random()*0.1), angle + 0.25 + Math.random()*0.2, depth - 1);
+      if (depth > 3 && Math.random() < 0.45) build(endX, endY, len * 0.65, angle + (Math.random()-0.5)*0.5, depth - 1);
+    } else {
+      for (let i = 0; i < 5; i++) leaves.push({ x: endX + (Math.random()-0.5)*40, y: endY + (Math.random()-0.5)*40, baseX: endX, baseY: endY, attached: true, scale: 0, r: 34, g: 139, b: 34, rot: Math.random()*Math.PI*2, rotS: (Math.random()-0.5)*0.2, vx: 0, vy: 0 });
+    }
+  }
+  build(treeRootX, treeRootY, Math.min(140, h * 0.2), -Math.PI / 2, 7); 
+}
+initScene();
 resize();
 
 
-// -------- SKY DATA --------
-let skyColor = { r: 135, g: 206, b: 235, r2: 240, g2: 250, b2: 255 };
-const targetSunny = { r: 135, g: 206, b: 235, r2: 240, g2: 250, b2: 255 }; 
-const targetStorm = { r: 25, g: 30, b: 45, r2: 50, g2: 60, b2: 70 }; 
+// ======== ENVIRONMENT DRAWING ========
 
-const rainDrops = [];
-const clouds = [];
-const birds = [];
-const leaves = [];
-function initSky() {
-    // Không cần quá nhiều hạt mưa vì Video đã đảm nhiệm, chỉ để lại một ít mờ mờ
-    for (let i = 0; i < 150; i++) {
-        rainDrops.push({
-            x: Math.random() * w * 1.5 - w * 0.25,
-            y: Math.random() * h, 
-            l: Math.random() * 20 + 20,
-            xs: Math.random() * 3 + 1,
-            ys: Math.random() * 20 + 15,
-            o: 0 
-        });
-    }
-    for (let i = 0; i < 60; i++) {
-        leaves.push({
-            x: Math.random() * w * 1.5 - w * 0.2, // Spread out widely
-            y: Math.random() * (h - 100), // Sky and lower parts
-            size: Math.random() * 8 + 4,
-            speedX: Math.random() * 10 + 15, // Fast sweeping wind
-            speedY: Math.random() * 4 - 2,
-            rot: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() * 0.4 - 0.2),
-            color: Math.random() > 0.6 ? '#65a30d' : (Math.random() > 0.5 ? '#a16207' : '#4d7c0f'), // greens and browns
-            o: 0 // opacity
-        });
-    }
-    for(let i=0; i<6; i++) {
-        clouds.push({
-            x: Math.random() * w, 
-            y: Math.random() * (h/2) + 250,
-            size: Math.random() * 80 + 60, 
-            baseSpeed: Math.random() * 0.2 + 0.1,
-            dir: (i % 2 === 0) ? -1 : 1
-        });
-    }
-    for(let i=0; i<8; i++){
-        birds.push({
-            x: Math.random() * w,
-            y: Math.random() * (h/3) + 100,
-            size: Math.random() * 4 + 4,
-            speed: Math.random() * 1 + 0.5,
-            flap: Math.random() * Math.PI * 2,
-            flapspeed: Math.random() * 0.05 + 0.05
-        });
-    }
+function drawSun() {
+  const sunX = w > 800 ? w - 250 : w - 100;
+  drawSun.op = lerp(drawSun.op || 1, weatherLevel === 2 ? 0 : 1, 0.02);
+  if (drawSun.op < 0.01) return;
+
+  const sunColor = weatherLevel === 1 ? "#FF5533" : "#FFD700";
+  const glowColor = weatherLevel === 1 ? "rgba(255, 100, 0, 0.55)" : "rgba(255, 220, 60, 0.5)";
+
+  ctx.globalAlpha = drawSun.op;
+  const glow = ctx.createRadialGradient(sunX, 150, 20, sunX, 150, 160);
+  glow.addColorStop(0, glowColor); glow.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(sunX, 150, 160, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = sunColor; ctx.beginPath(); ctx.arc(sunX, 150, 50, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
 }
 
-initSky();
+function drawClouds() {
+  const cTarget = weatherLevel===2 ? {r:30,g:35,b:45} : (weatherLevel===1 ? {r:255,g:210,b:170} : {r:255,g:255,b:255});
+  if(!clouds.color) clouds.color = {r:255,g:255,b:255};
+  
+  clouds.color.r = lerp(clouds.color.r, cTarget.r, 0.02);
+  clouds.color.g = lerp(clouds.color.g, cTarget.g, 0.02);
+  clouds.color.b = lerp(clouds.color.b, cTarget.b, 0.02);
 
-function lerp(start, end, amt) { return (1 - amt) * start + amt * end; }
-let frameCount = 0;
-
-// -------- DRAW FUNCTIONS --------
-function drawSun(sunX, sunY, radius, panicked) {
-    let glowGradient = ctx.createRadialGradient(sunX, sunY, radius * 0.5, sunX, sunY, radius * 2);
-    glowGradient.addColorStop(0, "rgba(255, 215, 0, 0.4)");
-    glowGradient.addColorStop(1, "rgba(255, 215, 0, 0)");
-    ctx.fillStyle = glowGradient;
-    ctx.beginPath(); ctx.arc(sunX, sunY, radius * 2, 0, Math.PI * 2); ctx.fill();
-
-    ctx.fillStyle = "#FFD700";
-    ctx.beginPath(); ctx.arc(sunX, sunY, radius, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = "#B8860B"; ctx.fillStyle = "#B8860B";
-    ctx.lineWidth = 3; ctx.lineCap = "round";
-
-    if (!panicked) {
-        ctx.beginPath(); ctx.arc(sunX - radius*0.3, sunY - radius*0.1, 4, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(sunX + radius*0.3, sunY - radius*0.1, 4, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(sunX, sunY + radius*0.1, radius*0.4, 0, Math.PI); ctx.stroke();
-    } else {
-        ctx.fillStyle = "#FFF";
-        ctx.beginPath(); ctx.arc(sunX - radius*0.35, sunY - radius*0.15, 9, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(sunX + radius*0.35, sunY - radius*0.15, 9, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = "#000";
-        ctx.beginPath(); ctx.arc(sunX - radius*0.35, sunY - radius*0.15, 4, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(sunX + radius*0.35, sunY - radius*0.15, 4, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(sunX, sunY + radius*0.35, radius*0.2, radius*0.25, 0, 0, Math.PI*2); ctx.stroke();
-        let waveTime = frameCount * 0.4;
-        let leftWave = Math.sin(waveTime) * 15;
-        let rightWave = Math.cos(waveTime) * 15;
-        ctx.beginPath(); ctx.moveTo(sunX - radius + 5, sunY + 10); ctx.quadraticCurveTo(sunX - radius - 20, sunY + 10, sunX - radius - 30, sunY - 10 + leftWave); ctx.stroke();
-        ctx.beginPath(); ctx.arc(sunX - radius - 30, sunY - 10 + leftWave, 6, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.moveTo(sunX + radius - 5, sunY + 10); ctx.quadraticCurveTo(sunX + radius + 20, sunY + 10, sunX + radius + 30, sunY - 10 + rightWave); ctx.stroke();
-        ctx.beginPath(); ctx.arc(sunX + radius + 30, sunY - 10 + rightWave, 6, 0, Math.PI * 2); ctx.fill();
-    }
-}
-
-function drawStormCloud(x, y, scale, alpha) {
-    ctx.fillStyle = `rgba(60, 65, 75, ${alpha})`;
+  ctx.fillStyle = `rgb(${clouds.color.r},${clouds.color.g},${clouds.color.b})`;
+  ctx.globalAlpha = weatherLevel === 2 ? 0.9 : 0.8;
+  
+  clouds.forEach(c => {
+    c.x -= c.speed * (weatherLevel === 2 ? 5 : 1.5); // Fast clouds
+    if (c.x < -c.size * 3) { c.x = w + c.size * 2; c.y = Math.random() * 300 + 50; }
     ctx.beginPath();
-    ctx.arc(x, y, 60*scale, 0, Math.PI * 2);
-    ctx.arc(x + 40*scale, y - 40*scale, 50*scale, 0, Math.PI * 2);
-    ctx.arc(x + 100*scale, y - 20*scale, 70*scale, 0, Math.PI * 2);
-    ctx.arc(x + 150*scale, y + 10*scale, 60*scale, 0, Math.PI * 2);
+    ctx.arc(c.x, c.y, c.size * 0.6, 0, Math.PI * 2);
+    ctx.arc(c.x + c.size * 0.4, c.y - c.size * 0.3, c.size * 0.5, 0, Math.PI * 2);
+    ctx.arc(c.x + c.size * 0.9, c.y - c.size * 0.1, c.size * 0.55, 0, Math.PI * 2);
+    ctx.arc(c.x + c.size * 1.3, c.y + c.size * 0.05, c.size * 0.45, 0, Math.PI * 2);
     ctx.fill();
+  });
+  ctx.globalAlpha = 1;
 }
 
+function drawBirds() {
+  birds.op = lerp(birds.op || 1, weatherLevel < 2 ? 1 : 0, 0.05);
+  if (birds.op < 0.01) return;
 
-// -------- MAIN LOOP --------
+  ctx.globalAlpha = birds.op;
+  ctx.strokeStyle = "#2b2b2b"; ctx.lineWidth = 1.5; ctx.lineCap = "round";
+
+  birds.forEach(b => {
+    b.x -= b.speed; b.flap += b.flapSpeed; b.y += Math.sin(frameCount * 0.02 + b.flap) * 0.3;
+    if (b.x < -20) { b.x = w + 50 + Math.random() * 200; b.y = Math.random() * 200 + 50; }
+    let wingY = Math.sin(b.flap) * b.size;
+    ctx.beginPath(); ctx.moveTo(b.x + b.size, b.y - wingY); ctx.lineTo(b.x, b.y); ctx.lineTo(b.x - b.size, b.y - wingY); ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function drawTreeAndLeaves() {
+  ctx.strokeStyle = weatherLevel === 2 ? "#1a1c1d" : "#3e2723"; ctx.lineCap = "round";
+  branches.forEach(b => {
+    ctx.lineWidth = b.width; ctx.beginPath(); ctx.moveTo(b.x1, b.y1); ctx.lineTo(b.x2, b.y2); ctx.stroke();
+  });
+
+  const isAutumn = weatherLevel === 1; const isStorm = weatherLevel === 2; const isSpring = weatherLevel === 0;
+
+  leaves.forEach(l => {
+    const tR = isAutumn ? 228 : (isStorm ? 110 : 34);
+    const tG = isAutumn ? 155 : (isStorm ? 120 : 139);
+    const tB = isAutumn ? 42  : (isStorm ? 30  : 34);
+    l.r = lerp(l.r, tR, 0.015); l.g = lerp(l.g, tG, 0.015); l.b = lerp(l.b, tB, 0.015);
+
+    if (isSpring) {
+      if (!l.attached) { l.attached = true; l.x = l.baseX + (Math.random()-0.5)*35; l.y = l.baseY + (Math.random()-0.5)*35; l.scale = 0; l.vx = 0; l.vy = 0; }
+      l.scale = lerp(l.scale, 1, 0.02);
+    } else if (isAutumn && l.attached) {
+      if (Math.random() < 0.0015) l.attached = false;
+    } else if (isStorm && l.attached) {
+      if (Math.random() < 0.025) l.attached = false;
+    }
+
+    if (!l.attached) {
+      l.vx = lerp(l.vx, isStorm ? 14 + Math.random()*5 : 2.5 + Math.random()*2, 0.05);
+      l.vy += 0.055; l.x += l.vx; l.y += l.vy + Math.sin(frameCount * 0.05 + l.rot) * 2; l.rot += l.rotS;
+    } else {
+      const ww = isStorm ? 4 : 1;
+      l.x = l.baseX + Math.sin(frameCount * 0.1 + l.baseY) * ww; l.y = l.baseY + Math.cos(frameCount * 0.12 + l.baseX) * ww;
+    }
+
+    if (l.scale > 0.01 && l.y < h + 20) {
+      ctx.save(); ctx.translate(l.x, l.y); ctx.rotate(l.rot); ctx.scale(l.scale, l.scale);
+      ctx.fillStyle = `rgb(${l.r},${l.g},${l.b})`; ctx.beginPath();
+      ctx.moveTo(0, -6); ctx.quadraticCurveTo(5, -2, 1, 4); ctx.quadraticCurveTo(0, 2, -1, 4); ctx.quadraticCurveTo(-5, -2, 0, -6); ctx.fill();
+      ctx.restore();
+    }
+  });
+}
+
+function drawTerrain() {
+  if(!drawTerrain.c) drawTerrain.c = {r:45,g:160,b:50};
+  const tr = weatherLevel === 1 ? 160 : (weatherLevel === 2 ? 30 : 45);
+  const tg = weatherLevel === 1 ? 130 : (weatherLevel === 2 ? 40 : 160);
+  const tb = weatherLevel === 1 ? 55  : (weatherLevel === 2 ? 30 : 50);
+
+  drawTerrain.c.r = lerp(drawTerrain.c.r, tr, 0.02);
+  drawTerrain.c.g = lerp(drawTerrain.c.g, tg, 0.02);
+  drawTerrain.c.b = lerp(drawTerrain.c.b, tb, 0.02);
+
+  ctx.fillStyle = `rgb(${drawTerrain.c.r},${drawTerrain.c.g},${drawTerrain.c.b})`;
+  ctx.beginPath();
+  ctx.moveTo(0, h); ctx.lineTo(0, h - 70);
+  ctx.quadraticCurveTo(w * 0.25, h - 120, w * 0.6, h - 60);
+  ctx.quadraticCurveTo(w * 0.8, h - 30, w, h - 80);
+  ctx.lineTo(w, h); ctx.fill();
+}
+
+function drawCountrysideHouse() {
+    const isStorm = weatherLevel === 2;
+    const isAutumn = weatherLevel === 1;
+
+    // Target light opacity: 0 in spring, 0.5 in autumn, 1.0 in storm
+    const targetLightOp = weatherLevel === 0 ? 0 : (weatherLevel === 1 ? 0.6 : 1.0);
+    houseLightOpacity = lerp(houseLightOpacity, targetLightOp, 0.03);
+
+    // Place house stably on the right side of the screen
+    // Lùi vào trong màn hình để không bị cắt nửa (w * 0.65)
+    const bx = w > 800 ? w * 0.65 : w * 0.5; 
+    
+    // Khớp tuyệt đối với đường cong của bãi cỏ (xấp xỉ h - 45 tại tọa độ w * 0.65)
+    const by = h - 45; 
+    
+    // Adjust colors based on weather state
+    const wallColor = isStorm ? "#3b3633" : (isAutumn ? "#8c725d" : "#c4a387"); // Tường nhà đất
+    const roofColor = isStorm ? "#4a1c1c" : (isAutumn ? "#8B2B2B" : "#B22222"); // Mái ngói đỏ
+    const shadowColor = isStorm ? "#24201e" : (isAutumn ? "#5a4534" : "#8c7a65");
+    const doorColor = isStorm ? "#211a14" : "#4a3322";
+
+    ctx.save();
+    ctx.translate(bx, by);
+    
+    // Bậc thềm hiên nhà (Grounded base)
+    ctx.fillStyle = shadowColor;
+    ctx.fillRect(-110, 0, 220, 10);
+    ctx.fillRect(-120, 10, 240, 10); // Bậc thang chạm sát mặt cỏ
+
+    // Vẽ tường chính (front-view)
+    ctx.fillStyle = wallColor;
+    ctx.fillRect(-100, -90, 200, 90);
+    
+    // Đổ bóng dưới mái
+    ctx.fillStyle = shadowColor;
+    ctx.fillRect(-100, -90, 200, 15);
+
+    // Vẽ Mái Ngói (Mái chữ A trùm ra ngoài)
+    ctx.fillStyle = roofColor;
+    ctx.beginPath();
+    ctx.moveTo(-120, -90); // Đuôi mái vươn ra khỏi tường trái
+    ctx.lineTo(0, -170);   // Nóc nhà ở giữa
+    ctx.lineTo(120, -90);  // Đuôi mái vươn ra khỏi tường phải
+    ctx.closePath();
+    ctx.fill();
+
+    // Viền mái nhà gỗ
+    ctx.strokeStyle = shadowColor;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(-120, -90); ctx.lineTo(0, -170); ctx.lineTo(120, -90);
+    ctx.stroke();
+
+    // Cửa chính giữa hiên
+    ctx.fillStyle = doorColor;
+    ctx.fillRect(-25, -70, 50, 70); // Cửa vòm hoặc gỗ chữ nhật
+    ctx.strokeStyle = shadowColor;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(-25, -70, 50, 70);
+    // Dọc cửa (2 cánh)
+    ctx.beginPath(); ctx.moveTo(0, -70); ctx.lineTo(0, 0); ctx.stroke();
+
+    // Hai cửa sổ đối xứng hai bên
+    ctx.fillStyle = isStorm ? "#14171a" : "#222a33";
+    ctx.fillRect(-85, -55, 40, 35); // Cửa sổ trái
+    ctx.fillRect(45, -55, 40, 35);  // Cửa sổ phải
+    
+    if (houseLightOpacity > 0.01) {
+        // Ánh đèn hắt ra từ 2 cửa sổ
+        ctx.fillStyle = `rgba(255, 210, 50, ${houseLightOpacity})`; 
+        ctx.fillRect(-85, -55, 40, 35);
+        ctx.fillRect(45, -55, 40, 35);
+
+        // Vệt ánh sáng tỏa xuống bãi cỏ
+        ctx.globalAlpha = houseLightOpacity * 0.35;
+        const glowGrd = ctx.createLinearGradient(0, -15, 0, 70);
+        glowGrd.addColorStop(0, "rgba(255, 200, 0, 1)");
+        glowGrd.addColorStop(1, "rgba(255, 200, 0, 0)");
+        ctx.fillStyle = glowGrd;
+        
+        // Vệt sáng chéo chữ A
+        ctx.beginPath();
+        ctx.moveTo(-85, -20); ctx.lineTo(-120, 70); ctx.lineTo(120, 70); ctx.lineTo(85, -20);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+    }
+
+    // Khung cửa sổ song dọc và ngang
+    ctx.strokeStyle = shadowColor;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(-85, -55, 40, 35);
+    ctx.strokeRect(45, -55, 40, 35);
+    
+    // Crossbars cửa sổ trái
+    ctx.beginPath(); ctx.moveTo(-65, -55); ctx.lineTo(-65, -20); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-85, -37.5); ctx.lineTo(-45, -37.5); ctx.stroke();
+    // Crossbars cửa sổ phải
+    ctx.beginPath(); ctx.moveTo(65, -55); ctx.lineTo(65, -20); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(45, -37.5); ctx.lineTo(85, -37.5); ctx.stroke();
+
+    ctx.restore();
+}
+
+function drawRainAndLightning() {
+  drawRainAndLightning.op = lerp(drawRainAndLightning.op || 0, weatherLevel === 2 ? 1 : 0, 0.03);
+
+  if (drawRainAndLightning.op > 0.01) {
+    ctx.lineCap = "round"; ctx.globalAlpha = drawRainAndLightning.op;
+    raindrops.forEach(r => {
+      r.x -= r.windX * r.z; r.y += r.speed * r.z;
+      if (r.y > h) { r.y = -100; r.x = Math.random() * (w + 600); }
+      ctx.strokeStyle = `rgba(180, 200, 220, ${0.4 / r.z})`; ctx.lineWidth = r.z * 1.5;
+      ctx.beginPath(); ctx.moveTo(r.x, r.y); ctx.lineTo(r.x - r.windX * r.z, r.y + r.len * r.z); ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  if (weatherLevel === 2) {
+    lightningTimer++;
+    if (lightningTimer > 70 + Math.random() * 100) {
+      lightningTimer = 0; lightningFlash = 1.0;
+      const p1x = Math.random() * w; const p2x = p1x + (Math.random() - 0.5) * 400;
+      const bolts = [];
+      function recurse(sx, sy, ex, ey, depth) {
+        if (depth <= 0) { bolts.push({x1:sx, y1:sy, x2:ex, y2:ey}); return; }
+        const mx = (sx+ex)/2 + (Math.random()-0.5)*100, my = (sy+ey)/2 + (Math.random()-0.5)*80;
+        recurse(sx, sy, mx, my, depth-1); recurse(mx, my, ex, ey, depth-1);
+        if(depth > 1 && Math.random() < 0.3) recurse(mx, my, mx+(Math.random()-0.5)*150, my+Math.random()*120, depth-2);
+      }
+      recurse(p1x, 0, p2x, h, 4); lightningBolts = bolts;
+    }
+  }
+
+  if (lightningFlash > 0) {
+    ctx.fillStyle = `rgba(180, 220, 255, ${lightningFlash * 0.25})`; ctx.fillRect(0, 0, w, h);
+    lightningBolts.forEach(seg => {
+      ctx.globalAlpha = lightningFlash;
+      ctx.strokeStyle = "rgba(100,200,255,0.4)"; ctx.lineWidth = 18;
+      ctx.beginPath(); ctx.moveTo(seg.x1, seg.y1); ctx.lineTo(seg.x2, seg.y2); ctx.stroke();
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(seg.x1, seg.y1); ctx.lineTo(seg.x2, seg.y2); ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+    lightningFlash -= 0.05; if (lightningFlash < 0) { lightningFlash = 0; lightningBolts = []; }
+  }
+}
+
+// ======== MAIN ========
 function draw() {
-    frameCount++;
-    ctx.clearRect(0, 0, w, h);
-    const lerpSpeed = 0.04;
-    
-    let sunX = w > 800 ? w - 250 : w - 100;
-    
-    // 0. State Machine Cập nhật CSS Fade
-    let isStormy = weatherLevel > 0;
-    
-    if (weatherLevel === 2) {
-        // Hiện video, làm chìm Canvas
-        video.style.opacity = "1";
-        canvas.style.opacity = "0"; 
-    } else {
-        // Chỉ mây bão, mây vẫn rõ
-        video.style.opacity = "0";
-        canvas.style.opacity = "1";
-    }
+  frameCount++; ctx.clearRect(0, 0, w, h);
 
-    // Nhưng dù mờ, canvas vẫn phải render vòng lặp trạng thái bão để khi Reset nó còn đúng vị trí
-    if (isStormy) {
-        stormCloudX = lerp(stormCloudX, sunX - 80, 0.025); 
-    } else {
-        stormCloudX = lerp(stormCloudX, -1000, 0.02); 
-    }
+  const tSky = weatherLevel === 0 ? targetSpring : (weatherLevel === 1 ? targetAutumn : targetStorm);
+  const spd = (weatherLevel === 2) ? 0.04 : 0.015;
 
-    // 1. Sky Transition 
-    const targetDark = isStormy ? targetStorm : targetSunny;
-    skyColor.r = lerp(skyColor.r, targetDark.r, lerpSpeed);
-    skyColor.g = lerp(skyColor.g, targetDark.g, lerpSpeed);
-    skyColor.b = lerp(skyColor.b, targetDark.b, lerpSpeed);
-    skyColor.r2 = lerp(skyColor.r2, targetDark.r2, lerpSpeed);
-    skyColor.g2 = lerp(skyColor.g2, targetDark.g2, lerpSpeed);
-    skyColor.b2 = lerp(skyColor.b2, targetDark.b2, lerpSpeed);
+  sky.r = lerp(sky.r, tSky.r, spd); sky.g = lerp(sky.g, tSky.g, spd); sky.b = lerp(sky.b, tSky.b, spd);
+  sky.r2= lerp(sky.r2,tSky.r2,spd); sky.g2= lerp(sky.g2,tSky.g2,spd); sky.b2= lerp(sky.b2,tSky.b2,spd);
 
-    let lFl = lightningFlash > 0 ? lightningFlash * 150 : 0;
-    let grad = ctx.createLinearGradient(0, 0, w, h);
-    grad.addColorStop(0, `rgb(${skyColor.r + lFl}, ${skyColor.g + lFl}, ${skyColor.b + lFl})`);
-    grad.addColorStop(1, `rgb(${skyColor.r2 + lFl}, ${skyColor.g2 + lFl}, ${skyColor.b2 + lFl})`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
+  const lF = lightningFlash > 0 ? lightningFlash * 150 : 0;
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, `rgb(${Math.min(255,sky.r+lF)},${Math.min(255,sky.g+lF)},${Math.min(255,sky.b+lF)})`);
+  grad.addColorStop(1, `rgb(${Math.min(255,sky.r2+lF)},${Math.min(255,sky.g2+lF)},${Math.min(255,sky.b2+lF)})`);
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
 
-    // DRAW SKY ELEMENTS
-    let sunY = 150; 
-    
-    drawSun(sunX, sunY, 50, isStormy);
+  drawSun();
+  drawClouds();
+  drawBirds();
+  drawTreeAndLeaves();
+  
+  drawCountrysideHouse();
 
-    const wcA = isStormy ? 0.0 : 0.9;
-    clouds.forEach(c => {
-        c.x += (isStormy ? c.baseSpeed * 25 : c.baseSpeed) * (isStormy ? c.dir : -1); 
-        if (!isStormy && c.x < -c.size * 2) c.x = w + c.size; 
-        if(!c.o) c.o = 1; c.o = lerp(c.o, wcA, lerpSpeed);
-        if (c.o > 0.01) {
-            ctx.fillStyle = `rgba(255, 255, 255, ${c.o})`;
-            ctx.beginPath(); ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
-            ctx.arc(c.x + c.size * 0.5, c.y - c.size * 0.3, c.size * 0.7, 0, Math.PI * 2);
-            ctx.arc(c.x + c.size * 1.2, c.y, c.size * 0.8, 0, Math.PI * 2); ctx.fill();
-        }
-    });
-
-    ctx.strokeStyle = "#111827"; ctx.lineWidth = 1.5; ctx.lineCap = "round"; ctx.lineJoin = "round";
-    birds.forEach(b => {
-        if(!b.o) b.o = 1; b.o = lerp(b.o, wcA, lerpSpeed * 2);
-        if(b.o > 0.01) {
-            b.x -= isStormy ? b.speed * 10 : b.speed;
-            if(!isStormy && b.x < -20) { b.x = w + 20; b.y = Math.random() * (h/3) + 100; }
-            b.flap += isStormy ? b.flapspeed * 4 : b.flapspeed; 
-            let wY = Math.sin(b.flap) * b.size; 
-            ctx.globalAlpha = b.o * 0.6; ctx.beginPath();
-            ctx.moveTo(b.x + b.size, b.y - wY); ctx.lineTo(b.x, b.y); ctx.lineTo(b.x - b.size, b.y - wY); ctx.stroke();
-        }
-    });
-    ctx.globalAlpha = 1.0;
-
-    // FLYING LEAVES
-    const leafOp = isStormy ? 1 : 0;
-    leaves.forEach(l => {
-        l.o = lerp(l.o, leafOp, lerpSpeed);
-        if (l.o > 0.01) {
-            ctx.globalAlpha = l.o;
-            ctx.fillStyle = l.color;
-            ctx.save();
-            ctx.translate(l.x, l.y);
-            ctx.rotate(l.rot);
-            ctx.beginPath(); ctx.ellipse(0, 0, l.size, l.size/2, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.restore();
-
-            l.x -= l.speedX;
-            l.y += l.speedY + Math.sin(frameCount * 0.1) * 2; 
-            l.rot += l.rotSpeed;
-
-            if (l.x < -20) {
-                l.x = w + Math.random() * 500;
-                l.y = Math.random() * (h - 100);
-            }
-        }
-    });
-    ctx.globalAlpha = 1.0;
-
-    let dCA = (stormCloudX + 800) / (sunX + 600); if (dCA < 0) dCA = 0; if (dCA > 1) dCA = 1;
-    for (let c = 0; c < 5; c++) {
-         drawStormCloud(stormCloudX - (c*180), sunY - 80 + (c*15), 1.6, dCA);
-         drawStormCloud(stormCloudX + 220 - (c*220), sunY - 10, 1.4, dCA * 0.9);
-    }
-    drawStormCloud(stormCloudX, sunY - 50, 2.3, dCA);
-
-    // DRAW RAIN CỦA CANVAS (Phủ lên mọi thứ)
-    const rainOp = (weatherLevel === 2) ? 1 : 0;
-    ctx.strokeStyle = "rgba(180,200,225,0.6)"; ctx.lineWidth = 1.2; ctx.lineCap = "round";
-    rainDrops.forEach(r => {
-        if(!r.ia) r.ia = 0; r.ia = lerp(r.ia, rainOp, lerpSpeed * 1.5);
-        if (r.ia > 0.01) {
-            ctx.globalAlpha = r.ia;
-            ctx.beginPath(); ctx.moveTo(r.x, r.y); ctx.lineTo(r.x - r.xs * 1.5, r.y + r.ys); ctx.stroke();
-            r.x -= r.xs; r.y += r.ys;
-            if (r.y > h || r.x < -r.l) { r.y = -r.l; r.x = Math.random() * w * 1.5 - w * 0.25; }
-        }
-    });
-    ctx.globalAlpha = 1.0;
-
-    // Lightning
-    if (isStormy && stormCloudX > sunX - 300) { 
-        if (Math.random() < 0.01 && lightningFlash === 0) lightningFlash = 1.0;
-        if (lightningFlash > 0) { lightningFlash -= 0.06; if (lightningFlash < 0) lightningFlash = 0; }
-    } else lightningFlash = 0;
-
-    requestAnimationFrame(draw);
+  drawTerrain(); 
+  drawRainAndLightning(); // Rain overlaps house
+  
+  requestAnimationFrame(draw);
 }
 
 draw();
-
-window.setWeatherState = function(lvl) {
-    if (lvl === 2) video.play().catch(e=>console.log(e));
-    weatherLevel = lvl;
-}
+window.setWeatherState = function (lvl) { weatherLevel = lvl; };

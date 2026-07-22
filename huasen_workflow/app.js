@@ -26,6 +26,10 @@ async function fetchExistingDocNumbers() {
       }
     });
     console.log("Loaded existing doc numbers:", existingDocNumbers.size);
+    ['so_baogia', 'so_hd', 'so_hd_kt', 'so_hd_nt', 'so_pl', 'so_bbgh'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) validateInputUnique(input);
+    });
   } catch (err) {
     console.error("Error fetching doc numbers:", err);
   }
@@ -34,17 +38,40 @@ async function fetchExistingDocNumbers() {
 function validateInputUnique(el) {
   if (!el) return;
   const val = el.value.trim();
+  
+  let parent = el.parentElement;
+  let errEl = parent.querySelector('.cloud-dup-error');
+  if (!errEl) {
+    errEl = document.createElement('div');
+    errEl.className = 'cloud-dup-error';
+    errEl.style.color = '#ef4444';
+    errEl.style.fontSize = '12px';
+    errEl.style.fontWeight = '600';
+    errEl.style.marginTop = '4px';
+    parent.appendChild(errEl);
+  }
+
   if (!val || val === '...' || /^(\.)+$/.test(val)) {
     el.style.border = '';
+    el.style.boxShadow = '';
     el.title = '';
+    errEl.textContent = '';
+    errEl.style.display = 'none';
     return;
   }
+
   if (existingDocNumbers.has(val)) {
     el.style.border = '2px solid #ef4444'; // Red border
+    el.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.2)';
     el.title = 'Số văn bản này đã tồn tại trên Đám Mây!';
+    errEl.textContent = '❌ Số văn bản này đã tồn tại trên Cloud!';
+    errEl.style.display = 'block';
   } else {
     el.style.border = '';
+    el.style.boxShadow = '';
     el.title = '';
+    errEl.textContent = '';
+    errEl.style.display = 'none';
   }
 }
 
@@ -146,6 +173,7 @@ function fmtVND(n) {
 
 // Navigation Logic
 function updateNav() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   els.steps.forEach((st, i) => {
     st.classList.toggle('active', i + 1 === State.currentStep);
   });
@@ -200,6 +228,14 @@ els.btnPrev.addEventListener('click', () => {
     State.currentStep--;
     updateNav();
   }
+});
+
+els.steps.forEach((st, i) => {
+  st.addEventListener('click', () => {
+    saveFormState();
+    State.currentStep = i + 1;
+    updateNav();
+  });
 });
 
 
