@@ -627,9 +627,10 @@
         </div>
       </div>
 
+      <div style="text-align: right; margin-bottom: 10px;">
+        <button id="btn-fill-dummy" class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;">🧪 Dữ liệu Mẫu</button>
+      </div>
       <div class="file-drop" id="file-drop" style="position:relative;">
-        <button id="btn-fill-dummy" class="btn btn-secondary"
-          style="position:absolute; top: 10px; right: 10px; font-size: 12px; padding: 6px 12px;">🧪 Dữ liệu Mẫu</button>
         <h3>Kéo thả file Excel Báo Giá vào đây</h3>
         <p>Hoặc click để chọn file. File cần có các cột: Mã SP, Tên Hàng Hoá, ĐVT, Số Lượng, Đơn Giá.</p>
         <input type="file" id="excel-file" accept=".xlsx, .xls" style="display:none;">
@@ -640,11 +641,15 @@
         <div class="row">
           <div class="col"><label>Tên Công Ty Khách Hàng</label><input type="text" id="kh_ten"
               placeholder="Ví dụ: Công ty TNHH XYZ"></div>
+          <div class="col"><label>Tên Công Ty (Tiếng Trung)</label><input type="text" id="kh_ten_cn" placeholder="Ví dụ: 越南华森国际..."></div>
+        </div>
+        <div class="row">
           <div class="col"><label>Mã số thuế</label><input type="text" id="kh_mst"></div>
+          <div class="col"><label>Số tài khoản</label><input type="text" id="kh_stk"></div>
         </div>
         <div class="row">
           <div class="col"><label>Địa chỉ</label><input type="text" id="kh_diachi"></div>
-          <div class="col"><label>Số tài khoản</label><input type="text" id="kh_stk"></div>
+          <div class="col"><label>Địa chỉ (Tiếng Trung)</label><input type="text" id="kh_diachi_cn" placeholder="Ví dụ: 越南, 胡志明市..."></div>
         </div>
         <div class="row">
           <div class="col"><label>Người đại diện (Ông/Bà)</label><input type="text" id="kh_daidien"></div>
@@ -1370,13 +1375,13 @@
                     <tr>
                       <td colspan="4" style="border:none; padding:4px 0;">
                         <div style="margin-bottom: 5px;"><strong>BÊN MUA (BÊN A) : <span class="bind-kh-ten" style="text-transform:uppercase;">...</span></strong></div>
-                        <div><strong>買方(A方) : <span class="bind-kh-ten-cn" contenteditable="true" style="border-bottom: 1px dashed #ccc; min-width: 150px; display: inline-block;"></span></strong></div>
+                        <div><strong>買方(A方) : <span class="bind-kh-ten-cn"></span></strong></div>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="4" style="padding:4px 0; border:none;">
                         <div style="margin-bottom: 5px;">Địa chỉ : <span class="bind-kh-diachi">...</span></div>
-                        <div>地址 : <span class="bind-kh-diachi-cn" contenteditable="true" style="border-bottom: 1px dashed #ccc; min-width: 250px; display: inline-block;"></span></div>
+                        <div>地址 : <span class="bind-kh-diachi-cn"></span></div>
                       </td>
                     </tr>
                     <tr>

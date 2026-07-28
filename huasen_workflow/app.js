@@ -137,6 +137,8 @@ const els = {
   kh_stk: document.getElementById('kh_stk'),
   kh_chucvu: document.getElementById('kh_chucvu'),
   kh_sdt: document.getElementById('kh_sdt'),
+  kh_ten_cn: document.getElementById('kh_ten_cn'),
+  kh_diachi_cn: document.getElementById('kh_diachi_cn'),
   kh_email: document.getElementById('kh_email'),
   kh_ngay: document.getElementById('kh_ngay'),
   so_baogia: document.getElementById('so_baogia'),
@@ -264,8 +266,10 @@ if (els.radioNt) {
 // Update State from Inputs
 function saveFormState() {
   State.client.ten = els.kh_ten.value || '...';
+  State.client.ten_cn = (els.kh_ten_cn && els.kh_ten_cn.value) ? els.kh_ten_cn.value : '';
   State.client.mst = els.kh_mst.value || '...';
   State.client.diachi = els.kh_diachi.value || '...';
+  State.client.diachi_cn = (els.kh_diachi_cn && els.kh_diachi_cn.value) ? els.kh_diachi_cn.value : '';
   State.client.daidien = els.kh_daidien.value || '...';
   State.client.stk = els.kh_stk.value || '';
   State.client.chucvu = els.kh_chucvu.value || '';
@@ -324,8 +328,10 @@ function saveFormState() {
 function bindDataToPreviews() {
   // Bind Text
   document.querySelectorAll('.bind-kh-ten').forEach(e => e.textContent = State.client.ten);
+  document.querySelectorAll('.bind-kh-ten-cn').forEach(e => e.textContent = State.client.ten_cn);
   document.querySelectorAll('.bind-kh-mst').forEach(e => e.textContent = State.client.mst);
   document.querySelectorAll('.bind-kh-diachi').forEach(e => e.textContent = State.client.diachi);
+  document.querySelectorAll('.bind-kh-diachi-cn').forEach(e => e.textContent = State.client.diachi_cn);
   document.querySelectorAll('.bind-kh-daidien').forEach(e => e.textContent = State.client.daidien);
   document.querySelectorAll('.bind-kh-stk').forEach(e => e.textContent = State.client.stk);
   document.querySelectorAll('.bind-kh-chucvu').forEach(e => e.textContent = State.client.chucvu);
@@ -1161,8 +1167,10 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
 document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   e.stopPropagation();
   document.getElementById('kh_ten').value = "Công ty TNHH MTV Demo Tech";
+  if (document.getElementById('kh_ten_cn')) document.getElementById('kh_ten_cn').value = "越南演示科技有限公司";
   document.getElementById('kh_mst').value = "0101234567";
   document.getElementById('kh_diachi').value = "Số 15, KCN ABC, Phường 1, TP HCM";
+  if (document.getElementById('kh_diachi_cn')) document.getElementById('kh_diachi_cn').value = "越南, 胡志明市, 第一区, ABC工业区, 15号";
   document.getElementById('kh_stk').value = "123456789 tại VietinBank";
   document.getElementById('kh_daidien').value = "Phạm Văn Mẫu";
   document.getElementById('kh_chucvu').value = "Tổng Giám Đốc";
