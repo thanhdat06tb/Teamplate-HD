@@ -164,6 +164,8 @@ const els = {
   so_hd_nt: document.getElementById('so_hd_nt'),
   ngay_ky_nt: document.getElementById('ngay_ky_nt'),
   ngay_het_han_nt: document.getElementById('ngay_het_han_nt'),
+  so_hd_mb: document.getElementById('so_hd_mb'),
+  ngay_ky_mb: document.getElementById('ngay_ky_mb'),
 };
 
 function fmtVND(n) {
@@ -289,6 +291,8 @@ function saveFormState() {
     State.contract.sohd = els.so_hd_nt ? (els.so_hd_nt.value || '...') : '...';
     State.contract.ngay = els.ngay_ky_nt ? (els.ngay_ky_nt.value || '...') : '...';
     State.contract.hethan = els.ngay_het_han_nt ? (els.ngay_het_han_nt.value || '...') : '...';
+    State.contract.sohdMb = els.so_hd_mb ? (els.so_hd_mb.value || '...') : '...';
+    State.contract.ngayMb = els.ngay_ky_mb ? (els.ngay_ky_mb.value || '...') : '...';
   } else {
     State.contract.sohd = els.so_hd.value || '...';
     State.contract.ngay = els.ngay_ky.value || '...';
@@ -384,6 +388,23 @@ function bindDataToPreviews() {
     document.querySelectorAll('.bind-ngay-hethan').forEach(e => e.textContent = '...');
     document.querySelectorAll('.bind-thang-hethan').forEach(e => e.textContent = '...');
     document.querySelectorAll('.bind-nam-hethan').forEach(e => e.textContent = '...');
+  }
+
+  // Bind Mua Ban logic
+  document.querySelectorAll('.bind-sohd-mb').forEach(e => e.textContent = State.contract.sohdMb || '...');
+  
+  const dateMbStr = State.contract.ngayMb;
+  if (dateMbStr) {
+    const parts = dateMbStr.split('-');
+    if (parts.length === 3) {
+      document.querySelectorAll('.bind-ngay-mb').forEach(e => e.textContent = parts[2]);
+      document.querySelectorAll('.bind-thang-mb').forEach(e => e.textContent = parts[1]);
+      document.querySelectorAll('.bind-nam-mb').forEach(e => e.textContent = parts[0]);
+    }
+  } else {
+    document.querySelectorAll('.bind-ngay-mb').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-thang-mb').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-nam-mb').forEach(e => e.textContent = '...');
   }
 
   // Appendix Parsing
@@ -643,6 +664,7 @@ function renderProducts() {
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
   if (document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
+  if (document.getElementById('bind-products-mb')) document.getElementById('bind-products-mb').innerHTML = hKt;
   if (document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
 
   // Set table modes
@@ -652,7 +674,8 @@ function renderProducts() {
     document.querySelector('#product-table-body')?.closest('table'),
     document.querySelector('#bg-product-table')?.closest('table'),
     document.querySelector('#app-product-table')?.closest('table'),
-    document.querySelector('#bind-products-kt')?.closest('table')
+    document.querySelector('#bind-products-kt')?.closest('table'),
+    document.querySelector('#bind-products-mb')?.closest('table')
   ].forEach(tb => {
     if (tb) {
       tb.classList.add(tblMode);
@@ -686,6 +709,11 @@ function renderProducts() {
   setText('kt-subtotal', fmtVND(bgSubtotal));
   setText('kt-vat-amount', fmtVND(bgVatAmount));
   setText('kt-total-rounded', fmtVND(bgTotal));
+
+  document.querySelectorAll('.bind-sum-vat-0').forEach(e => e.textContent = fmtVND(bgSubtotal));
+  document.querySelectorAll('.bind-vat-rate-text').forEach(e => e.textContent = (State.vatRate * 100) + '%');
+  document.querySelectorAll('.bind-vat-amount').forEach(e => e.textContent = fmtVND(bgVatAmount));
+  document.querySelectorAll('.bind-sum-vat').forEach(e => e.textContent = fmtVND(bgTotal));
 
   document.querySelectorAll('.bind-vat-rate').forEach(e => e.textContent = (State.vatRate * 100));
 
@@ -922,6 +950,7 @@ function prepareFinalPreviews() {
   document.getElementById('mini-preview-1').innerHTML = cleanHtml(document.getElementById('preview-baogia').innerHTML);
 
   if (State.contractType === 'gk') {
+    if (document.getElementById('box-preview-mb')) document.getElementById('box-preview-mb').style.display = 'none';
     document.getElementById('mini-preview-2').innerHTML = cleanHtml(document.getElementById('preview-contract-gk').innerHTML);
     document.getElementById('chk-contract-gk').checked = true;
     if(document.getElementById('chk-contract-kt')) document.getElementById('chk-contract-kt').checked = false;
@@ -933,13 +962,20 @@ function prepareFinalPreviews() {
     document.getElementById('chk-bbnt').checked = true;
     if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
   } else if (State.contractType === 'nt') {
+    if (document.getElementById('box-preview-mb')) document.getElementById('box-preview-mb').style.display = 'block';
+    const mbPreview = document.getElementById('preview-contract-mb');
+    if (mbPreview && document.getElementById('mini-preview-mb')) {
+      document.getElementById('mini-preview-mb').innerHTML = cleanHtml(mbPreview.innerHTML);
+    }
+    if (document.getElementById('chk-contract-mb')) document.getElementById('chk-contract-mb').checked = true;
+
     document.getElementById('mini-preview-nt').innerHTML = cleanHtml(document.getElementById('preview-contract-nt').innerHTML);
     document.getElementById('chk-contract-nt').checked = true;
     if(document.getElementById('chk-contract-kt')) document.getElementById('chk-contract-kt').checked = false;
     if(document.getElementById('chk-contract-gk')) document.getElementById('chk-contract-gk').checked = false;
     document.getElementById('mini-preview-2').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ GIAO KHOÁN</i>";
     if(document.getElementById('mini-preview-kt')) document.getElementById('mini-preview-kt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ KINH TẾ</i>";
-
+    
     if (document.getElementById('preview-bbgh')) {
       document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
       // rename the label 
@@ -947,7 +983,9 @@ function prepareFinalPreviews() {
     }
     document.getElementById('chk-bbnt').checked = true;
     if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = true;
+
   } else {
+    if (document.getElementById('box-preview-mb')) document.getElementById('box-preview-mb').style.display = 'none';
     document.getElementById('mini-preview-kt').innerHTML = cleanHtml(document.getElementById('preview-contract-kt').innerHTML);
     document.getElementById('chk-contract-kt').checked = true;
     if(document.getElementById('chk-contract-gk')) document.getElementById('chk-contract-gk').checked = false;
@@ -984,6 +1022,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   const chk1 = document.getElementById('chk-quote').checked;
   const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
+  const chk2_mb = document.getElementById('chk-contract-mb') ? document.getElementById('chk-contract-mb').checked : false;
   const chk2_nt = document.getElementById('chk-contract-nt') ? document.getElementById('chk-contract-nt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
@@ -993,7 +1032,13 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
-  if (chk2_nt) docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
+  if (chk2_mb && State.contractType === 'nt') {
+    const mbHtml = document.getElementById('preview-contract-mb');
+    if (mbHtml) docs.push(cleanHtml(mbHtml.outerHTML));
+  }
+  if (chk2_nt && State.contractType === 'nt') {
+    docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
+  }
 
   if (chk3) {
     if (State.contractType === 'kt') {
@@ -1053,6 +1098,7 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
   const chk1 = document.getElementById('chk-quote').checked;
   const chk2_gk = document.getElementById('chk-contract-gk') ? document.getElementById('chk-contract-gk').checked : false;
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
+  const chk2_mb = document.getElementById('chk-contract-mb') ? document.getElementById('chk-contract-mb').checked : false;
   const chk2_nt = document.getElementById('chk-contract-nt') ? document.getElementById('chk-contract-nt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
   const chk4 = document.getElementById('chk-bbnt').checked;
@@ -1060,7 +1106,14 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
   if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(cleanHtml(document.getElementById('preview-baogia').outerHTML)));
   if (chk2_gk) folder.file("02_HopDongGiaoKhoan.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-gk').outerHTML)));
   if (chk2_kt) folder.file("02_HopDongKinhTe.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-kt').outerHTML)));
-  if (chk2_nt) folder.file("02_HopDongNguyenTac.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-nt').outerHTML)));
+  
+  if (chk2_mb && State.contractType === 'nt') {
+    const mbHtml = document.getElementById('preview-contract-mb');
+    if (mbHtml) folder.file("02a_HopDongMuaBan.doc", generateWordBlob(cleanHtml(mbHtml.outerHTML)));
+  }
+  if (chk2_nt && State.contractType === 'nt') {
+    folder.file("02b_HopDongNguyenTac.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-nt').outerHTML)));
+  }
 
   if (chk3) {
     if (State.contractType === 'kt') {
@@ -1154,7 +1207,11 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
-  if (chk2_nt) docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
+  if (chk2_nt) {
+    const mbHtml = document.getElementById('preview-contract-mb');
+    if (mbHtml) docs.push(cleanHtml(mbHtml.outerHTML));
+    docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
+  }
 
   if (chk3) {
     if (State.contractType === 'kt') {

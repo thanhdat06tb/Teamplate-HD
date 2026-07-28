@@ -1297,12 +1297,254 @@
       </div>
     
           </div>
-      <div id="wrapper-nt" style="display:none;"><!-- STEP 3: CONTRACT NGUYÊN TẮC -->
+      <div id="wrapper-nt" style="display:none;"><!-- STEP 3: CONTRACT MUA BÁN VÀ NGUYÊN TẮC -->
+        
+        <!-- SUB-STEP: HỢP ĐỒNG MUA BÁN -->
+        <div id="nt-substep-mb">
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2>Hợp Đồng Mua Bán</h2>
+              <button class="btn" style="padding: 10px 20px; font-size:14px;" onclick="document.getElementById('nt-substep-mb').style.display='none'; document.getElementById('nt-substep-nt').style.display='block';">Tiếp tục (Nguyên tắc) ➔</button>
+            </div>
+            <div class="row" style="margin-top:14px;">
+              <div class="col"><label>Số hợp đồng Mua Bán</label><input type="text" id="so_hd_mb" value="01/2026/HĐMB" oninput="saveFormState(); bindDataToPreviews();"></div>
+              <div class="col"><label>Ngày ký HĐ Mua Bán</label><input type="date" id="ngay_ky_mb" oninput="saveFormState(); bindDataToPreviews();"></div>
+            </div>
+          </div>
+          <!-- TEMPLATE MUA BÁN -->
+          <div class="doc-preview" id="preview-contract-mb">
+          <table style="width:100%; border:none; border-collapse:collapse;">
+            <thead style="display:table-header-group;">
+              <tr>
+                <td style="border:none; padding-bottom: 20px; border-bottom: 1px solid #777;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <img src="./Picture1.png" style="height:60px;" class="bind-logo">
+                    <div style="text-align:center; flex:1;">
+                      <div style="font-size:16px; color:#555; font-family:'Times New Roman', serif;">CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM</div>
+                      <div style="font-size:14px; color:#555; font-family:'SimSun', 'Times New Roman', serif;">越南华森国际商贸有限公司</div>
+                    </div>
+                    <img src="./qr.jpg" style="height:60px;" class="bind-qr" alt="QR Code">
+                  </div>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:none; padding-top:20px;">
+                  <!-- BÌA HỢP ĐỒNG MUA BÁN -->
+                  <div style="text-align:center; height: 650px; display:flex; flex-direction:column; justify-content:space-between; page-break-after:always;">
+                    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                      <h1 style="font-size:42px; font-weight:bold; color: #437831; margin: 15px 0;">HỢP</h1>
+                      <h1 style="font-size:42px; font-weight:bold; color: #437831; margin: 15px 0;">ĐỒNG</h1>
+                      <h1 style="font-size:42px; font-weight:bold; color: #437831; margin: 15px 0;">MUA</h1>
+                      <h1 style="font-size:42px; font-weight:bold; color: #437831; margin: 15px 0; margin-bottom:40px;">BÁN</h1>
+                      <h2 style="font-size:24px; font-weight:bold; color:#437831;">買賣合同</h2>
+                    </div>
+                    
+                    <div style="text-align:right; font-size:16px; font-weight:bold; width: 100%; border-top: 1px solid #ddd; padding-top: 10px; margin-top:20px;">
+                      Hồ Chí Minh, Ngày <span class="bind-ngay-mb">...</span> tháng <span class="bind-thang-mb">...</span> năm <strong class="bind-nam-mb">...</strong>
+                      <div style="font-weight:normal; font-size:12px; color:#999; margin-top:5px;">1 | P a g e</div>
+                    </div>
+                  </div>
+
+                  <!-- NỘI DUNG HỢP ĐỒNG MUA BÁN -->
+                  <div class="doc-title">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><span style="font-size:14px; font-weight:normal;"><u>Độc Lập - Tự Do – Hạnh Phúc</u></span></div>
+                  <div class="doc-title" style="font-size:14px; font-weight:normal;">越南社會主義共和國<br>獨立 - 自由 - 幸福</div>
+                  <div style="text-align:center; margin-bottom:20px;">**********</div>
+                  <div class="doc-title" style="margin-top:20px; font-size:24px; font-weight:bold; margin-bottom: 5px;">HỢP ĐỒNG MUA BÁN<br><span style="font-size:18px; font-weight:normal;">買賣合同</span></div>
+                  <p style="text-align:center; margin-top: 0; font-weight: bold;">Số Hợp Đồng合約號: <span class="bind-sohd-mb">...</span></p>
+
+                  <div style="margin-left: 20px; font-style: italic; margin-top: 10px;">
+                    <p>- Căn cứ Bộ Luật Dân sự số 91/2015/QH13 và các văn bản pháp luật liên quan;</p>
+                    <p>- Căn cứ Luật Thương mại số 36/2005/QH11 và các văn bản pháp luật liên quan;</p>
+                    <p>- Căn cứ nhu cầu và khả năng của hai bên.<br>根據雙方之能力和需求</p>
+                  </div>
+
+                  <p style="margin-top:10px;">Hôm nay, ngày <strong class="bind-ngay-mb">...</strong> tháng <strong class="bind-thang-mb">...</strong> năm <strong class="bind-nam-mb">...</strong>, chúng tôi gồm:<br>今天，<strong class="bind-nam-mb">...</strong>年<strong class="bind-thang-mb">...</strong>月<strong class="bind-ngay-mb">...</strong>日</p>
+                  
+                  <table style="width:100%; margin-left: 20px; border:none; line-height:1.35;">
+                    <tr>
+                      <td colspan="4"><strong>BÊN MUA (BÊN A) / 買方(A方): <span class="bind-kh-ten" style="text-transform:uppercase;">...</span></strong></td>
+                    </tr>
+                    <tr>
+                      <td style="width:120px; padding:4px 0; border:none;">Địa chỉ / 地址:</td>
+                      <td style="border:none; padding:4px 0;" colspan="3"><span class="bind-kh-diachi">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Mã số thuế / 稅號:</td>
+                      <td style="border:none; padding:4px 0;" colspan="3"><span class="bind-kh-mst">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Điện thoại / 電話:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-kh-sdt">...</span></td>
+                      <td style="padding:4px 0; border:none; width:80px;">Email / 郵箱:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-kh-email">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Đại diện / 代表人:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-kh-daidien">...</span></td>
+                      <td style="padding:4px 0; border:none;">Chức vụ / 職務:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-kh-chucvu">...</span></td>
+                    </tr>
+                  </table>
+                  
+                  <table style="width:100%; margin-left: 20px; border:none; line-height:1.35; margin-top:10px;">
+                    <tr>
+                      <td colspan="4"><strong>BÊN BÁN (BÊN B) / 賣方(B方): <span class="bind-dn-ten" style="text-transform:uppercase;">...</span></strong></td>
+                    </tr>
+                    <tr>
+                      <td style="width:120px; padding:4px 0; border:none;">Địa chỉ / 地址:</td>
+                      <td style="border:none; padding:4px 0;" colspan="3"><span class="bind-dn-diachi">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Mã số thuế / 稅號:</td>
+                      <td style="border:none; padding:4px 0;" colspan="3"><span class="bind-dn-mst">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Điện thoại / 電話:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-dn-sdt">...</span></td>
+                      <td style="padding:4px 0; border:none; width:80px;">Email / 郵箱:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-dn-email">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Đại diện / 代表人:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-dn-daidien">...</span></td>
+                      <td style="padding:4px 0; border:none;">Chức vụ / 職務:</td>
+                      <td style="border:none; padding:4px 0;"><span class="bind-dn-chucvu">...</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:4px 0; border:none;">Số tài khoản / 賬號:</td>
+                      <td style="border:none; padding:4px 0;" colspan="3"><strong class="bind-dn-stk">...</strong></td>
+                    </tr>
+                  </table>
+
+                  <p style="margin-top:10px;"><strong>ĐIỀU 1: HÀNG HÓA VÀ GIÁ TRỊ HỢP ĐỒNG / 第一條：貨物及合同價值</strong></p>
+                  <div id="bind-products-mb-container">
+                    <table style="width:100%; border:1px solid #000; border-collapse:collapse; margin-top:10px; font-size:13px; text-align:center;">
+                      <thead>
+                        <tr style="background:#f0f0f0;">
+                          <th style="border:1px solid #000; padding:4px;">STT<br>序號</th>
+                          <th style="border:1px solid #000; padding:4px;">Tên hàng hóa<br>貨物名稱</th>
+                          <th style="border:1px solid #000; padding:4px;">ĐVT<br>單位</th>
+                          <th style="border:1px solid #000; padding:4px;">Số lượng<br>數量</th>
+                          <th style="border:1px solid #000; padding:4px;">Đơn giá<br>單價</th>
+                          <th style="border:1px solid #000; padding:4px;">Thành tiền<br>金額 (VNĐ)</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bind-products-mb">
+                        <tr>
+                          <td style="border:1px solid #000; padding:4px;">1</td>
+                          <td style="border:1px solid #000; padding:4px;">...</td>
+                          <td style="border:1px solid #000; padding:4px;">...</td>
+                          <td style="border:1px solid #000; padding:4px;">...</td>
+                          <td style="border:1px solid #000; padding:4px;">...</td>
+                          <td style="border:1px solid #000; padding:4px;">...</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="5" style="border:1px solid #000; padding:4px; text-align:right;"><strong>Cộng tiền hàng / 貨款總額:</strong></td>
+                          <td style="border:1px solid #000; padding:4px; text-align:right;"><strong class="bind-sum-vat-0">...</strong></td>
+                        </tr>
+                        <tr>
+                          <td colspan="5" style="border:1px solid #000; padding:4px; text-align:right;"><strong>Thuế VAT / 增值稅 (<span class="bind-vat-rate-text">8%</span>):</strong></td>
+                          <td style="border:1px solid #000; padding:4px; text-align:right;"><strong class="bind-vat-amount">...</strong></td>
+                        </tr>
+                        <tr>
+                          <td colspan="5" style="border:1px solid #000; padding:4px; text-align:right;"><strong>Tổng cộng / 總計:</strong></td>
+                          <td style="border:1px solid #000; padding:4px; text-align:right;"><strong class="bind-sum-vat">...</strong></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  
+                  <p style="margin-top:20px;"><strong>ĐIỀU 2: HÌNH THỨC THANH TOÁN / 第二條：付款方式</strong></p>
+                  <div style="margin-left:5px;">
+                    <p><strong>2.1 Phương thức thanh toán / 付款方式：</strong> Chuyển khoản / 转账</p>
+                    <p>Thanh toán chuyển khoản 02 đợt / 通过银行转账分 02 期付款:</p>
+                    <p>- Đợt 01: Bên A đặt cọc cho Bên B số tiền là ....... (VNĐ).<br>第一次: 甲方支付乙方订金金额 ......... （越南盾）。</p>
+                    <p>- Đợt 2: Sau khi bên B giao hàng cho bên A, lắp đặt thiết bị, nghiệm thu, xuất hoá đơn cho bên A, trong vòng 30 ngày bên A thanh toán nốt số tiền còn lại là: ...... VNĐ<br>第二次：B方把设备送达A方工厂后，B方会安排技术来安装调试,验收指导A方的员工使用，然后给A方开发票。A方30天内向B方支付剩下的尾款总金额 ....... （越南盾）。</p>
+                    <p><strong>2.2 Thông tin thanh toán / 付款信息：</strong></p>
+                    <p>- Tên tài khoản / 账户： <strong class="bind-dn-ten">VN Hua sen CO.,LTD</strong></p>
+                    <p>- Tên Ngân Hàng / 开户银行： Ngân hàng thương mại Cổ phần Quân Đội Việt Nam -MB bank - CN Bình Dương -PGD Đông Bình Dương</p>
+                    <p>- Số tài khoản VND (Bank account) / 越南银行账号: <strong class="bind-dn-stk">3703486766</strong></p>
+                    <p>- Số tài khoản USD (Bank account) / 美金账号: <strong>0584723984634</strong></p>
+                  </div>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 3: GIAO HÀNG / 第三條：送貨</strong></p>
+                  <p style="margin-left:5px;">Bên B sẽ giao hàng cho bên A trong vòng 25-30 ngày kể từ ngày nhận được tiền đặt cọc.<br>B方在收到订金25-30天内将乙方向甲方安排送货和安装好设备给甲方。</p>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 4: BẢO TRÌ THIẾT BỊ / 第四條：设备维修</strong></p>
+                  <div style="margin-left:5px;">
+                    <p>- Kính thuộc về vật tư tiêu hao và hàng dễ vỡ, không nằm trong phạm vi bảo hành.<br>鏡片属于耗材及易碎物品，不在保修范围内。</p>
+                    <p>- Các bộ phận khác của thiết bị được bảo hành một năm.<br>设备其它部件保修壹年。</p>
+                  </div>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 5: QUYỀN VÀ NGHĨA VỤ CỦA BÊN A / 第五條：买方的权利和义务</strong></p>
+                  <div style="margin-left:5px;">
+                    <p>- Tạo điều kiện thuận lợi, cung cấp nguồn điện, thiết bị cần thiết tại địa điểm lắp đặt máy để bên B hoàn thành công việc của mình.<br>创造有利条件，在机器安装现场为乙方完成工作提供必要的动力和设备。</p>
+                    <p>- Khi bên B thử máy, bên A phải cung cấp đủ vật tư và sản phẩm để thử máy.<br>乙方试机时，甲方必须提供足够的材料和产品来试机。</p>
+                    <p>- Thanh toán tiền cho bên B theo đúng thỏa thuận.<br>按约定向乙方付款。</p>
+                    <p>- Các quyền và nghĩa vụ khác của bên mua hàng theo qui định của pháp luật.<br>法律规定的购货人的其他权利和义务。</p>
+                    <p>5.5 Nếu bên A không thanh toán hết số tiền như trong thời gian giao ước, bên B có quyền từ chối bảo hành và không tuân theo trình tự mà thu hồi thiết bị, số tiền đã nhận không được trả lại.<br>如甲方未在合同期内全额支付货款，乙方有权拒绝保修且收回设备，收到的款项不予退还。</p>
+                  </div>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 6: QUYỀN VÀ NGHĨA VỤ CỦA BÊN B / 第六條：賣方权利和义务</strong></p>
+                  <div style="margin-left:5px;">
+                    <p>- Bảo đảm cung cấp thiết bị đúng chất lượng và qui cách kỹ thuật như đã thỏa thuận và cam kết thiết bị bán cho bên A thuộc quyền sở hữu hợp pháp của mình.<br>确保提供符合约定的质量和技术规格的设备，并承诺出售给甲方的设备属于甲方的合法所有权。</p>
+                    <p>- Cung cấp thông tin, tài liệu liên quan đến thiết bị hướng dẫn bên A cách sử dụng.<br>提供与设备相关的资料和文件，并指导甲方如何使用。</p>
+                    <p>- Các quyền và nghĩa vụ khác của bên bán hàng theo qui định của pháp luật.<br>法律规定的卖方的其他权利和义务。</p>
+                  </div>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 7: BẤT KHẢ KHÁNG VÀ GIẢI QUYẾT TRANH CHẤP / 第七條：不可抗力和争议解决</strong></p>
+                  <div style="margin-left:5px;">
+                    <p>- Bất khả kháng có nghĩa là các sự kiện xảy ra một cách khách quan, không thể lường trước được và không thể khắc phục được mặc dù đã áp dụng mọi biện pháp cần thiết trong khả năng cho phép, một trong các Bên vẫn không có khả năng thực hiện được nghĩa vụ của mình theo Hợp đồng này, bao gồm: thiên tai, hỏa hoạn, lũ lụt, chiến tranh, cản trở giao thông vận tải, kiểm định hải quan và các sư kiện khác tương tự.<br>不可抗力是指尽管在其能力范围内采取了一切必要措施，但仍客观地、不可预见和不可挽回地发生的事件，其中一方仍无法履行其在本协议项下的义务包括：自然灾害、火灾、洪水、战争、交通不便、海关查验等类似事件。</p>
+                    <p>- Khi xảy ra sự kiện bất khả kháng, bên gặp phải bất khả kháng phải không chậm chễ, thông báo cho bên kia tình trạng thực tế, đề xuất phương án xử lý và nỗ lực giảm thiểu tổn thất, thiệt hại đến mức thấp nhất có thể.<br>当不可抗力事件发生时，遭受不可抗力的一方必须立即将实际情况通知对方，提出处理方案，尽最大努力将损失和损害降到最低。</p>
+                    <p>- Trừ trường hợp bất khả kháng, hai bên phải thực hiện đầy đủ và đúng thời hạn các nội dung của hợp đồng này. Trong quá trình thực hiện hợp đồng, nếu có vướng mắc từ bất kỳ bên nào, hai bên sẽ cùng nhau giải quyết trên tinh thần hợp tác. Trong trường hợp không tự giải quyết được, hai bên thống nhất đưa ra giải quyết tại Tòa án có thẩm quyền tại Tỉnh Bình Dương. Phán quyết của toà án là quyết định cuối cùng, có giá trị ràng buộc các bên. Bên thua phải chịu toàn bộ các chi phí giải quyết tranh chấp.<br>除不可抗力外，双方必须全面、按时履行本合同的内容。在合同履行过程中，任何一方出现问题，双方将本着合作的精神共同解决。如果无法自行解决，双方同意在平阳省的主管法院解决。法院的决定对各方具有约束力。败诉方必须承担争端解决的所有费用。</p>
+                  </div>
+
+                  <p style="margin-top:20px;"><strong>ĐIỀU 8: ĐIỀU KHOẢN CHUNG / 第八條：一般条款</strong></p>
+                  <div style="margin-left:5px;">
+                    <p>- Mọi thay đổi, bổ sung nội dung hợp đồng này đều chỉ có giá trị khi được hai bên cùng nhau bàn bạc, trao đổi và đồng ý bằng văn bản.<br>本合同内容的任何变更或补充，仅在双方讨论、交换并书面同意后有效。</p>
+                    <p>- Hai bên cam kết thực hiện đúng theo những điều đã thỏa thuận. Mọi tranh chấp liên quan đến việc thực hiện hợp đồng này nếu không tự giải quyết được sẽ đưa ra giải quyết tại Tòa án có thẩm quyền theo qui định của pháp luật.<br>双方承诺严格遵守商定事项。与履行本合同有关的任何争议，如不能自行解决，将依法向有管辖权的法院提起诉讼。</p>
+                    <p>- Hợp đồng này có hiệu lực kể từ ngày ký, được lập thành bốn (04) bản, mỗi bên giữ hai (02) bản, có giá trị như nhau.<br>本合同自签订之日起生效，一式肆（04）份，双方各留一（02）份，价值相同。</p>
+                    <p>8.4 Hợp đồng này tự động thanh lý sau khi 02 bên hoàn tất việc giao nhận và thanh toán và bảo hành như đã nêu trong Điều 4 của hợp đồng này.<br>本合同在双方完成本合同第四条规定的交货、付款和保修后自动完結。</p>
+                  </div>
+                  
+                  <table style="width:100%; border:none; margin-top:40px; text-align:center;">
+                    <tr>
+                      <td style="width:50%; border:none;"><strong>ĐẠI DIỆN BÊN A<br>A方代表</strong></td>
+                      <td style="width:50%; border:none;"><strong>ĐẠI DIỆN BÊN B<br>B方代表</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="height:100px; border:none;"></td>
+                      <td style="border:none; position:relative;">
+                        <img class="bind-stamp" src="" style="width:120px; position:absolute; top:0; left:50%; transform:translateX(-50%); display:none;">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="border:none;"><strong class="bind-kh-daidien">...</strong></td>
+                      <td style="border:none;"><strong class="bind-dn-daidien">...</strong></td>
+                    </tr>
+                  </table>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- End of nt-substep-mb preview -->
+      </div> <!-- End of nt-substep-mb -->
+
+      <!-- SUB-STEP: HỢP ĐỒNG NGUYÊN TẮC -->
+      <div id="nt-substep-nt" style="display:none;">
         <div class="card">
-          <h2>Hợp Đồng Nguyên Tắc</h2>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Hợp Đồng Nguyên Tắc</h2>
+            <button class="btn btn-secondary" style="padding: 8px 16px; font-size:13px;" onclick="document.getElementById('nt-substep-nt').style.display='none'; document.getElementById('nt-substep-mb').style.display='block';">← Quay lại HĐ Mua Bán</button>
+          </div>
           <div class="row" style="margin-top:14px;">
-            <div class="col"><label>Số hợp đồng</label><input type="text" id="so_hd_nt" value="01/2026/HĐNT"></div>
-            <div class="col"><label>Ngày ký</label><input type="date" id="ngay_ky_nt"></div>
+            <div class="col"><label>Số hợp đồng Nguyên Tắc</label><input type="text" id="so_hd_nt" value="01/2026/HĐNT"></div>
+            <div class="col"><label>Ngày ký HĐ Nguyên Tắc</label><input type="date" id="ngay_ky_nt"></div>
           </div>
           <div class="row" style="margin-top:14px;">
             <div class="col"><label>Ngày hết hiệu lực</label><input type="date" id="ngay_het_han_nt" value="2026-12-31"></div>
@@ -1739,6 +1981,14 @@
           </div>
           <div class="box-content" id="mini-preview-kt"></div>
         </div>
+        <div class="preview-box" id="box-preview-mb" style="display:none;">
+          <div class="box-header">
+            <label style="color:#fff; display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="chk-contract-mb" checked> HỢP ĐỒNG MUA BÁN
+            </label>
+          </div>
+          <div class="box-content" id="mini-preview-mb"></div>
+        </div>
         <div class="preview-box">
           <div class="box-header">
             <label style="color:#fff; display:flex; align-items:center; gap:8px;">
@@ -1782,7 +2032,7 @@
   </div>
 
   <div id="toast-container"></div>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
 
 </div></main>
 </div></body>

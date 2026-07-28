@@ -165,6 +165,8 @@ const els = {
   so_hd_nt: document.getElementById('so_hd_nt'),
   ngay_ky_nt: document.getElementById('ngay_ky_nt'),
   ngay_het_han_nt: document.getElementById('ngay_het_han_nt'),
+  so_hd_mb: document.getElementById('so_hd_mb'),
+  ngay_ky_mb: document.getElementById('ngay_ky_mb'),
 };
 
 function fmtVND(n) {
@@ -326,6 +328,8 @@ function saveFormState() {
     State.contract.sohd = els.so_hd_nt ? (els.so_hd_nt.value || '...') : '...';
     State.contract.ngay = els.ngay_ky_nt ? (els.ngay_ky_nt.value || '...') : '...';
     State.contract.hethan = els.ngay_het_han_nt ? (els.ngay_het_han_nt.value || '...') : '...';
+    State.contract.sohdMb = els.so_hd_mb ? (els.so_hd_mb.value || '...') : '...';
+    State.contract.ngayMb = els.ngay_ky_mb ? (els.ngay_ky_mb.value || '...') : '...';
   } else {
     State.contract.sohd = els.so_hd.value || '...';
     State.contract.ngay = els.ngay_ky.value || '...';
@@ -459,6 +463,23 @@ function bindDataToPreviews() {
     document.querySelectorAll('.bind-ngay-hethan').forEach(e => e.textContent = '...');
     document.querySelectorAll('.bind-thang-hethan').forEach(e => e.textContent = '...');
     document.querySelectorAll('.bind-nam-hethan').forEach(e => e.textContent = '...');
+  }
+
+  // Bind Mua Ban logic
+  document.querySelectorAll('.bind-sohd-mb').forEach(e => e.textContent = State.contract.sohdMb || '...');
+  
+  const dateMbStr = State.contract.ngayMb;
+  if (dateMbStr) {
+    const parts = dateMbStr.split('-');
+    if (parts.length === 3) {
+      document.querySelectorAll('.bind-ngay-mb').forEach(e => e.textContent = parts[2]);
+      document.querySelectorAll('.bind-thang-mb').forEach(e => e.textContent = parts[1]);
+      document.querySelectorAll('.bind-nam-mb').forEach(e => e.textContent = parts[0]);
+    }
+  } else {
+    document.querySelectorAll('.bind-ngay-mb').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-thang-mb').forEach(e => e.textContent = '...');
+    document.querySelectorAll('.bind-nam-mb').forEach(e => e.textContent = '...');
   }
 
   // Appendix Parsing
@@ -719,6 +740,7 @@ function renderProducts() {
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
   if (document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
+  if (document.getElementById('bind-products-mb')) document.getElementById('bind-products-mb').innerHTML = hKt;
   if (document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
 
   // Set table modes
@@ -728,7 +750,8 @@ function renderProducts() {
     document.querySelector('#product-table-body')?.closest('table'),
     document.querySelector('#bg-product-table')?.closest('table'),
     document.querySelector('#app-product-table')?.closest('table'),
-    document.querySelector('#bind-products-kt')?.closest('table')
+    document.querySelector('#bind-products-kt')?.closest('table'),
+    document.querySelector('#bind-products-mb')?.closest('table')
   ].forEach(tb => {
     if (tb) {
       tb.classList.add(tblMode);
@@ -762,6 +785,11 @@ function renderProducts() {
   setText('kt-subtotal', fmtVND(bgSubtotal));
   setText('kt-vat-amount', fmtVND(bgVatAmount));
   setText('kt-total-rounded', fmtVND(bgTotal));
+
+  document.querySelectorAll('.bind-sum-vat-0').forEach(e => e.textContent = fmtVND(bgSubtotal));
+  document.querySelectorAll('.bind-vat-rate-text').forEach(e => e.textContent = (State.vatRate * 100) + '%');
+  document.querySelectorAll('.bind-vat-amount').forEach(e => e.textContent = fmtVND(bgVatAmount));
+  document.querySelectorAll('.bind-sum-vat').forEach(e => e.textContent = fmtVND(bgTotal));
 
   document.querySelectorAll('.bind-vat-rate').forEach(e => e.textContent = (State.vatRate * 100));
 
