@@ -1190,7 +1190,9 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   ];
 
   alert("Đã điền dữ liệu mẫu thành công!");
-  handleInputBind();
+  saveFormState();
+  bindDataToPreviews();
+  if (typeof renderProducts === 'function') renderProducts();
 });
 
 function exportHTMLToWord(htmlContent, filename) {

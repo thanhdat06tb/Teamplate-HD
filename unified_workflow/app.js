@@ -1241,6 +1241,7 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
 
   saveFormState();
   bindDataToPreviews();
+  if (typeof renderProducts === 'function') renderProducts();
   showToast("Đã điền dữ liệu mẫu thành công!", "success");
 });
 
