@@ -1112,7 +1112,9 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   }, 500);
 });
 
-document.getElementById('btn-export-all').addEventListener('click', () => {
+const btnExportAll = document.getElementById('btn-export-all');
+if (btnExportAll) {
+  btnExportAll.addEventListener('click', () => {
   const zip = new JSZip();
   const folder = zip.folder("HopDong_XuatKhang");
 
@@ -1162,7 +1164,8 @@ document.getElementById('btn-export-all').addEventListener('click', () => {
   zip.generateAsync({ type: "blob" }).then(function (content) {
     saveAs(content, "TaiLieu.zip");
   });
-});
+  });
+}
 
 document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   e.stopPropagation();
