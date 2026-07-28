@@ -166,6 +166,7 @@ const els = {
   ngay_het_han_nt: document.getElementById('ngay_het_han_nt'),
   so_hd_mb: document.getElementById('so_hd_mb'),
   ngay_ky_mb: document.getElementById('ngay_ky_mb'),
+  diadiem_ky_mb: document.getElementById('diadiem_ky_mb'),
 };
 
 function fmtVND(n) {
@@ -293,6 +294,7 @@ function saveFormState() {
     State.contract.hethan = els.ngay_het_han_nt ? (els.ngay_het_han_nt.value || '...') : '...';
     State.contract.sohdMb = els.so_hd_mb ? (els.so_hd_mb.value || '...') : '...';
     State.contract.ngayMb = els.ngay_ky_mb ? (els.ngay_ky_mb.value || '...') : '...';
+    State.contract.diadiemMb = els.diadiem_ky_mb ? (els.diadiem_ky_mb.value || 'Hồ Chí Minh') : 'Hồ Chí Minh';
   } else {
     State.contract.sohd = els.so_hd.value || '...';
     State.contract.ngay = els.ngay_ky.value || '...';
@@ -391,7 +393,9 @@ function bindDataToPreviews() {
   }
 
   // Bind Mua Ban logic
+  // Bind Mua Ban logic
   document.querySelectorAll('.bind-sohd-mb').forEach(e => e.textContent = State.contract.sohdMb || '...');
+  document.querySelectorAll('.bind-diadiem-mb').forEach(e => e.textContent = State.contract.diadiemMb || '...');
   
   const dateMbStr = State.contract.ngayMb;
   if (dateMbStr) {
