@@ -538,7 +538,7 @@ function renderProducts() {
   if (State.products.length === 0) {
     State.products = [{ stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: '' }];
   }
-  let h1 = '', h3 = '', hBg = '', hKt = '', hBb = '';
+  let h1 = '', h3 = '', hBg = '', hKt = '', hBb = '', hMb = '';
   let sum = 0;
 
   if (State.products.length === 0) {
@@ -661,6 +661,17 @@ function renderProducts() {
 
       // Step 2 Kinh Te Rows
       hKt += staticRow;
+
+      // Step 2 Mua Ban Rows
+      hMb += `<tr style="${styleBold}">
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.stt || (isCat ? '' : i + 1)}</td>
+        <td style="border:1px solid #000; padding:8px;">${p.ten || ''}</td>
+        <td style="border:1px solid #000; padding:8px;">${p.ghiChu || ''}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${p.dvt || ''}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:center;">${dispSl}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:right;">${(tGia || isCat) ? fmtVND(tGia) : ''}</td>
+        <td style="border:1px solid #000; padding:8px; text-align:right; font-weight:bold;">${displayTt ? fmtVND(displayTt) : ''}</td>
+      </tr>`;
     });
   }
 
@@ -668,7 +679,7 @@ function renderProducts() {
   els.appProductTable.innerHTML = h3;
   document.getElementById('bg-product-table').innerHTML = hBg;
   if (document.getElementById('bind-products-kt')) document.getElementById('bind-products-kt').innerHTML = hKt;
-  if (document.getElementById('bind-products-mb')) document.getElementById('bind-products-mb').innerHTML = hKt;
+  if (document.getElementById('bind-products-mb')) document.getElementById('bind-products-mb').innerHTML = hMb;
   if (document.getElementById('bbgh-product-table')) document.getElementById('bbgh-product-table').innerHTML = hBb;
 
   // Set table modes
