@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div id="result">Testing...</div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3VAwCZbtmpqyNYB9XT2vSDZT4isF0rlc",
+      authDomain: "quanlyhopdong-298e9.firebaseapp.com",
+      projectId: "quanlyhopdong-298e9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.collection('contracts_cloud').limit(1).get()
+      .then(s => document.getElementById('result').textContent = 'SUCCESS: ' + s.size)
+      .catch(e => document.getElementById('result').textContent = 'ERROR: ' + e.message);
+  </script>
+</body>
+</html>
