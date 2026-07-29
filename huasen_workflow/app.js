@@ -1382,62 +1382,20 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
 // FIREBASE AUTHENTICATION LOGIC
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-  const authOverlay = document.getElementById('auth-overlay');
-  const mainApp = document.getElementById('main-app');
-  const btnLogin = document.getElementById('btn-login');
-  const btnLogout = document.getElementById('btn-logout');
-  const emailInput = document.getElementById('login-email');
-  const passInput = document.getElementById('login-pass');
-  const errorMsg = document.getElementById('login-error');
-
   if (auth) {
-    // Listen to Auth State
+    // Khi có user (kể cả anonymous) => khởi động app
     auth.onAuthStateChanged((user) => {
       if (user) {
-        // Logged in
-        authOverlay.style.display = 'none';
-        mainApp.style.display = 'block';
-        fetchExistingDocNumbers(); // Fetch numbers cache 
+        fetchExistingDocNumbers();
       } else {
-        // Logged out
-        authOverlay.style.display = 'flex';
-        mainApp.style.display = 'none';
+        // Tự đăng nhập ẩn danh — không hiện màn hình bảo mật
+        auth.signInAnonymously().catch(() => {
+          fetchExistingDocNumbers(); // fallback nếu anonymous bị tắt
+        });
       }
     });
-
-    // Login Action
-    if (btnLogin) {
-      btnLogin.addEventListener('click', () => {
-        const email = emailInput.value.trim();
-        const pass = passInput.value;
-        errorMsg.style.display = 'none';
-        btnLogin.innerText = 'Đang xử lý...';
-
-        auth.signInWithEmailAndPassword(email, pass)
-          .then((userCredential) => {
-            btnLogin.innerText = 'ĐĂNG NHẬP';
-          })
-          .catch((error) => {
-            btnLogin.innerText = 'ĐĂNG NHẬP';
-            errorMsg.innerText = error.message;
-            errorMsg.style.display = 'block';
-            console.error(error);
-          });
-      });
-    }
-
-    // Logout Action
-    if (btnLogout) {
-      btnLogout.addEventListener('click', () => {
-        auth.signOut().then(() => {
-          // Sign-out successful.
-          emailInput.value = '';
-          passInput.value = '';
-        }).catch((error) => {
-          console.error(error);
-        });
-      });
-    }
+  } else {
+    fetchExistingDocNumbers();
   }
 });
 

@@ -131,7 +131,7 @@
     }
     .login-box button:hover { background: #b08d48; }
     #login-error { color: #F43F5E; font-size: 14px; text-align: center; margin-top: 15px; display: none; font-weight: 600; }
-    #main-app { display: none; }
+    #main-app { display: block; }
 
     /* Modal preview styles */
     #modal-content .page-break {
@@ -271,15 +271,7 @@
   <!-- PRINT ZONE: ẩn bình thường, hiện khi in — GIỐNG HỆT DỰ ÁN GỐC -->
   <div id="print-zone"></div>
 
-  <div id="auth-overlay">
-    <div class="login-box">
-      <h2>CỔNG BẢO MẬT</h2>
-      <input type="email" id="login-email" placeholder="Email nhân viên" />
-      <input type="password" id="login-pass" placeholder="Mật khẩu" />
-      <button id="btn-login">ĐĂNG NHẬP</button>
-      <div id="login-error">...</div>
-    </div>
-  </div>
+
 
   <div id="main-app">
     <div class="header">
@@ -334,31 +326,15 @@
     const db = firebase.firestore();
     db.settings({ experimentalForceLongPolling: true });
 
-    const authOverlay = document.getElementById('auth-overlay');
-    const mainApp = document.getElementById('main-app');
-
     auth.onAuthStateChanged(user => {
       if (user) {
-        authOverlay.style.display = 'none';
-        mainApp.style.display = 'block';
         loadData();
       } else {
-        authOverlay.style.display = 'flex';
-        mainApp.style.display = 'none';
+        // Tự đăng nhập ẩn danh — không hiện màn hình bảo mật
+        auth.signInAnonymously().catch(() => loadData());
       }
     });
 
-    document.getElementById('btn-login').addEventListener('click', () => {
-      const email = document.getElementById('login-email').value.trim();
-      const pass = document.getElementById('login-pass').value;
-      auth.signInWithEmailAndPassword(email, pass).catch(err => {
-        const errEL = document.getElementById('login-error');
-        errEL.style.display = 'block';
-        errEL.innerText = err.message;
-      });
-    });
-
-    document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
 
     let allContracts = [];
     let currentTab = 'khach';
