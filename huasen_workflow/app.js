@@ -747,6 +747,7 @@ function renderProducts() {
   document.querySelectorAll('.bind-tien-vat').forEach(e => e.textContent = fmtVND(bgVatAmount));
   document.querySelectorAll('.bind-tong-sau-vat').forEach(e => e.textContent = fmtVND(bgTotal));
   document.querySelectorAll('.bind-tong-bang-chu').forEach(e => e.textContent = docTien(bgTotal));
+  document.querySelectorAll('.bind-tong-bang-chu-cn').forEach(e => e.textContent = docTienTrung(bgTotal));
 
 
   document.querySelectorAll('.bind-tien-tam-ung').forEach(e => e.textContent = fmtVND(tamUngVal));
@@ -821,6 +822,43 @@ function docTien(so) {
     chuoi = chuoi.charAt(0).toUpperCase() + chuoi.slice(1);
   }
   return chuoi + " chẵn.";
+}
+
+function docTienTrung(num) {
+    if (num == 0) return "零越南盾";
+    var digits = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
+    var radices = ["", "拾", "佰", "仟"];
+    var bigRadices = ["", "万", "亿", "兆"];
+    
+    var str = num.toString();
+    var len = str.length;
+    var result = "";
+    var zeroCount = 0;
+    
+    for (var i = 0; i < len; i++) {
+        var p = len - i - 1;
+        var d = parseInt(str.charAt(i));
+        var quotient = Math.floor(p / 4);
+        var modulus = p % 4;
+        
+        if (d === 0) {
+            zeroCount++;
+        } else {
+            if (zeroCount > 0) {
+                result += digits[0];
+            }
+            zeroCount = 0;
+            result += digits[d] + radices[modulus];
+        }
+        
+        if (modulus === 0 && zeroCount < 4) {
+            result += bigRadices[quotient];
+            zeroCount = 0;
+        }
+    }
+    
+    result += "越南盾整";
+    return result;
 }
 
 // Global window function for inline handlers
