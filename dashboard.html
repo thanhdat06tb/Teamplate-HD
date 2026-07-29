@@ -459,6 +459,11 @@
       if (doc) {
         let htmlStr = doc.html_content || "Kho dữ liệu trống!";
         
+        // Fix đường dẫn ảnh khi xem ở dashboard (root) thay vì trong thư mục con
+        htmlStr = htmlStr.replace(/\.\/Picture1\.png/g, './huasen_workflow/Picture1.png');
+        htmlStr = htmlStr.replace(/\.\/Picture2\.png/g, './huasen_workflow/Picture2.png');
+        htmlStr = htmlStr.replace(/\.\/qr\.jpg/g, './huasen_workflow/qr.jpg');
+        
         // Xóa con dấu (Picture2.png) khỏi tất cả văn bản trừ Báo giá (cái đầu tiên)
         // Tách theo page-break, giữ nguyên cái đầu, xóa Picture2 ở các cái sau
         const parts = htmlStr.split(/(<div[^>]*class=["']page-break["'][^>]*>)/i);
