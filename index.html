@@ -38,95 +38,228 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ======= AUTH OVERLAY (Login Screen) ======= */
+  /* ======= AUTH OVERLAY — Office Tech Style ======= */
   #auth-overlay {
     position: fixed; inset: 0;
-    background: #f4f7f6;
+    background: #0d1117;
     z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: stretch;
     font-family: 'Inter', sans-serif;
+    overflow: hidden;
   }
 
-  .login-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 48px 40px;
-    width: 100%; max-width: 400px;
-    text-align: center;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
+  /* Grid dot background */
+  #auth-overlay::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(56,189,248,0.12) 1px, transparent 0);
+    background-size: 32px 32px;
+    pointer-events: none;
   }
 
-  .login-icon {
-    width: 72px; height: 72px;
-    background: var(--primary);
-    border-radius: 50%;
+  /* Glow accent top-left */
+  #auth-overlay::after {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(2,132,199,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Left panel — branding */
+  .login-left {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    padding: 48px 56px;
+    position: relative; z-index: 1;
+  }
+
+  .login-left-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .login-left-brand .brand-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 24px auto;
     color: #fff;
-    font-size: 32px;
+    font-size: 20px;
   }
 
-  .login-card h2 {
+  .login-left-brand span {
+    font-size: 16px; font-weight: 700;
+    color: #e2e8f0;
+    letter-spacing: -0.3px;
+  }
+
+  .login-left-center {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 48px 0;
+  }
+
+  .login-left-center h2 {
+    font-size: 42px; font-weight: 800;
+    color: #f1f5f9;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .login-left-center h2 span {
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .login-left-center p {
+    font-size: 15px; color: #64748b; line-height: 1.7;
+    max-width: 380px;
+  }
+
+  .login-feature-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-top: 36px;
+  }
+
+  .login-feature-list li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: #94a3b8;
+  }
+
+  .login-feature-list li .fi-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    flex-shrink: 0;
+  }
+
+  .login-left-footer {
+    font-size: 12px; color: #334155;
+  }
+
+  /* Divider */
+  .login-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.06);
+    position: relative; z-index: 1;
+  }
+
+  /* Right panel — form */
+  .login-right {
+    width: 440px;
+    flex-shrink: 0;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 56px 48px;
+    background: rgba(255,255,255,0.03);
+    position: relative; z-index: 1;
+  }
+
+  /* Right-side glow */
+  .login-right::before {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-right-head {
+    margin-bottom: 36px;
+  }
+
+  .login-right-head h3 {
     font-size: 24px; font-weight: 700;
-    color: #111827;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+
+  .login-right-head p {
+    font-size: 14px; color: #64748b;
+  }
+
+  .login-field {
+    margin-bottom: 16px;
+  }
+
+  .login-field label {
+    display: block;
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: #64748b;
     margin-bottom: 8px;
   }
 
-  .login-card .login-sub {
-    font-size: 14px; color: #6b7280;
-    margin-bottom: 32px;
-  }
-
-  .login-card input {
+  .login-field input {
     width: 100%;
-    padding: 14px 16px;
-    border: 1px solid #d1d5db;
+    padding: 13px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
-    background: #fff;
-    font-size: 15px; font-family: 'Inter', sans-serif;
-    color: #111827;
-    transition: border-color 0.2s;
-    margin-bottom: 16px;
+    font-size: 14px; font-family: 'Inter', sans-serif;
+    color: #e2e8f0;
+    transition: all 0.2s;
     box-sizing: border-box;
   }
 
-  .login-card input:focus {
+  .login-field input::placeholder { color: #475569; }
+
+  .login-field input:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(0, 93, 172, 0.1);
+    border-color: #38bdf8;
+    background: rgba(56,189,248,0.05);
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
   }
 
-  .login-card button {
+  #btn-login {
     width: 100%;
     padding: 14px;
-    background: var(--primary);
+    background: linear-gradient(135deg, #0284c7, #0369a1);
     color: #fff;
     border: none; border-radius: 8px;
-    font-size: 15px; font-weight: 600;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
     font-family: 'Inter', sans-serif;
     margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
 
-  .login-card button:hover {
-    background: #004b8b;
+  #btn-login:hover {
+    background: linear-gradient(135deg, #0369a1, #075985);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -4px rgba(2,132,199,0.4);
   }
 
-  .login-card button:active { transform: translateY(1px); }
+  #btn-login:active { transform: translateY(0); }
 
   #login-error {
     display: none;
-    margin-top: 18px;
+    margin-top: 16px;
     padding: 12px 16px;
-    background: rgba(220, 38, 38, 0.08);
-    color: var(--danger);
-    border-radius: 12px;
-    border: 1px solid rgba(220, 38, 38, 0.15);
-    font-size: 13px; font-weight: 600;
+    background: rgba(220,38,38,0.08);
+    color: #f87171;
+    border-radius: 8px;
+    border: 1px solid rgba(220,38,38,0.2);
+    font-size: 13px; font-weight: 500;
+  }
+
+  /* Responsive: stack on mobile */
+  @media (max-width: 860px) {
+    #auth-overlay { flex-direction: column; }
+    .login-left { display: none; }
+    .login-divider { display: none; }
+    .login-right { width: 100%; padding: 48px 32px; justify-content: center; }
   }
 
   /* ======= MAIN APP (Hub Layout) ======= */
@@ -391,22 +524,57 @@
 
 <!-- ====== LOGIN SCREEN ====== -->
 <div id="auth-overlay">
-  <div class="login-card">
-    <div class="login-icon">
-      <span class="material-symbols-outlined" style="font-size:38px;font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+
+  <!-- LEFT: Branding panel -->
+  <div class="login-left">
+    <div class="login-left-brand">
+      <div class="brand-icon">
+        <span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:'FILL' 1;">contract</span>
+      </div>
+      <span>ContractOS</span>
     </div>
-    <h2>Hệ thống Hợp Đồng</h2>
-    <p class="login-sub">Hệ thống đồng bộ hợp đồng nội bộ</p>
 
-    <input type="email" id="login-email" placeholder="Email quản trị viên" />
-    <input type="password" id="login-pass" placeholder="Mật khẩu" />
+    <div class="login-left-center">
+      <h2>Hệ thống<br><span>Quản lý Hợp Đồng</span><br>Thông Minh</h2>
+      <p>Nền tảng số hoá và quản trị toàn bộ vòng đời hợp đồng — từ soạn thảo, ký kết đến lưu trữ đám mây, tất cả trong một giao diện duy nhất.</p>
+      <ul class="login-feature-list">
+        <li><span class="fi-dot"></span> Soạn hợp đồng chuẩn hóa, tự động tính phí</li>
+        <li><span class="fi-dot"></span> Lưu trữ & tìm kiếm tức thì trên Firebase Cloud</li>
+        <li><span class="fi-dot"></span> Xuất PDF chất lượng cao, sẵn sàng ký kết</li>
+        <li><span class="fi-dot"></span> Quản lý đa luồng: Khách, HuaSen, Vận chuyển</li>
+      </ul>
+    </div>
 
-    <button id="btn-login">VÀO HỆ THỐNG</button>
+    <div class="login-left-footer">© 2026 ContractOS · Phiên bản nội bộ</div>
+  </div>
+
+  <!-- Vertical divider -->
+  <div class="login-divider"></div>
+
+  <!-- RIGHT: Form panel -->
+  <div class="login-right">
+    <div class="login-right-head">
+      <h3>Đăng nhập</h3>
+      <p>Nhập thông tin tài khoản quản trị để tiếp tục</p>
+    </div>
+
+    <div class="login-field">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="admin@congty.com" />
+    </div>
+    <div class="login-field">
+      <label for="login-pass">Mật khẩu</label>
+      <input type="password" id="login-pass" placeholder="••••••••" />
+    </div>
+
+    <button id="btn-login">
+      <span class="material-symbols-outlined" style="font-size:18px;">login</span>
+      TRUY CẬP HỆ THỐNG
+    </button>
     <div id="login-error">Sai thông tin đăng nhập!</div>
   </div>
+
 </div>
-<!-- Weather Canvas Script -->
-<script src="weather.js?v=13"></script>
 
 <!-- ====== MAIN HUB ====== -->
 <div id="main-app">
