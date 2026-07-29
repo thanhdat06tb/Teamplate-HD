@@ -367,7 +367,8 @@
       currentTab = tab;
       document.getElementById('tab-khach').classList.toggle('active', tab === 'khach');
       document.getElementById('tab-huasen').classList.toggle('active', tab === 'huasen');
-      document.getElementById('tab-don').classList.toggle('active', tab === 'don');
+      const tabDon = document.getElementById('tab-don');
+      if (tabDon) tabDon.classList.toggle('active', tab === 'don');
       applyFilters();
     }
 
