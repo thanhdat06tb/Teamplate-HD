@@ -3,7 +3,7 @@ const State = {
   currentStep: 1,
   contractType: 'nt',
   client: { ten: '', mst: '', diachi: '', daidien: '', stk: '', chucvu: '', sdt: '', email: '', soBaogia: '' },
-  company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - VN Hua Sen CO.,LTD', daidien: 'LIN. ZHIHUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
+  company: { ten: 'CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM', mst: '3703486766', diachi: 'Số 2/1 Tổ 24, Khu Phố 1B, đường tỉnh 743, Phường An Phú, Thành phố Hồ Chí Minh, Việt Nam', stk: 'VNĐ: 3703486766 | USD: 0584723984634 - CONG TY TNHH QUOC TE THUONG MAI HUA SEN VIET NAM', daidien: 'LIN, ZHI HUA', chucvu: '', sdt: '0921115868', email: 'huasen2026@gmail.com' },
   contract: { sohd: '01/2024/HDGK', ngay: '', tenct: '', diadiemct: '', tamung: '50', songaytt: '15', thoiGianGiao: '10', ptThanhKhoan: 'Chuyển khoản (VNĐ)' },
   products: [{ stt: '1', ten: '', dvt: '', sl: 1, gia: 0, giaVatTu: 0, giaNhanCong: 0, ghiChu: '' }],
   tableMode: 'simple',
