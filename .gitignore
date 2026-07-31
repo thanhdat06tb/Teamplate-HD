@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+package.json
+teamplate_word/
+*.tmp
+*.doc
+*.docx
+*.txt

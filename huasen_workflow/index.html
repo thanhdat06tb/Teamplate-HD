@@ -839,13 +839,16 @@
         </div>
 
         <div class="step" id="st-3">
-          <div class="step-num">3</div> Phụ Lục
+          <div class="step-num">3</div> Đề Nghị T.Toán
         </div>
         <div class="step" id="st-4">
-          <div class="step-num">4</div> Biên Bản
+          <div class="step-num">4</div> Phụ Lục
         </div>
         <div class="step" id="st-5">
-          <div class="step-num">5</div> Tổng Duyệt
+          <div class="step-num">5</div> Biên Bản
+        </div>
+        <div class="step" id="st-6">
+          <div class="step-num">6</div> Tổng Duyệt
         </div>
       </div>
 
@@ -2279,7 +2282,26 @@
           </div>
         </div>
         <!-- STEP 3: APPENDIX -->
-        <div class="step-content" id="step-3">
+                <div class="step-content" id="step-3">
+          <div class="card">
+            <h2>Thông tin Đề Nghị Thanh Toán</h2>
+            <div class="info-box">Căn cứ Điều 2 Hợp Đồng Mua Bán (nếu chọn loại Hợp Đồng Mua Bán). Tự động lấy dữ liệu.</div>
+            <div class="row">
+              <div class="col"><label>Số ĐNTT</label><input type="text" id="so_dntt" placeholder=".../DNTT/..."></div>
+              <div class="col"><label>Ngày lập ĐNTT</label><input type="date" id="ngay_dntt"></div>
+              
+            </div>
+            
+            <div class="row" style="grid-template-columns:1fr;">
+              <div class="col"><label>Ghi chú</label><input type="text" id="ghi_chu_dntt" placeholder="..."></div>
+            </div>
+          </div>
+        
+<div class="doc-preview" id="preview-dntt-step" style="margin-top: 40px; font-family: 'Times New Roman', serif; padding: 20px;">
+            <!-- Rendered via JS -->
+          </div>
+</div>
+<div class="step-content" id="step-4">
           <div class="card">
             <h2>Cài đặt Phụ Lục</h2>
             <div class="row">
@@ -2412,7 +2434,7 @@
         </div>
 
         <!-- STEP 4: BIÊN BẢN -->
-        <div class="step-content" id="step-4">
+        <div class="step-content" id="step-5">
 
           <div class="card" id="bb-settings" style="margin-bottom: 20px;">
             <h2>Cài đặt Biên Bản</h2>
@@ -2612,7 +2634,7 @@
           </div>
         </div>
         <!-- STEP 5: FINAL PREVIEW & EXPORT -->
-        <div class="step-content" id="step-5">
+        <div class="step-content" id="step-6">
           <div class="card">
             <h2>Tổng duyệt Văn bản</h2>
             <p>Kiểm tra các văn bản bên dưới và chọn để xuất cùng lúc dưới dạng Word.</p>
@@ -2658,6 +2680,14 @@
               </div>
               <div class="box-content" id="mini-preview-nt"></div>
             </div>
+            <div class="preview-box" id="box-preview-dntt">
+              <div class="box-header">
+                <label style="color:#fff; display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="chk-dntt" checked> ĐỀ NGHỊ THANH TOÁN
+                </label>
+              </div>
+              <div class="box-content" id="mini-preview-dntt"></div>
+            </div>
             <div class="preview-box">
               <div class="box-header">
                 <label style="color:#fff; display:flex; align-items:center; gap:8px;">
@@ -2666,6 +2696,7 @@
               </div>
               <div class="box-content" id="mini-preview-3"></div>
             </div>
+
             <div class="preview-box">
               <div class="box-header">
                 <label style="color:#fff; display:flex; align-items:center; gap:8px;">
@@ -2695,7 +2726,7 @@
       </div>
 
       <div id="toast-container"></div>
-      <script src="app.js?v=17"></script>
+      <script src="app.js?v=21"></script>
 
   </div>
   </main>

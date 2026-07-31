@@ -187,7 +187,7 @@ function updateNav() {
   });
 
   els.btnPrev.style.display = State.currentStep === 1 ? 'none' : 'block';
-  if (State.currentStep === 5) {
+  if (State.currentStep === 6) {
     els.btnNext.style.display = 'none';
     prepareFinalPreviews();
   } else {
@@ -204,7 +204,7 @@ function updateNav() {
     else if (State.contractType === 'nt') els.wrapperNt.style.display = 'block';
   }
 
-  if (State.currentStep === 4) {
+  if (State.currentStep === 5) {
     if (State.contractType === 'gk') {
       els.wrapperBbnt.style.display = 'block';
       if (els.wrapperBbgh) els.wrapperBbgh.style.display = 'none';
@@ -220,7 +220,7 @@ function updateNav() {
 }
 
 els.btnNext.addEventListener('click', () => {
-  if (State.currentStep < 5) {
+  if (State.currentStep < 6) {
     saveFormState();
     State.currentStep++;
     updateNav();
@@ -436,6 +436,9 @@ function bindDataToPreviews() {
 
   // Render Product Tables for Step 1 and Step 3
   renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 }
 
 // Check if string is Roman Numeral
@@ -459,6 +462,9 @@ window.updateRow = function (index, field, value) {
     State.products[index][field] = value;
   }
   renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 };
 
 window.addProductRow = function () {
@@ -473,11 +479,17 @@ window.addProductRow = function () {
     ghichu: ''
   });
   renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 };
 
 window.removeProductRow = function (index) {
   State.products.splice(index, 1);
   renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 };
 
 window.updateDvt = function (index, value) {
@@ -490,6 +502,9 @@ window.updateDvt = function (index, value) {
     State.products[index].dvt = value;
   }
   renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 };
 
 
@@ -741,6 +756,7 @@ function renderProducts() {
   // Update KT contract totals
   const tamUngPerc = parseFloat(State.contract.tamung) || 0;
   const tamUngVal = Math.round(bgTotal * tamUngPerc / 100);
+  State.contract.tienTamUng = tamUngVal;
   const conLaiVal = bgTotal - tamUngVal;
 
   document.querySelectorAll('.bind-tong-truoc-vat').forEach(e => e.textContent = fmtVND(bgSubtotal));
@@ -885,6 +901,13 @@ if (els.vatSelectKt) {
   });
 }
 
+
+if (document.getElementById('loai_dntt')) {
+  document.getElementById('loai_dntt').addEventListener('change', () => {
+    saveFormState();
+    bindDataToPreviews();
+  });
+}
 // Setup realtime updates for all inputs
 document.querySelectorAll('input').forEach(input => {
   // skip the excel file input
@@ -1018,6 +1041,7 @@ function prepareFinalPreviews() {
     if(document.getElementById('mini-preview-nt')) document.getElementById('mini-preview-nt').innerHTML = "<i>KHÔNG ÁP DỤNG HĐ NGUYÊN TẮC</i>";
 
     document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbnt').innerHTML);
+    if(document.getElementById('mini-preview-dntt')) document.getElementById('mini-preview-dntt').innerHTML = cleanHtml(document.getElementById('preview-dntt-step').innerHTML);
     document.getElementById('chk-bbnt').checked = true;
     if (document.getElementById('chk-bbgh')) document.getElementById('chk-bbgh').checked = false;
   } else if (State.contractType === 'nt') {
@@ -1037,6 +1061,7 @@ function prepareFinalPreviews() {
     
     if (document.getElementById('preview-bbgh')) {
       document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
+    if(document.getElementById('mini-preview-dntt')) document.getElementById('mini-preview-dntt').innerHTML = cleanHtml(document.getElementById('preview-dntt-step').innerHTML);
       // rename the label 
       document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
     }
@@ -1054,6 +1079,7 @@ function prepareFinalPreviews() {
 
     if (document.getElementById('preview-bbgh')) {
       document.getElementById('mini-preview-4').innerHTML = cleanHtml(document.getElementById('preview-bbgh').innerHTML);
+    if(document.getElementById('mini-preview-dntt')) document.getElementById('mini-preview-dntt').innerHTML = cleanHtml(document.getElementById('preview-dntt-step').innerHTML);
       // rename the label 
       document.getElementById('chk-bbnt').nextSibling.textContent = ' BIÊN BẢN GIAO HÀNG';
     }
@@ -1084,6 +1110,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
   const chk2_mb = document.getElementById('chk-contract-mb') ? document.getElementById('chk-contract-mb').checked : false;
   const chk2_nt = document.getElementById('chk-contract-nt') ? document.getElementById('chk-contract-nt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
+  const chk_dntt = document.getElementById('chk-dntt') ? document.getElementById('chk-dntt').checked : false;
   const chk4 = document.getElementById('chk-bbnt').checked;
 
   const docs = [];
@@ -1099,6 +1126,10 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
     docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
   }
 
+  if (chk_dntt) {
+    const dnttEl = document.getElementById('preview-dntt-step');
+    if (dnttEl) docs.push(cleanHtml(dnttEl.outerHTML));
+  }
   if (chk3) {
     if (State.contractType === 'kt') {
       const appPreview = document.getElementById('preview-appendix').cloneNode(true);
@@ -1117,6 +1148,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', () => {
     if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
     else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
   }
+
 
   if (docs.length === 0) {
     alert("Vui lòng chọn ít nhất 1 văn bản để lưu PDF.");
@@ -1162,6 +1194,7 @@ if (btnExportAll) {
   const chk2_mb = document.getElementById('chk-contract-mb') ? document.getElementById('chk-contract-mb').checked : false;
   const chk2_nt = document.getElementById('chk-contract-nt') ? document.getElementById('chk-contract-nt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
+  const chk_dntt = document.getElementById('chk-dntt') ? document.getElementById('chk-dntt').checked : false;
   const chk4 = document.getElementById('chk-bbnt').checked;
 
   if (chk1) folder.file("01_BaoGia.doc", generateWordBlob(cleanHtml(document.getElementById('preview-baogia').outerHTML)));
@@ -1176,6 +1209,10 @@ if (btnExportAll) {
     folder.file("02b_HopDongNguyenTac.doc", generateWordBlob(cleanHtml(document.getElementById('preview-contract-nt').outerHTML)));
   }
 
+  if (chk_dntt) {
+    const dnttEl = document.getElementById('preview-dntt-step');
+    if (dnttEl) docs.push(cleanHtml(dnttEl.outerHTML));
+  }
   if (chk3) {
     if (State.contractType === 'kt') {
       const appPreview = document.getElementById('preview-appendix').cloneNode(true);
@@ -1234,6 +1271,9 @@ document.getElementById('btn-fill-dummy').addEventListener('click', (e) => {
   saveFormState();
   bindDataToPreviews();
   if (typeof renderProducts === 'function') renderProducts();
+  const dnttHtml = buildDNTT();
+  if (document.getElementById('preview-dntt')) document.getElementById('preview-dntt').innerHTML = dnttHtml;
+  if (document.getElementById('preview-dntt-step')) document.getElementById('preview-dntt-step').innerHTML = dnttHtml;
 });
 
 function exportHTMLToWord(htmlContent, filename) {
@@ -1266,6 +1306,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   const chk2_kt = document.getElementById('chk-contract-kt') ? document.getElementById('chk-contract-kt').checked : false;
   const chk2_nt = document.getElementById('chk-contract-nt') ? document.getElementById('chk-contract-nt').checked : false;
   const chk3 = document.getElementById('chk-appendix').checked;
+  const chk_dntt = document.getElementById('chk-dntt') ? document.getElementById('chk-dntt').checked : false;
   const chk4 = document.getElementById('chk-bbnt').checked;
 
   const docs = [];
@@ -1273,12 +1314,17 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
   if (chk1) docs.push(cleanHtml(document.getElementById('preview-baogia').outerHTML));
   if (chk2_gk) docs.push(cleanHtml(document.getElementById('preview-contract-gk').outerHTML));
   if (chk2_kt) docs.push(cleanHtml(document.getElementById('preview-contract-kt').outerHTML));
+
   if (chk2_nt) {
     const mbHtml = document.getElementById('preview-contract-mb');
     if (mbHtml) docs.push(cleanHtml(mbHtml.outerHTML));
     docs.push(cleanHtml(document.getElementById('preview-contract-nt').outerHTML));
   }
 
+  if (chk_dntt) {
+    const dnttEl = document.getElementById('preview-dntt-step');
+    if (dnttEl) docs.push(cleanHtml(dnttEl.outerHTML));
+  }
   if (chk3) {
     if (State.contractType === 'kt') {
       const appPreview = document.getElementById('preview-appendix').cloneNode(true);
@@ -1298,6 +1344,7 @@ document.getElementById('btn-save-cloud').addEventListener('click', () => {
     if (State.contractType === 'gk') docs.push(cleanHtml(document.getElementById('preview-bbnt').outerHTML));
     else docs.push(cleanHtml(document.getElementById('preview-bbgh').outerHTML));
   }
+
 
   if (docs.length === 0) {
     showToast("Vui lòng chọn ít nhất 1 văn bản để lưu.", "warning");
@@ -1398,4 +1445,146 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchExistingDocNumbers();
   }
 });
+
+
+function buildDNTT() {
+  const actionText = 'đặt cọc';
+  const st = State.contract.tienTamUng || 0;
+  
+  // DocSo function for Vietnamese reading
+  function docSo(so) {
+    if (so === 0) return '...........................................';
+    const numToWords = (num) => {
+        const units = ['', 'nghìn', 'triệu', 'tỷ', 'nghìn tỷ', 'triệu tỷ'];
+        const digits = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+        let words = '';
+        let strSo = Math.round(num).toString();
+        let i = 0;
+        while (strSo.length > 0) {
+            let chunk = strSo.slice(-3);
+            strSo = strSo.slice(0, -3);
+            if (parseInt(chunk) > 0) {
+                let chunkWords = '';
+                if (chunk.length == 3) {
+                    chunkWords += digits[parseInt(chunk[0])] + ' trăm ';
+                    if (parseInt(chunk[1]) == 0 && parseInt(chunk[2]) != 0) chunkWords += 'lẻ ';
+                }
+                if (chunk.length >= 2 && parseInt(chunk.slice(-2,-1)) > 0) {
+                    if (parseInt(chunk.slice(-2,-1)) == 1) chunkWords += 'mười ';
+                    else chunkWords += digits[parseInt(chunk.slice(-2,-1))] + ' mươi ';
+                }
+                if (parseInt(chunk.slice(-1)) > 0) {
+                    if (parseInt(chunk.slice(-1)) == 1 && chunk.length >= 2 && parseInt(chunk.slice(-2,-1)) > 1) chunkWords += 'mốt ';
+                    else if (parseInt(chunk.slice(-1)) == 5 && chunk.length >= 2 && parseInt(chunk.slice(-2,-1)) > 0) chunkWords += 'lăm ';
+                    else chunkWords += digits[parseInt(chunk.slice(-1))] + ' ';
+                }
+                words = chunkWords + units[i] + ' ' + words;
+            }
+            i++;
+        }
+        return words.trim().replace(/^./, str => str.toUpperCase()) + ' đồng';
+    };
+    return numToWords(so);
+  }
+
+  function getVal(id) { 
+      const val = document.getElementById(id) ? document.getElementById(id).value : ''; 
+      return val ? val : '......................';
+  }
+  function getValHD(id) {
+      const val = document.getElementById(id) ? document.getElementById(id).value : ''; 
+      return val && val !== '...' && val !== '......................' ? val : '......................';
+  }
+  
+  function fd(s) {
+    if(!s || s === '......................') return '.... tháng ..... năm .....';
+    const d = new Date(s);
+    return `${strPad(d.getDate())} tháng ${strPad(d.getMonth()+1)} năm ${d.getFullYear()}`;
+  }
+
+  function strPad(n) {
+      return n.toString().padStart(2, '0');
+  }
+  
+  let loaiHd = getValHD('so_hd_mb');
+  if (loaiHd === '......................') loaiHd = getValHD('so_hd_kt');
+  if (loaiHd === '......................') loaiHd = getValHD('so_hd');
+
+  let ngayHd = getValHD('ngay_ky_mb');
+  if (ngayHd === '......................') ngayHd = getValHD('ngay_ky_kt');
+  if (ngayHd === '......................') ngayHd = getValHD('ngay_ky');
+
+  const formattedTien = st > 0 ? fmtVND(st) : '......................';
+
+  return `
+  <div style="font-family:'Times New Roman',Times,serif;color:#000;font-size:16px;line-height:1.6;background:#fff;padding:30px 40px; max-width: 800px; margin: 0 auto; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+    
+    <table style="width: 100%; border: none; margin-bottom: 40px;">
+      <tr>
+        <td style="width: 45%; vertical-align: top; text-align: center; font-size: 15px; font-weight: bold; line-height: 1.2;">
+          CÔNG TY TNHH QUỐC TẾ<br>
+          THƯƠNG MẠI HUA SEN<br>
+          VIỆT NAM<br>
+          <span style="font-weight: normal;">===@===</span><br><br>
+          <span style="font-weight: normal;">Số: ${getVal('so_dntt')}</span>
+        </td>
+        <td style="width: 55%; vertical-align: top; text-align: center; line-height: 1.2;">
+          <b style="font-size: 16px;">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
+          <b style="font-size: 16px;">Độc lập - Tự do - Hạnh phúc</b><br>
+          <span style="font-weight: normal;">----&---</span><br><br>
+          <div style="text-align: right; padding-right: 30px; margin-top: 10px;">
+              <i style="font-size: 16px;">Hồ Chí Minh, ngày ${fd(getVal('ngay_dntt'))}</i>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div style="text-align: center; margin-bottom: 25px;">
+      <h2 style="margin: 0; font-size: 20px; font-weight: bold;">ĐỀ NGHỊ THANH TOÁN</h2>
+    </div>
+
+    <div style="margin-bottom: 10px; font-size: 16px; text-align: center;">
+      <u><b><i>Kính gửi:</i></b></u> &nbsp; <b>${State.client.ten ? 'CÔNG TY ' + State.client.ten.replace(/^CÔNG TY /i, '').replace(/^Cty /i, '') : 'CÔNG TY ....................................................'}</b>
+    </div>
+
+    <div style="margin-bottom: 10px; font-size: 16px; text-align: justify; text-indent: 40px;">
+      Căn cứ theo Điều 2 của hợp đồng mua bán số <b>${loaiHd}</b> giữa <b>${State.client.ten ? 'CÔNG TY ' + State.client.ten.replace(/^CÔNG TY /i, '').replace(/^Cty /i, '') : 'CÔNG TY ....................................................'}</b> và <b>CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM</b> ký ngày <b>${fd(ngayHd)}</b> về việc mua bán máy móc thiết bị.
+    </div>
+
+    <div style="margin-bottom: 10px; font-size: 16px; text-align: justify; text-indent: 40px;">
+      Đề nghị Quý công ty tiến hành ${actionText} cho chúng tôi số tiền là:<br>
+      <b>${formattedTien} VNĐ</b> ( <u><b><i>Bằng chữ:</i></b></u> <i>${docSo(st)}./</i>)
+    </div>
+
+    <div style="margin-bottom: 15px; font-size: 16px; text-indent: 40px;">
+      Số tiền trên đề nghị Quý Công ty chuyển vào địa chỉ sau:
+    </div>
+
+    <div style="margin-bottom: 15px; font-size: 16px;">
+      Tên đơn vị thụ hưởng : CÔNG TY TNHH QUỐC TẾ THƯƠNG MẠI HUA SEN VIỆT NAM
+    </div>
+
+    <div style="margin-bottom: 25px; font-size: 16px; line-height: 1.8;">
+      Số tài khoản : 3703486766 tại Ngân hàng TMCP Quân Đội MBBank - CN Bình Dương - PGD Đông Bình Dương.
+    </div>
+
+    <div style="margin-bottom: 40px; font-size: 16px; text-indent: 40px;">
+      <i>Trân trọng cảm ơn!</i>
+    </div>
+
+    <table style="width: 100%; border: none;">
+      <tr>
+        <td style="width: 45%; vertical-align: top; font-size: 16px;">
+          <b>Nơi nhận:</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Như KG;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Lưu Cty;
+        </td>
+        <td style="width: 55%; vertical-align: top; text-align: center; font-size: 16px;">
+          <b style="line-height: 1.2;">CÔNG TY TNHH QUỐC TẾ THƯƠNG<br>MẠI HUA SEN VIỆT NAM</b>
+          <br><br><br><br><br>
+        </td>
+      </tr>
+    </table>
+  </div>`;
+}
 
