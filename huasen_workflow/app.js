@@ -1521,14 +1521,14 @@ function buildDNTT() {
     
     <table style="width: 100%; border: none; margin-bottom: 40px;">
       <tr>
-        <td style="width: 45%; vertical-align: top; text-align: center; font-size: 15px; font-weight: bold; line-height: 1.2;">
+        <td style="width: 45%; vertical-align: top; text-align: center; font-size: 15px; font-weight: bold; line-height: 1.2; border: none;">
           CÔNG TY TNHH QUỐC TẾ<br>
           THƯƠNG MẠI HUA SEN<br>
           VIỆT NAM<br>
           <span style="font-weight: normal;">===@===</span><br><br>
           <span style="font-weight: normal;">Số: ${getVal('so_dntt')}</span>
         </td>
-        <td style="width: 55%; vertical-align: top; text-align: center; line-height: 1.2;">
+        <td style="width: 55%; vertical-align: top; text-align: center; line-height: 1.2; border: none;">
           <b style="font-size: 16px;">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
           <b style="font-size: 16px;">Độc lập - Tự do - Hạnh phúc</b><br>
           <span style="font-weight: normal;">----&---</span><br><br>
@@ -1574,12 +1574,12 @@ function buildDNTT() {
 
     <table style="width: 100%; border: none;">
       <tr>
-        <td style="width: 45%; vertical-align: top; font-size: 16px;">
+        <td style="width: 45%; vertical-align: top; font-size: 16px; border: none;">
           <b>Nơi nhận:</b><br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Như KG;<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Lưu Cty;
         </td>
-        <td style="width: 55%; vertical-align: top; text-align: center; font-size: 16px;">
+        <td style="width: 55%; vertical-align: top; text-align: center; font-size: 16px; border: none;">
           <b style="line-height: 1.2;">CÔNG TY TNHH QUỐC TẾ THƯƠNG<br>MẠI HUA SEN VIỆT NAM</b>
           <br><br><br><br><br>
         </td>
