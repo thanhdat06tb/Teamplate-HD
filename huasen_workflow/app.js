@@ -1517,7 +1517,7 @@ function buildDNTT() {
   const formattedTien = st > 0 ? fmtVND(st) : '......................';
 
   return `
-  <div style="font-family:'Times New Roman',Times,serif;color:#000;font-size:16px;line-height:1.6;background:#fff;padding:30px 40px; max-width: 800px; margin: 0 auto; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+  <div style="font-family:'Times New Roman',Times,serif;color:#000;font-size:16px;line-height:1.6; max-width: 800px; margin: 0 auto;">
     
     <table style="width: 100%; border: none; margin-bottom: 40px;">
       <tr>

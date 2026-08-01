@@ -112,35 +112,53 @@
     /* ===== STEPPER ===== */
     .stepper {
       display: flex;
-      justify-content: center;
-      gap: 28px;
-      padding: 20px 30px;
       background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(0, 93, 172, 0.06);
-      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.02);
       position: relative;
       z-index: 1;
+    }
+    
+    @media (min-width: 768px) {
+      .stepper {
+        position: fixed;
+        left: 16px;
+        top: 210px;
+        width: 248px;
+        flex-direction: column;
+        gap: 6px;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        padding: 20px 0 0 0;
+        z-index: 60;
+        border-top: 1px solid #c1c6d4;
+      }
+      .stepper::before {
+        content: "QUY TRÌNH THỰC HIỆN";
+        font-size: 11px;
+        font-weight: 800;
+        color: #55676f;
+        padding-left: 16px;
+        margin-bottom: 8px;
+      }
     }
 
     .step {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       color: var(--text-secondary);
       font-weight: 600;
-      opacity: 0.55;
+      opacity: 0.6;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       font-size: 14px;
       cursor: pointer;
-      padding: 8px 16px;
+      padding: 10px 16px;
       border-radius: 12px;
     }
 
     .step:hover {
-      opacity: 0.8;
-      background: rgba(0, 93, 172, 0.04);
+      opacity: 1;
+      background: rgba(0, 93, 172, 0.05);
     }
 
     .step.active {
@@ -678,6 +696,10 @@
         justify-content: flex-start;
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(0, 93, 172, 0.06);
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.02);
       }
 
       .stepper::-webkit-scrollbar {
@@ -2297,7 +2319,7 @@
             </div>
           </div>
         
-<div class="doc-preview" id="preview-dntt-step" style="margin-top: 40px; font-family: 'Times New Roman', serif; padding: 20px;">
+<div class="doc-preview" id="preview-dntt-step" style="margin-top: 40px; font-family: 'Times New Roman', serif; padding: 60px 80px;">
             <!-- Rendered via JS -->
           </div>
 </div>
@@ -2726,7 +2748,7 @@
       </div>
 
       <div id="toast-container"></div>
-      <script src="app.js?v=22"></script>
+      <script src="app.js?v=23"></script>
 
   </div>
   </main>

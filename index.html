@@ -32,9 +32,13 @@
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #0d1117;
-    background-image: radial-gradient(circle at 1px 1px, rgba(56,189,248,0.07) 1px, transparent 0);
-    background-size: 32px 32px;
+    background: #0b0914;
+    background-image: 
+      radial-gradient(circle at top left, rgba(76, 29, 149, 0.25) 0%, transparent 40%),
+      radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.2) 0%, transparent 40%),
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+    background-size: 100% 100%, 100% 100%, 32px 32px;
+    background-attachment: fixed;
     color: #e2e8f0;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -43,7 +47,10 @@
   /* ======= AUTH OVERLAY — Office Tech Style ======= */
   #auth-overlay {
     position: fixed; inset: 0;
-    background: #0d1117;
+    background: #0b0914;
+    background-image: 
+      radial-gradient(circle at top right, rgba(126, 34, 206, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at bottom left, rgba(2, 132, 199, 0.2) 0%, transparent 50%);
     z-index: 9999;
     display: flex; align-items: stretch;
     font-family: 'Inter', sans-serif;
@@ -55,7 +62,7 @@
     content: '';
     position: absolute; inset: 0;
     background-image:
-      radial-gradient(circle at 1px 1px, rgba(56,189,248,0.12) 1px, transparent 0);
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
     background-size: 32px 32px;
     pointer-events: none;
   }
@@ -85,7 +92,7 @@
 
   .login-left-brand .brand-icon {
     width: 40px; height: 40px;
-    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    background: linear-gradient(135deg, #7e22ce, #0284c7);
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     color: #fff;
@@ -114,7 +121,7 @@
   }
 
   .login-left-center h2 span {
-    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    background: linear-gradient(135deg, #c084fc, #38bdf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -225,7 +232,7 @@
   #btn-login {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #0284c7, #0369a1);
+    background: linear-gradient(135deg, #7e22ce, #0369a1);
     color: #fff;
     border: none; border-radius: 8px;
     font-size: 14px; font-weight: 700;
@@ -268,12 +275,14 @@
   #main-app { display: none; }
 
   .hub-wrapper {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 32px 24px 64px;
+    padding: 64px 24px 100px;
     display: flex; flex-direction: column;
-    gap: 40px;
+    gap: 56px;
     animation: hubFadeIn 0.5s ease-out;
+    min-height: calc(100vh - 120px);
+    justify-content: center;
   }
 
   @keyframes hubFadeIn {
@@ -298,7 +307,7 @@
 
   .hub-brand-icon {
     width: 32px; height: 32px;
-    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    background: linear-gradient(135deg, #7e22ce, #0284c7);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     color: #fff;
@@ -377,21 +386,23 @@
   .hub-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 36px;
   }
 
   .hub-card {
     position: relative;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px;
-    padding: 28px 24px;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
+    padding: 48px 40px;
     display: flex; flex-direction: column;
-    gap: 14px;
+    gap: 20px;
     text-decoration: none; color: inherit;
     overflow: hidden;
-    transition: all 0.2s;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    box-shadow: 0 4px 24px -8px rgba(0,0,0,0.2);
   }
 
   /* top accent line */
@@ -399,99 +410,101 @@
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 2px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    height: 3px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
   }
   .hub-card.blue::before  { background: linear-gradient(90deg, #0284c7, #38bdf8); }
   .hub-card.orange::before { background: linear-gradient(90deg, #ea580c, #f59e0b); }
-  .hub-card.dark::before  { background: linear-gradient(90deg, #475569, #94a3b8); }
+  .hub-card.dark::before  { background: linear-gradient(90deg, #6366f1, #a855f7); }
   .hub-card.red::before  { background: linear-gradient(90deg, #e11d48, #fb7185); }
 
   .hub-card:hover {
-    background: rgba(255,255,255,0.06);
-    border-color: rgba(56,189,248,0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4);
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(56,189,248,0.3);
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
   }
 
   .card-icon-wrap {
-    width: 44px; height: 44px;
-    border-radius: 10px;
+    width: 64px; height: 64px;
+    border-radius: 16px;
     display: flex; align-items: center; justify-content: center;
     color: #fff;
     flex-shrink: 0;
+    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.3);
   }
 
   .card-icon-wrap.blue   { background: linear-gradient(135deg, #0284c7, #38bdf8); }
   .card-icon-wrap.orange { background: linear-gradient(135deg, #ea580c, #f59e0b); }
-  .card-icon-wrap.dark   { background: linear-gradient(135deg, #334155, #64748b); }
+  .card-icon-wrap.dark   { background: linear-gradient(135deg, #4f46e5, #9333ea); }
   .card-icon-wrap.red    { background: linear-gradient(135deg, #e11d48, #fb7185); }
 
   .card-icon-wrap .material-symbols-outlined {
-    font-size: 24px;
+    font-size: 32px;
     font-variation-settings: 'FILL' 1;
   }
 
   .card-title {
-    font-size: 18px; font-weight: 700;
-    letter-spacing: -0.3px;
+    font-size: 26px; font-weight: 800;
+    letter-spacing: -0.5px;
     color: #f1f5f9;
+    margin-top: 8px;
   }
 
   .card-desc {
-    font-size: 13px; line-height: 1.65;
+    font-size: 15px; line-height: 1.7;
     color: #94a3b8;
     flex-grow: 1;
   }
 
   .card-stat {
-    margin-top: 4px;
-    padding: 12px 16px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 8px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.05);
     display: flex; align-items: center; justify-content: space-between;
   }
 
   .card-stat .label {
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.7px;
+    font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
     color: #64748b;
   }
 
   .card-stat .value {
-    font-size: 18px; font-weight: 800;
+    font-size: 22px; font-weight: 800;
   }
 
   .card-stat .value.blue   { color: #38bdf8; }
   .card-stat .value.orange { color: #fb923c; }
-  .card-stat .value.dark   { color: #94a3b8; }
+  .card-stat .value.dark   { color: #c084fc; }
   .card-stat .value.red    { color: #fb7185; }
 
   .card-go {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12px; font-weight: 700;
-    margin-top: 2px;
-    opacity: 0;
-    transform: translateX(-6px);
-    transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 700;
+    margin-top: 8px;
+    opacity: 0.6;
+    transform: translateX(0);
+    transition: all 0.3s;
   }
 
   .hub-card:hover .card-go {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(6px);
   }
 
   .card-go.blue   { color: #38bdf8; }
   .card-go.orange { color: #fb923c; }
-  .card-go.dark   { color: #94a3b8; }
+  .card-go.dark   { color: #c084fc; }
   .card-go.red    { color: #fb7185; }
 
   /* --- Footer --- */
   .hub-footer {
     text-align: center;
-    font-size: 11px; color: #1e293b;
+    font-size: 11px; color: #94a3b8;
     padding-top: 4px;
   }
 
@@ -518,9 +531,9 @@
   <div class="login-left">
     <div class="login-left-brand">
       <div class="brand-icon">
-        <span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:'FILL' 1;">contract</span>
+        <span class="material-symbols-outlined" style="font-size:20px;font-variation-settings:'FILL' 1;">history_edu</span>
       </div>
-      <span>ContractOS</span>
+      <span>Quản Trị Hợp Đồng</span>
     </div>
 
     <div class="login-left-center">
@@ -534,7 +547,7 @@
       </ul>
     </div>
 
-    <div class="login-left-footer">© 2026 ContractOS · Phiên bản nội bộ</div>
+    <div class="login-left-footer">© 2026 Quản Trị Hợp Đồng · Phiên bản nội bộ</div>
   </div>
 
   <!-- Vertical divider -->
@@ -573,10 +586,10 @@
     <div class="hub-topbar">
       <div class="hub-brand">
         <div class="hub-brand-icon">
-          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">contract</span>
+          <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 1;">history_edu</span>
         </div>
         <div>
-          <h1>ContractOS</h1>
+          <h1>Quản Trị Hợp Đồng</h1>
           <p id="hub-greeting">Chào mừng trở lại, Quản trị viên</p>
         </div>
       </div>
@@ -611,7 +624,7 @@
 
       <!-- Card 1.5: Liên Hợp Đồng HuaSen -->
       <a href="huasen_workflow/index.html" class="hub-card red">
-        <div class="card-icon-wrap red" style="background: #ffffff; padding: 6px; display: flex; align-items: center; justify-content: center;">
+        <div class="card-icon-wrap red" style="background: #ffffff; padding: 10px; display: flex; align-items: center; justify-content: center;">
           <img src="assets/Picture1.png" alt="Logo HuaSen" style="width: 100%; height: 100%; object-fit: contain; border-radius: inherit;" />
         </div>
         <div class="card-title">Hợp Đồng HuaSen</div>
